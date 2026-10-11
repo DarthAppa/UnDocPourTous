@@ -1,1 +1,53 @@
 
+/* ==========================================
+   UnDocPourTout.com — Styles Sur-Mesure CSS
+   ========================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+    --bg-dark: #0B0F17;
+    --bg-card: #151A25;
+    --border-card: #232A3B;
+    --accent-orange: #FF7A1A;
+    --accent-hover: #FF8F3D;
+    --text-main: #F2EEE6;
+    --mint-free: #2EC4A6;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-dark);
+    color: var(--text-main);
+    overflow-x: hidden;
+}
+
+.font-cinzel {
+    font-family: 'Cinzel', serif;
+}
+
+/* Effets de lueur et bordures lumineuses sur les cartes */
+.game-card {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+}
+
+.game-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 30px -10px rgba(255, 122, 26, 0.15);
+}
+
+/* Scrollbar personnalisée aux couleurs du site */
+::-webkit-scrollbar {
+    width: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+::-webkit-scrollbar-thumb {
+    background: var(--border-card);
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--accent-orange);
+}
