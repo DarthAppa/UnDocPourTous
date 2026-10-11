@@ -1,0 +1,21 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm run shot*)",
+      "Bash(node tools/screenshot.mjs*)",
+      "Bash(npm install*)",
+      "Bash(npx playwright install*)",
+      "Bash(git status*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git add*)",
+      "Bash(git commit*)",
+      "WebFetch(domain:tailwindcss.com)",
+      "WebFetch(domain:v3.tailwindcss.com)",
+      "WebFetch(domain:developer.mozilla.org)"
+    ],
+    "ask": [
+      "Bash(git push*)"
+    ]
+  }
+}

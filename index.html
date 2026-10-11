@@ -1,330 +1,303 @@
-<!-- HEADER / NAVIGATION -->
-<header class="border-b border-gray-800/80 bg-darkBg/95 sticky top-0 z-50 backdrop-blur-md">
+<!DOCTYPE html>
+<html lang="fr" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UnDocPourTout — Guides & outils pour gamers</title>
+    <meta name="description" content="Guides, bases de données et outils gratuits pour Albion Online, Path of Exile et World of Warcraft.">
+
+    <!-- Polices -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind (CDN) + couleurs du site -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        darkBg: '#0B0F17',
+                        cardBg: '#151A25',
+                        cardBorder: '#232A3B',
+                        brandOrange: '#FF7A1A',
+                        brandOrangeHover: '#FF8F3D',
+                        textLight: '#F2EEE6',
+                        mintFree: '#2EC4A6',
+                        holo: '#5EE7FF'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        cinzel: ['Cinzel', 'serif']
+                    }
+                }
+            }
+        };
+    </script>
+
     <link rel="stylesheet" href="style.css">
-    <script src="script.js"></script>
-    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-lg bg-cardBg border border-brandOrange/50 flex items-center justify-center text-brandOrange font-bold text-lg shadow-lg shadow-brandOrange/10">U</div>
-            <span class="font-cinzel text-lg font-bold tracking-wide text-white">UnDocPourTout</span>
-        </div>
-        <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
-            <a href="#guides" class="hover:text-brandOrange transition flex items-center gap-1">Guides <span class="text-xs opacity-60">▾</span></a>
-            <a href="#tools" class="hover:text-brandOrange transition flex items-center gap-1">Tools <span class="text-xs opacity-60">▾</span></a>
-            <a href="#community" class="hover:text-brandOrange transition">Community</a>
+    <script src="script.js" defer></script>
+</head>
+
+<body class="bg-darkBg text-textLight font-sans antialiased">
+
+<!-- ================= HEADER ================= -->
+<header class="sticky top-0 z-50 border-b border-white/5 bg-darkBg/85 backdrop-blur-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+        <a href="#" class="flex items-center gap-3">
+            <!-- Logo : cube hexagonal -->
+            <svg class="w-8 h-8" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+                <path d="M16 2 28 9v14l-12 7-12-7V9z" stroke="#FF7A1A" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M4 9l12 7 12-7M16 16v14" stroke="#FF7A1A" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M10 12.5 16 16l6-3.5" stroke="#FFB070" stroke-width="1.2" opacity=".7"/>
+            </svg>
+            <span class="text-lg font-bold tracking-tight text-white">UnDocPourTout</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-8 text-sm font-medium text-gray-300">
+            <div class="dropdown relative">
+                <button class="dropdown-toggle flex items-center gap-1 hover:text-white transition" aria-expanded="false">
+                    Guides <svg class="w-3 h-3 text-brandOrange" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#jeux">Albion Online</a>
+                    <a href="#jeux">Path of Exile</a>
+                    <a href="#jeux">World of Warcraft</a>
+                </div>
+            </div>
+            <div class="dropdown relative">
+                <button class="dropdown-toggle flex items-center gap-1 hover:text-white transition" aria-expanded="false">
+                    Tools <svg class="w-3 h-3 text-brandOrange" viewBox="0 0 12 12"><path d="M2 4l4 4 4-4" stroke="currentColor" stroke-width="2" fill="none"/></svg>
+                </button>
+                <div class="dropdown-menu">
+                    <a href="#outils">Character Builder</a>
+                    <a href="#outils">DPS Analyzer</a>
+                    <a href="#outils">Market Tracker</a>
+                </div>
+            </div>
+            <a href="#community" class="hover:text-white transition">Community</a>
         </nav>
-        <div>
-            <a href="#login" class="bg-brandOrange hover:bg-brandOrangeHover text-darkBg font-bold px-6 py-2.5 rounded-lg text-sm transition shadow-md shadow-brandOrange/20">
-                Login
-            </a>
+
+        <div class="flex items-center gap-3">
+            <a href="#login" class="btn-primary text-sm px-5 py-2">Login</a>
+            <button id="burger" class="md:hidden p-2 text-gray-300" aria-label="Menu">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </button>
         </div>
+    </div>
+
+    <!-- Menu mobile -->
+    <div id="mobile-menu" class="md:hidden hidden border-t border-white/5 bg-darkBg px-4 py-4 space-y-3 text-sm">
+        <a href="#jeux" class="block text-gray-300">Guides</a>
+        <a href="#outils" class="block text-gray-300">Tools</a>
+        <a href="#community" class="block text-gray-300">Community</a>
     </div>
 </header>
 
-<!-- HERO SECTION -->
-<section class="relative py-16 lg:py-24 px-6 overflow-hidden border-b border-gray-800/40">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <div class="lg:col-span-6 space-y-6">
-            <div class="space-y-2">
-                <h1 class="font-cinzel text-5xl sm:text-6xl font-bold tracking-tight text-white">
-                    Guild HQ: War Room
-                </h1>
-                <p class="text-xl sm:text-2xl font-cinzel text-gray-300">
-                    Guides <span class="text-brandOrange">core-meets-dashboard</span>
-                </p>
-            </div>
-            <p class="text-gray-400 text-base leading-relaxed max-w-lg">
-                Sub-headline — <span class="text-gray-300 font-medium">Optimize, manage & grow your game organizations</span> with advanced tools & real-time analytics.
-            </p>
-            <div class="flex flex-wrap gap-4 pt-2">
-                <a href="#jeux" class="bg-brandOrange hover:bg-brandOrangeHover text-darkBg font-bold px-7 py-3 rounded-lg transition shadow-lg shadow-brandOrange/20 text-sm">
-                    Call-to-Action
-                </a>
-                <a href="#outils" class="bg-cardBg hover:bg-cardBorder border border-gray-700/80 text-textLight font-semibold px-7 py-3 rounded-lg transition text-sm">
-                    Call-to-Action
-                </a>
+<!-- ================= HERO ================= -->
+<section id="hero" class="hero relative overflow-hidden">
+    <!-- Décor : taverne + table de carte -->
+    <div class="hero-bg" aria-hidden="true">
+        <div class="shelves"></div>
+        <div class="candle c1"></div>
+        <div class="candle c2"></div>
+        <div class="map-table">
+            <svg viewBox="0 0 800 300" preserveAspectRatio="none">
+                <path d="M40 220 C 140 160, 220 250, 330 190 S 520 120, 620 170" stroke="#5a3a1c" stroke-width="3" fill="none" stroke-dasharray="8 6"/>
+                <path d="M100 60 C 180 110, 260 40, 360 90 S 560 60, 700 100" stroke="#6b4826" stroke-width="2" fill="none"/>
+                <circle cx="330" cy="190" r="10" fill="none" stroke="#7a2a12" stroke-width="3"/>
+                <circle cx="620" cy="170" r="7" fill="#7a2a12"/>
+                <path d="M480 230 l14 -24 l14 24 z M500 236 l10 -18 l10 18 z" fill="#5a3a1c" opacity=".7"/>
+            </svg>
+            <div class="token t1"></div><div class="token t2"></div><div class="token t3"></div>
+        </div>
+    </div>
+
+    <!-- Écrans holographiques -->
+    <div class="holo-stage" aria-hidden="true">
+        <!-- Gauche : inventaire -->
+        <div class="holo-screen screen-left" data-depth="18">
+            <div class="holo-bar"><span></span><span></span><span></span></div>
+            <div class="grid grid-cols-4 gap-1.5 p-3" id="inventory"></div>
+        </div>
+
+        <!-- Centre : tableau + donut -->
+        <div class="holo-screen screen-center" data-depth="10">
+            <div class="holo-bar"><span></span><span></span><span></span><i class="ml-auto">GUILD BANK</i></div>
+            <div class="flex gap-3 p-3">
+                <div class="flex-1 space-y-1.5" id="holo-table"></div>
+                <div class="w-1/4 flex flex-col items-center justify-end gap-2">
+                    <div class="donut"><span id="donut-val">72%</span></div>
+                    <div class="w-full space-y-1">
+                        <div class="h-1 rounded bg-holo/40"></div>
+                        <div class="h-1 w-2/3 rounded bg-holo/25"></div>
+                    </div>
+                </div>
             </div>
         </div>
-        <!-- Visuel War Room Dashboard Généré -->
-        <div class="lg:col-span-6">
-            <div class="rounded-xl border border-gray-800 bg-cardBg p-2 shadow-2xl relative overflow-hidden group">
-                <img src="war-room.jpg" alt="War Room Dashboard" class="rounded-lg w-full h-auto object-cover border border-gray-800/80 shadow-inner group-hover:scale-[1.01] transition duration-500">
+
+        <!-- Droite : gemmes + barres -->
+        <div class="holo-screen screen-right" data-depth="22">
+            <div class="holo-bar"><span></span><span></span><span></span></div>
+            <div class="flex justify-around px-3 pt-3">
+                <div class="gem g1"></div><div class="gem g2"></div><div class="gem g3"></div>
+            </div>
+            <div class="bars flex items-end gap-1.5 h-20 px-3 pb-3 pt-2" id="bars"></div>
+        </div>
+    </div>
+
+    <!-- Voile de lisibilité -->
+    <div class="hero-veil" aria-hidden="true"></div>
+
+    <!-- Contenu -->
+    <div class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-20 sm:py-28 lg:py-32">
+        <div class="max-w-xl space-y-5 reveal">
+            <h1 class="text-5xl sm:text-6xl font-extrabold tracking-tight text-white drop-shadow-lg">
+                Un Doc Pour Tout
+            </h1>
+            <p class="text-xl sm:text-2xl text-gray-200 font-medium">
+                Guides de jeu <span class="text-brandOrange">×</span> dashboards de guilde
+            </p>
+            <p class="text-base sm:text-lg text-gray-400">
+                Ta <span class="text-gray-200 font-semibold">War Room</span> : builds, trésorerie, raids et marché au même endroit.
+            </p>
+            <div class="flex flex-wrap gap-3 pt-3">
+                <a href="#jeux" class="btn-primary px-6 py-3">Explorer les guides</a>
+                <a href="#outils" class="btn-outline px-6 py-3">Voir les outils</a>
             </div>
         </div>
     </div>
 </section>
 
-<!-- SECTION 3 JEUX AVEC LES VISUELS GÉNÉRÉS -->
-<section id="jeux" class="py-16 px-6 max-w-7xl mx-auto w-full">
+<!-- ================= JEUX ================= -->
+<section id="jeux" class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 -mt-6 pb-16">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
+
         <!-- Albion Online -->
-        <div class="bg-cardBg rounded-xl border border-gray-800 hover:border-emerald-600/50 transition p-6 flex flex-col justify-between group shadow-lg">
-            <div class="space-y-4">
-                <div class="h-36 rounded-lg overflow-hidden border border-emerald-900/20 relative">
-                    <img src="albion-banner.jpg" alt="Albion Online" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+        <article class="game-card theme-albion reveal">
+            <div class="card-art" aria-hidden="true">
+                <div class="mini-monitor"><div></div><div></div><div></div></div>
+            </div>
+            <div class="card-body">
+                <div class="wordmark">Albion<small>Online</small></div>
+                <h3 class="text-xl font-bold text-white">Albion Online</h3>
+                <p class="text-sm text-gray-300/90 leading-relaxed">Gestion des assets de guilde, regear, calculateurs de craft et suivi de trésorerie.</p>
+                <div class="flex items-center justify-between pt-4 mt-auto">
+                    <a href="#" class="btn-primary text-sm px-5 py-2">Explorer les guides</a>
+                    <span class="emblem">⚔</span>
                 </div>
-                <h3 class="font-cinzel font-bold text-lg text-emerald-400 tracking-wider">Albion Online</h3>
-                <p class="text-gray-400 text-xs leading-relaxed">
-                    Albion Online : la référence pour gérer guild assets, regear guild events, calculateurs de craft et flux de trésorerie.
-                </p>
             </div>
-            <div class="pt-6">
-                <a href="#" class="inline-block bg-brandOrange/10 hover:bg-brandOrange text-brandOrange hover:text-darkBg font-semibold text-xs px-4 py-2 rounded-lg transition border border-brandOrange/20">
-                    Explore Guides
-                </a>
-            </div>
-        </div>
+        </article>
 
         <!-- Path of Exile -->
-        <div class="bg-cardBg rounded-xl border border-gray-800 hover:border-red-900/50 transition p-6 flex flex-col justify-between group shadow-lg">
-            <div class="space-y-4">
-                <div class="h-36 rounded-lg overflow-hidden border border-red-900/20 relative">
-                    <img src="poe-tree.jpg" alt="Path of Exile" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+        <article class="game-card theme-poe reveal" style="--d:.1s">
+            <div class="card-art" aria-hidden="true">
+                <svg class="skill-wheel" viewBox="0 0 200 200">
+                    <circle cx="100" cy="100" r="80" fill="none" stroke="#c46a3a" stroke-width="1.5" opacity=".6"/>
+                    <circle cx="100" cy="100" r="55" fill="none" stroke="#c46a3a" stroke-width="1.5" opacity=".5"/>
+                    <circle cx="100" cy="100" r="28" fill="none" stroke="#e08a4a" stroke-width="2"/>
+                    <g stroke="#c46a3a" stroke-width="1.2" opacity=".55">
+                        <line x1="100" y1="20" x2="100" y2="180"/><line x1="20" y1="100" x2="180" y2="100"/>
+                        <line x1="43" y1="43" x2="157" y2="157"/><line x1="157" y1="43" x2="43" y2="157"/>
+                    </g>
+                    <g fill="#ffb070">
+                        <circle cx="100" cy="20" r="4"/><circle cx="180" cy="100" r="4"/><circle cx="100" cy="180" r="4"/>
+                        <circle cx="20" cy="100" r="4"/><circle cx="157" cy="43" r="3"/><circle cx="43" cy="157" r="3"/>
+                        <circle cx="139" cy="61" r="3"/><circle cx="61" cy="139" r="3"/>
+                    </g>
+                </svg>
+            </div>
+            <div class="card-body">
+                <div class="wordmark">Path<small>of</small>Exile</div>
+                <h3 class="text-xl font-bold text-white">Path of Exile</h3>
+                <p class="text-sm text-gray-300/90 leading-relaxed">Base de données des arbres de passifs, profit/heure, progression de l'Atlas et stratégies de farm.</p>
+                <div class="flex items-center justify-between pt-4 mt-auto">
+                    <a href="#" class="btn-outline text-sm px-5 py-2">Voir la base</a>
+                    <span class="emblem">✦</span>
                 </div>
-                <h3 class="font-cinzel font-bold text-lg text-red-400 tracking-wider">Path of Exile</h3>
-                <p class="text-gray-400 text-xs leading-relaxed">
-                    Path of Exile : suivez vos skill trees, profit per hour, atlas progression et stratégies de farm avancées.
-                </p>
             </div>
-            <div class="pt-6">
-                <a href="#" class="inline-block bg-brandOrange/10 hover:bg-brandOrange text-brandOrange hover:text-darkBg font-semibold text-xs px-4 py-2 rounded-lg transition border border-brandOrange/20">
-                    View Database
-                </a>
-            </div>
-        </div>
+        </article>
 
         <!-- World of Warcraft -->
-        <div class="bg-cardBg rounded-xl border border-gray-800 hover:border-blue-900/50 transition p-6 flex flex-col justify-between group shadow-lg">
-            <div class="space-y-4">
-                <div class="h-36 rounded-lg overflow-hidden border border-blue-900/20 relative">
-                    <img src="wow-loot.jpg" alt="World of Warcraft" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+        <article class="game-card theme-wow reveal" style="--d:.2s">
+            <div class="card-art" aria-hidden="true">
+                <svg class="castle" viewBox="0 0 300 140" preserveAspectRatio="xMidYMax slice">
+                    <path fill="#0d1a35" d="M0 140V95h20V70h10v25h25V55l12-25 12 25v40h20V75h10v20h18V40l15-30 15 30v55h18V75h10v20h20V60l12-22 12 22v35h25V70h10v25h16v45z"/>
+                    <g fill="#ffd27a" opacity=".8">
+                        <rect x="64" y="70" width="4" height="7"/><rect x="149" y="55" width="4" height="8"/>
+                        <rect x="149" y="78" width="4" height="7"/><rect x="232" y="72" width="4" height="7"/>
+                    </g>
+                </svg>
+            </div>
+            <div class="card-body">
+                <div class="wordmark">World<small>of</small>Warcraft</div>
+                <h3 class="text-xl font-bold text-white">World of Warcraft</h3>
+                <p class="text-sm text-gray-300/90 leading-relaxed">Rosters de raid, suivi des présences, attribution du butin et analyse des performances.</p>
+                <div class="flex items-center justify-between pt-4 mt-auto">
+                    <a href="#" class="btn-primary text-sm px-5 py-2">Trouver un outil</a>
+                    <span class="emblem">⛨</span>
                 </div>
-                <h3 class="font-cinzel font-bold text-lg text-blue-400 tracking-wider">World of Warcraft</h3>
-                <p class="text-gray-400 text-xs leading-relaxed">
-                    World of Warcraft : gérez vos rosters de raid, suivi des présences, attributions de butin et performances.
-                </p>
             </div>
-            <div class="pt-6">
-                <a href="#" class="inline-block bg-brandOrange/10 hover:bg-brandOrange text-brandOrange hover:text-darkBg font-semibold text-xs px-4 py-2 rounded-lg transition border border-brandOrange/20">
-                    Find Tools
-                </a>
-            </div>
-        </div>
-
+        </article>
     </div>
 </section>
 
-<!-- COMMUNITY FREE TOOLS -->
-<section id="outils" class="py-16 px-6 max-w-7xl mx-auto w-full border-t border-gray-800/60">
-    <div class="flex items-center justify-between mb-8">
-        <h3 class="font-cinzel text-2xl font-bold tracking-tight">Community Free Tools</h3>
-        <span class="text-xs text-brandOrange font-medium">100% Gratuit</span>
-    </div>
+<!-- ================= OUTILS GRATUITS ================= -->
+<section id="outils" class="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+    <h2 class="text-2xl font-bold text-white mb-6">Community Free Tools</h2>
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-cardBg border border-gray-800 p-5 rounded-xl flex flex-col justify-between space-y-4">
-            <div class="space-y-2">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs text-brandOrange font-bold uppercase tracking-wider">Calculateur</span>
-                    <span class="bg-mintFree/10 text-mintFree text-[10px] font-bold px-2 py-0.5 rounded border border-mintFree/20">FREE</span>
-                </div>
-                <h4 class="font-bold text-sm text-white">Character Builder</h4>
-                <p class="text-xs text-gray-400 leading-relaxed">Character Build tool, character builder tool, analyze character.</p>
+        <a href="#" class="tool-card reveal">
+            <span class="tool-icon text-teal-300 bg-teal-400/10 border-teal-400/20">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="7" r="3.5"/><path d="M5 20c1-4 4-6 7-6s6 2 7 6"/><path d="M17 4l2-2M19 8h2"/></svg>
+            </span>
+            <div>
+                <h3 class="font-semibold text-white">Character Builder</h3>
+                <p class="text-sm text-gray-400 mt-1">Crée, compare et partage tes builds de personnage en quelques clics.</p>
             </div>
-        </div>
+        </a>
 
-        <div class="bg-cardBg border border-gray-800 p-5 rounded-xl flex flex-col justify-between space-y-4">
-            <div class="space-y-2">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs text-brandOrange font-bold uppercase tracking-wider">Analyseur</span>
-                    <span class="bg-mintFree/10 text-mintFree text-[10px] font-bold px-2 py-0.5 rounded border border-mintFree/20">FREE</span>
-                </div>
-                <h4 class="font-bold text-sm text-white">DPS Analyzer</h4>
-                <p class="text-xs text-gray-400 leading-relaxed">DPS optimizer, CPI Analyzer, DPS Analyzer, performance metrics.</p>
+        <a href="#" class="tool-card reveal" style="--d:.1s">
+            <span class="tool-icon text-orange-300 bg-orange-500/10 border-orange-500/20">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 20 20 4M14 4h6v6"/><path d="M4 14l6 6"/></svg>
+            </span>
+            <div>
+                <h3 class="font-semibold text-white">DPS Analyzer</h3>
+                <p class="text-sm text-gray-400 mt-1">Analyse tes logs de combat et repère ce qui limite tes dégâts.</p>
             </div>
-        </div>
+        </a>
 
-        <div class="bg-cardBg border border-gray-800 p-5 filenamespace-y-4">
-            <div class="space-y-2">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs text-brandOrange font-bold uppercase tracking-wider">Market</span>
-                    <span class="bg-mintFree/10 text-mintFree text-[10px] font-bold px-2 py-0.5 rounded border border-mintFree/20">FREE</span>
-                </div>
-                <h4 class="font-bold text-sm text-white">Market Tracker</h4>
-                <p class="text-xs text-gray-400 leading-relaxed">Market Tracker, market asset analytics and Market Tracker utility.</p>
+        <a href="#" class="tool-card reveal" style="--d:.2s">
+            <span class="badge-free">FREE</span>
+            <span class="tool-icon text-mintFree bg-mintFree/10 border-mintFree/20">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17l5-5 4 4 8-8"/><path d="M15 8h5v5"/></svg>
+            </span>
+            <div class="flex-1 min-w-0">
+                <h3 class="font-semibold text-white">Market Tracker</h3>
+                <p class="text-sm text-gray-400 mt-1">Suis les prix du marché en temps réel et repère les bonnes affaires.</p>
+                <svg class="sparkline mt-3" viewBox="0 0 120 28" preserveAspectRatio="none"><polyline id="spark" fill="none" stroke="#2EC4A6" stroke-width="2" points=""/></svg>
             </div>
-        </div>
+        </a>
     </div>
 </section>
 
-<!-- FOOTER -->
-<footer class="bg-darkBg border-t border-gray-800 text-gray-500 py-8 px-6 text-xs text-center">
-    <div class="max-w-7xl mx-auto space-y-2">
-        <p>UnDocPourTout.com — Tous droits réservés.</p>
-        <p class="opacity-75">Non affilié aux éditeurs de jeux mentionnés.</p>
-    </div>
-</footer>
-<!-- HEADER / NAVIGATION -->
-<header class="border-b border-gray-800/80 bg-darkBg/95 sticky top-0 z-50 backdrop-blur-md">
-    <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
-        <div class="flex items-center space-x-3">
-            <div class="w-9 h-9 rounded-lg bg-cardBg border border-brandOrange/50 flex items-center justify-center text-brandOrange font-bold text-lg shadow-lg shadow-brandOrange/10">U</div>
-            <span class="font-cinzel text-lg font-bold tracking-wide text-white">UnDocPourTout</span>
-        </div>
-        <nav class="hidden md:flex items-center space-x-8 text-sm font-medium text-gray-300">
-            <a href="#guides" class="hover:text-brandOrange transition flex items-center gap-1">Guides <span class="text-xs opacity-60">▾</span></a>
-            <a href="#tools" class="hover:text-brandOrange transition flex items-center gap-1">Tools <span class="text-xs opacity-60">▾</span></a>
-            <a href="#community" class="hover:text-brandOrange transition">Community</a>
-        </nav>
+<!-- ================= COMMUNAUTÉ ================= -->
+<section id="community" class="max-w-7xl mx-auto px-4 sm:px-6 pb-20">
+    <div class="rounded-2xl border border-cardBorder bg-gradient-to-r from-cardBg to-[#1b1410] p-8 sm:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 reveal">
         <div>
-            <a href="#login" class="bg-brandOrange hover:bg-brandOrangeHover text-darkBg font-bold px-6 py-2.5 rounded-lg text-sm transition shadow-md shadow-brandOrange/20">
-                Login
-            </a>
+            <h2 class="text-2xl font-bold text-white">Rejoins la communauté</h2>
+            <p class="text-gray-400 mt-2">Propose un guide, signale une erreur ou demande un outil pour ton jeu.</p>
         </div>
-    </div>
-</header>
-
-<!-- HERO SECTION -->
-<section class="relative py-16 lg:py-24 px-6 overflow-hidden border-b border-gray-800/40">
-    <div class="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-        <div class="lg:col-span-6 space-y-6">
-            <div class="space-y-2">
-                <h1 class="font-cinzel text-5xl sm:text-6xl font-bold tracking-tight text-white">
-                    Guild HQ: War Room
-                </h1>
-                <p class="text-xl sm:text-2xl font-cinzel text-gray-300">
-                    Guides <span class="text-brandOrange">core-meets-dashboard</span>
-                </p>
-            </div>
-            <p class="text-gray-400 text-base leading-relaxed max-w-lg">
-                Sub-headline — <span class="text-gray-300 font-medium">Optimize, manage & grow your game organizations</span> with advanced tools & real-time analytics.
-            </p>
-            <div class="flex flex-wrap gap-4 pt-2">
-                <a href="#jeux" class="bg-brandOrange hover:bg-brandOrangeHover text-darkBg font-bold px-7 py-3 rounded-lg transition shadow-lg shadow-brandOrange/20 text-sm">
-                    Call-to-Action
-                </a>
-                <a href="#outils" class="bg-cardBg hover:bg-cardBorder border border-gray-700/80 text-textLight font-semibold px-7 py-3 rounded-lg transition text-sm">
-                    Call-to-Action
-                </a>
-            </div>
-        </div>
-        <!-- Visuel War Room Dashboard Généré -->
-        <div class="lg:col-span-6">
-            <div class="rounded-xl border border-gray-800 bg-cardBg p-2 shadow-2xl relative overflow-hidden group">
-                <img src="war-room.jpg" alt="War Room Dashboard" class="rounded-lg w-full h-auto object-cover border border-gray-800/80 shadow-inner group-hover:scale-[1.01] transition duration-500">
-            </div>
-        </div>
+        <a href="#" class="btn-primary px-6 py-3 shrink-0">Rejoindre le Discord</a>
     </div>
 </section>
 
-<!-- SECTION 3 JEUX AVEC LES VISUELS GÉNÉRÉS -->
-<section id="jeux" class="py-16 px-6 max-w-7xl mx-auto w-full">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
-        <!-- Albion Online -->
-        <div class="bg-cardBg rounded-xl border border-gray-800 hover:border-emerald-600/50 transition p-6 flex flex-col justify-between group shadow-lg">
-            <div class="space-y-4">
-                <div class="h-36 rounded-lg overflow-hidden border border-emerald-900/20 relative">
-                    <img src="albion-banner.jpg" alt="Albion Online" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                </div>
-                <h3 class="font-cinzel font-bold text-lg text-emerald-400 tracking-wider">Albion Online</h3>
-                <p class="text-gray-400 text-xs leading-relaxed">
-                    Albion Online : la référence pour gérer guild assets, regear guild events, calculateurs de craft et flux de trésorerie.
-                </p>
-            </div>
-            <div class="pt-6">
-                <a href="#" class="inline-block bg-brandOrange/10 hover:bg-brandOrange text-brandOrange hover:text-darkBg font-semibold text-xs px-4 py-2 rounded-lg transition border border-brandOrange/20">
-                    Explore Guides
-                </a>
-            </div>
-        </div>
-
-        <!-- Path of Exile -->
-        <div class="bg-cardBg rounded-xl border border-gray-800 hover:border-red-900/50 transition p-6 flex flex-col justify-between group shadow-lg">
-            <div class="space-y-4">
-                <div class="h-36 rounded-lg overflow-hidden border border-red-900/20 relative">
-                    <img src="poe-tree.jpg" alt="Path of Exile" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                </div>
-                <h3 class="font-cinzel font-bold text-lg text-red-400 tracking-wider">Path of Exile</h3>
-                <p class="text-gray-400 text-xs leading-relaxed">
-                    Path of Exile : suivez vos skill trees, profit per hour, atlas progression et stratégies de farm avancées.
-                </p>
-            </div>
-            <div class="pt-6">
-                <a href="#" class="inline-block bg-brandOrange/10 hover:bg-brandOrange text-brandOrange hover:text-darkBg font-semibold text-xs px-4 py-2 rounded-lg transition border border-brandOrange/20">
-                    View Database
-                </a>
-            </div>
-        </div>
-
-        <!-- World of Warcraft -->
-        <div class="bg-cardBg rounded-xl border border-gray-800 hover:border-blue-900/50 transition p-6 flex flex-col justify-between group shadow-lg">
-            <div class="space-y-4">
-                <div class="h-36 rounded-lg overflow-hidden border border-blue-900/20 relative">
-                    <img src="wow-loot.jpg" alt="World of Warcraft" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
-                </div>
-                <h3 class="font-cinzel font-bold text-lg text-blue-400 tracking-wider">World of Warcraft</h3>
-                <p class="text-gray-400 text-xs leading-relaxed">
-                    World of Warcraft : gérez vos rosters de raid, suivi des présences, attributions de butin et performances.
-                </p>
-            </div>
-            <div class="pt-6">
-                <a href="#" class="inline-block bg-brandOrange/10 hover:bg-brandOrange text-brandOrange hover:text-darkBg font-semibold text-xs px-4 py-2 rounded-lg transition border border-brandOrange/20">
-                    Find Tools
-                </a>
-            </div>
-        </div>
-
-    </div>
-</section>
-
-<!-- COMMUNITY FREE TOOLS -->
-<section id="outils" class="py-16 px-6 max-w-7xl mx-auto w-full border-t border-gray-800/60">
-    <div class="flex items-center justify-between mb-8">
-        <h3 class="font-cinzel text-2xl font-bold tracking-tight">Community Free Tools</h3>
-        <span class="text-xs text-brandOrange font-medium">100% Gratuit</span>
-    </div>
-
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="bg-cardBg border border-gray-800 p-5 rounded-xl flex flex-col justify-between space-y-4">
-            <div class="space-y-2">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs text-brandOrange font-bold uppercase tracking-wider">Calculateur</span>
-                    <span class="bg-mintFree/10 text-mintFree text-[10px] font-bold px-2 py-0.5 rounded border border-mintFree/20">FREE</span>
-                </div>
-                <h4 class="font-bold text-sm text-white">Character Builder</h4>
-                <p class="text-xs text-gray-400 leading-relaxed">Character Build tool, character builder tool, analyze character.</p>
-            </div>
-        </div>
-
-        <div class="bg-cardBg border border-gray-800 p-5 rounded-xl flex flex-col justify-between space-y-4">
-            <div class="space-y-2">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs text-brandOrange font-bold uppercase tracking-wider">Analyseur</span>
-                    <span class="bg-mintFree/10 text-mintFree text-[10px] font-bold px-2 py-0.5 rounded border border-mintFree/20">FREE</span>
-                </div>
-                <h4 class="font-bold text-sm text-white">DPS Analyzer</h4>
-                <p class="text-xs text-gray-400 leading-relaxed">DPS optimizer, CPI Analyzer, DPS Analyzer, performance metrics.</p>
-            </div>
-        </div>
-
-        <div class="bg-cardBg border border-gray-800 p-5 filenamespace-y-4">
-            <div class="space-y-2">
-                <div class="flex justify-between items-start">
-                    <span class="text-xs text-brandOrange font-bold uppercase tracking-wider">Market</span>
-                    <span class="bg-mintFree/10 text-mintFree text-[10px] font-bold px-2 py-0.5 rounded border border-mintFree/20">FREE</span>
-                </div>
-                <h4 class="font-bold text-sm text-white">Market Tracker</h4>
-                <p class="text-xs text-gray-400 leading-relaxed">Market Tracker, market asset analytics and Market Tracker utility.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- FOOTER -->
-<footer class="bg-darkBg border-t border-gray-800 text-gray-500 py-8 px-6 text-xs text-center">
-    <div class="max-w-7xl mx-auto space-y-2">
-        <p>UnDocPourTout.com — Tous droits réservés.</p>
-        <p class="opacity-75">Non affilié aux éditeurs de jeux mentionnés.</p>
-    </div>
+<!-- ================= FOOTER ================= -->
+<footer class="border-t border-white/5 py-8 px-4 text-xs text-center text-gray-500">
+    <p>UnDocPourTout — Tous droits réservés.</p>
+    <p class="opacity-75 mt-1">Site de fan non affilié aux éditeurs des jeux mentionnés.</p>
 </footer>
+
+</body>
+</html>
