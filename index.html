@@ -97,55 +97,7 @@
 
 <!-- ================= HERO ================= -->
 <section id="hero" class="hero relative overflow-hidden">
-    <!-- Décor : taverne + table de carte -->
-    <div class="hero-bg" aria-hidden="true">
-        <div class="shelves"></div>
-        <div class="candle c1"></div>
-        <div class="candle c2"></div>
-        <div class="map-table">
-            <svg viewBox="0 0 800 300" preserveAspectRatio="none">
-                <path d="M40 220 C 140 160, 220 250, 330 190 S 520 120, 620 170" stroke="#5a3a1c" stroke-width="3" fill="none" stroke-dasharray="8 6"/>
-                <path d="M100 60 C 180 110, 260 40, 360 90 S 560 60, 700 100" stroke="#6b4826" stroke-width="2" fill="none"/>
-                <circle cx="330" cy="190" r="10" fill="none" stroke="#7a2a12" stroke-width="3"/>
-                <circle cx="620" cy="170" r="7" fill="#7a2a12"/>
-                <path d="M480 230 l14 -24 l14 24 z M500 236 l10 -18 l10 18 z" fill="#5a3a1c" opacity=".7"/>
-            </svg>
-            <div class="token t1"></div><div class="token t2"></div><div class="token t3"></div>
-        </div>
-    </div>
-
-    <!-- Écrans holographiques -->
-    <div class="holo-stage" aria-hidden="true">
-        <!-- Gauche : inventaire -->
-        <div class="holo-screen screen-left" data-depth="18">
-            <div class="holo-bar"><span></span><span></span><span></span></div>
-            <div class="grid grid-cols-4 gap-1.5 p-3" id="inventory"></div>
-        </div>
-
-        <!-- Centre : tableau + donut -->
-        <div class="holo-screen screen-center" data-depth="10">
-            <div class="holo-bar"><span></span><span></span><span></span><i class="ml-auto">GUILD BANK</i></div>
-            <div class="flex gap-3 p-3">
-                <div class="flex-1 space-y-1.5" id="holo-table"></div>
-                <div class="w-1/4 flex flex-col items-center justify-end gap-2">
-                    <div class="donut"><span id="donut-val">72%</span></div>
-                    <div class="w-full space-y-1">
-                        <div class="h-1 rounded bg-holo/40"></div>
-                        <div class="h-1 w-2/3 rounded bg-holo/25"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Droite : gemmes + barres -->
-        <div class="holo-screen screen-right" data-depth="22">
-            <div class="holo-bar"><span></span><span></span><span></span></div>
-            <div class="flex justify-around px-3 pt-3">
-                <div class="gem g1"></div><div class="gem g2"></div><div class="gem g3"></div>
-            </div>
-            <div class="bars flex items-end gap-1.5 h-20 px-3 pb-3 pt-2" id="bars"></div>
-        </div>
-    </div>
+    <div class="hero-bg" aria-hidden="true"></div>
 
     <!-- Voile de lisibilité -->
     <div class="hero-veil" aria-hidden="true"></div>
@@ -176,9 +128,7 @@
 
         <!-- Albion Online -->
         <article class="game-card theme-albion reveal">
-            <div class="card-art" aria-hidden="true">
-                <div class="mini-monitor"><div></div><div></div><div></div></div>
-            </div>
+            <div class="card-art" aria-hidden="true"></div>
             <div class="card-body">
                 <div class="wordmark">Albion<small>Online</small></div>
                 <h3 class="text-xl font-bold text-white">Albion Online</h3>

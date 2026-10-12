@@ -37,71 +37,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const mobileMenu = document.getElementById('mobile-menu');
     burger?.addEventListener('click', () => mobileMenu.classList.toggle('hidden'));
 
-    /* ---------- Contenu des écrans holographiques ---------- */
-    const table = document.getElementById('holo-table');
-    if (table) {
-        for (let i = 0; i < 9; i++) {
-            const row = document.createElement('div');
-            row.className = 'holo-row' + (i === 2 || i === 6 ? ' hl' : '');
-            row.innerHTML = '<b></b><b></b><b></b><b></b>';
-            row.children[1].style.width = 55 + Math.random() * 45 + '%';
-            row.children[2].style.width = 40 + Math.random() * 60 + '%';
-            table.appendChild(row);
-        }
-    }
-
-    const inventory = document.getElementById('inventory');
-    if (inventory) {
-        const colors = ['#ff7a1a', '#5ee7ff', '#2ec4a6', '#b06cff', '#ffd27a', 'transparent'];
-        for (let i = 0; i < 16; i++) {
-            const slot = document.createElement('div');
-            slot.className = 'inv-slot';
-            slot.style.setProperty('--c', colors[Math.floor(Math.random() * colors.length)]);
-            inventory.appendChild(slot);
-        }
-    }
-
-    const bars = document.getElementById('bars');
-    const barEls = [];
-    if (bars) {
-        for (let i = 0; i < 7; i++) {
-            const b = document.createElement('i');
-            b.style.height = 20 + Math.random() * 80 + '%';
-            bars.appendChild(b);
-            barEls.push(b);
-        }
-    }
-
-    const donut = document.querySelector('.donut');
-
-    // Animation "données live"
     const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!reduced) {
-        setInterval(() => {
-            barEls.forEach(b => (b.style.height = 20 + Math.random() * 80 + '%'));
-            donut?.style.setProperty('--p', 55 + Math.round(Math.random() * 25) + '%');
-        }, 2200);
-    }
 
-    /* ---------- Parallaxe des écrans à la souris ---------- */
-    const hero = document.getElementById('hero');
-    const screens = document.querySelectorAll('.holo-screen');
-    if (hero && !reduced && window.matchMedia('(pointer: fine)').matches) {
-        hero.addEventListener('mousemove', e => {
-            const r = hero.getBoundingClientRect();
-            const x = (e.clientX - r.left) / r.width - 0.5;
-            const y = (e.clientY - r.top) / r.height - 0.5;
-            screens.forEach(s => {
-                const d = Number(s.dataset.depth) || 10;
-                s.style.setProperty('--px', `${-x * d}px`);
-                s.style.setProperty('--py', `${-y * d}px`);
-            });
-        });
-        hero.addEventListener('mouseleave', () => screens.forEach(s => {
-            s.style.setProperty('--px', '0px');
-            s.style.setProperty('--py', '0px');
-        }));
-    }
 
     /* ---------- Sparkline Market Tracker ---------- */
     const spark = document.getElementById('spark');
