@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="fr" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Outils Premium Albion Online — UnDocPourTous</title>
+    <meta name="description" content="Les outils Premium d’Albion Online, optimisés pour votre compte : Builder Tryhard et bientôt d’autres.">
+    <meta property="og:site_name" content="UnDocPourTous">
+    <meta property="og:title" content="Outils Premium Albion Online — UnDocPourTous">
+    <meta property="og:description" content="Les outils Premium d’Albion Online, optimisés pour votre compte : Builder Tryhard et bientôt d’autres.">
+    <meta property="og:type" content="website">
+    <meta property="og:locale" content="fr_FR">
+
+    <!-- Polices -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Lora:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind (CDN) + couleurs du site -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="tailwind-config.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body class="bg-darkBg text-textLight font-sans antialiased">
+
+<!-- ================= EN-TÊTE ================= -->
+<header class="site-header sticky top-0 z-50">
+    <div class="wrap">
+        <a href="index.html" class="flex items-center gap-3" aria-label="UnDocPourTous, accueil">
+            <img src="assets/icons/embleme.svg" alt="" width="36" height="36">
+            <span class="text-lg font-bold text-textLight">UnDocPourTous</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-9 text-sm font-medium" aria-label="Navigation principale">
+            <a href="index.html" class="nav-link">Accueil</a>
+            <a href="index.html#jeux" class="nav-link">Jeux</a>
+            <a href="albion-gratuit.html" class="nav-link">Outils</a>
+            <a href="#" class="nav-link">Discord</a>
+        </nav>
+
+        <div class="flex items-center gap-2">
+            <a href="#" class="btn-login" aria-label="Connexion"><img src="assets/icons/log-in.svg" alt=""><span class="hidden sm:inline">Connexion</span></a>
+            <button id="burger" class="md:hidden grid place-items-center w-10 h-10 text-textLight" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Menu mobile -->
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-cardBorder bg-darkBg" aria-label="Navigation mobile">
+        <div class="wrap py-4 flex flex-col gap-4 text-sm font-medium">
+            <a href="index.html" class="nav-link">Accueil</a>
+            <a href="index.html#jeux" class="nav-link">Jeux</a>
+            <a href="albion-gratuit.html" class="nav-link">Outils</a>
+            <a href="#" class="nav-link">Discord</a>
+        </div>
+    </nav>
+</header>
+
+<main class="wrap pt-8 pb-16 flex flex-col gap-8">
+    <nav aria-label="Fil d’Ariane" class="crumbs">
+            <span><a href="index.html">Accueil</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><a href="albion.html">Albion Online</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><span aria-current="page">Premium</span></span>
+        </nav>
+
+    <section class="pt-3 pb-2 flex flex-col md:flex-row md:items-end md:justify-between gap-5 reveal">
+        <div class="flex flex-col gap-3.5 lg:w-[850px]">
+            <p class="font-mono font-medium text-[11px] text-brandOrange">ALBION ONLINE / PREMIUM</p>
+            <h1 class="text-4xl sm:text-5xl font-semibold">Aller plus loin, pour votre compte.</h1>
+            <p class="text-base leading-[1.6] text-textMuted">Des outils personnalisés pour affiner vos choix. Sélectionnez celui que vous voulez débloquer.</p>
+        </div>
+        <div class="flex flex-col gap-2 md:items-end pb-[5px]">
+            <p class="font-mono text-xs text-brandOrange">1 OUTIL DISPONIBLE · 8 BIENTÔT</p>
+            <p class="text-[13px] text-textMuted">Mises à jour à chaque patch</p>
+        </div>
+    </section>
+
+    <section aria-label="Catalogue des outils Premium">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+            <a href="albion-paiement.html" class="tool-card card-link reveal" style="--d:0s; --card-accent: var(--orange)">
+                <div class="tool-card-visual">
+                    <img class="cover" src="assets/img/maquette/outil-build-perso-carte.webp" alt="" width="1584" height="672" loading="lazy">
+                    <span class="badge badge-premium"><img src="assets/icons/lock-keyhole.svg" alt="">PREMIUM</span>
+                </div>
+                <div class="flex flex-col gap-2.5 p-[22px] flex-1">
+                    <h3 class="text-xl font-semibold leading-[1.2] md:h-12">Builder Tryhard</h3>
+                    <p class="text-[13px] leading-[1.6] text-textMuted md:h-[42px]">Le builder poussé, optimisé pour votre personnage et votre façon de jouer.</p>
+                    <p class="flex items-center justify-between h-6 mt-auto"><span class="card-hint text-[13px] font-semibold">Débloquer →</span><span class="font-mono text-[10px] text-textFaint">ALBION ONLINE</span></p>
+                </div>
+            </a>
+
+            <div class="tool-card card-soon reveal" style="--d:0.1s" aria-disabled="true">
+                <div class="tool-card-visual">
+                    <img class="cover" src="assets/img/maquette/outil-craft.webp" alt="" width="1584" height="672" loading="lazy">
+                    <span class="badge badge-premium"><img src="assets/icons/lock-keyhole.svg" alt="">PREMIUM</span>
+                </div>
+                <div class="flex flex-col gap-2.5 p-[22px] flex-1">
+                    <h3 class="text-xl font-semibold leading-[1.2] md:h-12">Planificateur de craft</h3>
+                    <p class="text-[13px] leading-[1.6] text-textMuted md:h-[42px]">Organisez vos fabrications et anticipez les ressources à réunir.</p>
+                    <p class="flex items-center justify-between h-6 mt-auto"><span class="text-[13px] font-semibold text-textFaint">Bientôt</span><span class="font-mono text-[10px] text-textFaint">ALBION ONLINE</span></p>
+                </div>
+            </div>
+
+            <div class="tool-card card-soon reveal" style="--d:0.2s" aria-disabled="true">
+                <div class="tool-card-visual">
+                    <img class="cover" src="assets/img/maquette/outil-guilde.webp" alt="" width="1584" height="672" loading="lazy">
+                    <span class="badge badge-premium"><img src="assets/icons/lock-keyhole.svg" alt="">PREMIUM</span>
+                </div>
+                <div class="flex flex-col gap-2.5 p-[22px] flex-1">
+                    <h3 class="text-xl font-semibold leading-[1.2] md:h-12">Panel de guilde</h3>
+                    <p class="text-[13px] leading-[1.6] text-textMuted md:h-[42px]">Rassemblez les informations utiles pour préparer les activités de votre guilde.</p>
+                    <p class="flex items-center justify-between h-6 mt-auto"><span class="text-[13px] font-semibold text-textFaint">Bientôt</span><span class="font-mono text-[10px] text-textFaint">ALBION ONLINE</span></p>
+                </div>
+            </div>
+
+            <div class="tool-card card-soon reveal" style="--d:0s" aria-disabled="true">
+                <div class="tool-card-visual">
+                    <img class="cover" src="assets/img/maquette/outil-marche.webp" alt="" width="1584" height="672" loading="lazy">
+                    <span class="badge badge-premium"><img src="assets/icons/lock-keyhole.svg" alt="">PREMIUM</span>
+                </div>
+                <div class="flex flex-col gap-2.5 p-[22px] flex-1">
+                    <h3 class="text-xl font-semibold leading-[1.2] md:h-12">Suivi du marché</h3>
+                    <p class="text-[13px] leading-[1.6] text-textMuted md:h-[42px]">Comparez les tendances des objets pour éclairer vos décisions d’achat.</p>
+                    <p class="flex items-center justify-between h-6 mt-auto"><span class="text-[13px] font-semibold text-textFaint">Bientôt</span><span class="font-mono text-[10px] text-textFaint">ALBION ONLINE</span></p>
+                </div>
+            </div>
+
+            <div class="tool-card card-soon reveal" style="--d:0.1s" aria-disabled="true">
+                <div class="tool-card-visual">
+                    <img class="cover" src="assets/img/maquette/outil-rentabilite.webp" alt="" width="1584" height="672" loading="lazy">
+                    <span class="badge badge-premium"><img src="assets/icons/lock-keyhole.svg" alt="">PREMIUM</span>
+                </div>
+                <div class="flex flex-col gap-2.5 p-[22px] flex-1">
+                    <h3 class="text-xl font-semibold leading-[1.2] md:h-12">Calculateur de rentabilité</h3>
+                    <p class="text-[13px] leading-[1.6] text-textMuted md:h-[42px]">Mettez en perspective vos coûts et vos gains avant de vous lancer.</p>
+                    <p class="flex items-center justify-between h-6 mt-auto"><span class="text-[13px] font-semibold text-textFaint">Bientôt</span><span class="font-mono text-[10px] text-textFaint">ALBION ONLINE</span></p>
+                </div>
+            </div>
+
+            <div class="tool-card card-soon reveal" style="--d:0.2s" aria-disabled="true">
+                <div class="tool-card-visual">
+                    <img class="cover" src="assets/img/maquette/outil-pvp.webp" alt="" width="1584" height="672" loading="lazy">
+                    <span class="badge badge-premium"><img src="assets/icons/lock-keyhole.svg" alt="">PREMIUM</span>
+                </div>
+                <div class="flex flex-col gap-2.5 p-[22px] flex-1">
+                    <h3 class="text-xl font-semibold leading-[1.2] md:h-12">Simulateur PvP</h3>
+                    <p class="text-[13px] leading-[1.6] text-textMuted md:h-[42px]">Explorez vos choix d’équipement avant votre prochain affrontement.</p>
+                    <p class="flex items-center justify-between h-6 mt-auto"><span class="text-[13px] font-semibold text-textFaint">Bientôt</span><span class="font-mono text-[10px] text-textFaint">ALBION ONLINE</span></p>
+                </div>
+            </div>
+
+            <div class="tool-card card-soon reveal" style="--d:0s" aria-disabled="true">
+                <div class="tool-card-visual">
+                    <img class="cover" src="assets/img/maquette/outil-progression.webp" alt="" width="1584" height="672" loading="lazy">
+                    <span class="badge badge-premium"><img src="assets/icons/lock-keyhole.svg" alt="">PREMIUM</span>
+                </div>
+                <div class="flex flex-col gap-2.5 p-[22px] flex-1">
+                    <h3 class="text-xl font-semibold leading-[1.2] md:h-12">Plan de progression</h3>
+                    <p class="text-[13px] leading-[1.6] text-textMuted md:h-[42px]">Tracez les prochaines étapes adaptées aux objectifs de votre personnage.</p>
+                    <p class="flex items-center justify-between h-6 mt-auto"><span class="text-[13px] font-semibold text-textFaint">Bientôt</span><span class="font-mono text-[10px] text-textFaint">ALBION ONLINE</span></p>
+                </div>
+            </div>
+
+            <div class="tool-card card-soon reveal" style="--d:0.1s" aria-disabled="true">
+                <div class="tool-card-visual">
+                    <img class="cover" src="assets/img/maquette/outil-alertes.webp" alt="" width="1584" height="672" loading="lazy">
+                    <span class="badge badge-premium"><img src="assets/icons/lock-keyhole.svg" alt="">PREMIUM</span>
+                </div>
+                <div class="flex flex-col gap-2.5 p-[22px] flex-1">
+                    <h3 class="text-xl font-semibold leading-[1.2] md:h-12">Alertes de prix</h3>
+                    <p class="text-[13px] leading-[1.6] text-textMuted md:h-[42px]">Définissez les objets et les seuils que vous souhaitez surveiller.</p>
+                    <p class="flex items-center justify-between h-6 mt-auto"><span class="text-[13px] font-semibold text-textFaint">Bientôt</span><span class="font-mono text-[10px] text-textFaint">ALBION ONLINE</span></p>
+                </div>
+            </div>
+
+            <div class="tool-card card-soon reveal" style="--d:0.2s" aria-disabled="true">
+                <div class="tool-card-visual">
+                    <img class="cover" src="assets/img/maquette/outil-zvz.webp" alt="" width="1584" height="672" loading="lazy">
+                    <span class="badge badge-premium"><img src="assets/icons/lock-keyhole.svg" alt="">PREMIUM</span>
+                </div>
+                <div class="flex flex-col gap-2.5 p-[22px] flex-1">
+                    <h3 class="text-xl font-semibold leading-[1.2] md:h-12">Logistique ZvZ</h3>
+                    <p class="text-[13px] leading-[1.6] text-textMuted md:h-[42px]">Préparez les équipements et les ressources pour vos combats de groupe.</p>
+                    <p class="flex items-center justify-between h-6 mt-auto"><span class="text-[13px] font-semibold text-textFaint">Bientôt</span><span class="font-mono text-[10px] text-textFaint">ALBION ONLINE</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <a href="albion-gratuit.html" class="invite card-link reveal" style="--card-accent: var(--mint)">
+        <span class="flex flex-col gap-2"><span class="text-lg">Vous préférez commencer par les bases ?</span><span class="text-[13px] text-textMuted">Les outils gratuits restent accessibles, sans compte.</span></span>
+        <span class="card-hint text-sm font-semibold">Voir les outils gratuits →</span>
+    </a>
+</main>
+
+<!-- ================= PIED DE PAGE ================= -->
+<footer class="site-footer">
+    <div class="wrap flex flex-col gap-7">
+        <div class="grid grid-cols-2 lg:flex lg:justify-between gap-x-6 gap-y-8">
+            <div class="col-span-2 lg:col-span-1 lg:w-[430px] flex flex-col gap-3.5">
+                <div class="flex items-center gap-3">
+                    <img src="assets/icons/embleme.svg" alt="" width="36" height="36">
+                    <span class="text-lg font-bold text-textLight">UnDocPourTous</span>
+                </div>
+                <p class="text-[13px] leading-[1.6] text-textMuted">Des outils pour comprendre votre jeu.<br>Et aller plus loin, à votre rythme.</p>
+            </div>
+            <div class="lg:w-[180px] flex flex-col gap-3">
+                <p class="footer-title">EXPLORER</p>
+                <a href="index.html" class="footer-link">Accueil</a>
+                <a href="index.html#jeux" class="footer-link">Jeux</a>
+                <a href="albion-gratuit.html" class="footer-link">Outils gratuits</a>
+            </div>
+            <div class="lg:w-[180px] flex flex-col gap-3">
+                <p class="footer-title">COMMUNAUTÉ</p>
+                <a href="#" class="footer-link">Discord</a>
+                <a href="#" class="footer-link">Connexion</a>
+                <a href="albion-premium.html" class="footer-link">Premium</a>
+            </div>
+            <div class="col-span-2 lg:col-span-1 lg:w-[220px] flex flex-col gap-3">
+                <p class="footer-title">INFORMATIONS</p>
+                <a href="#" class="footer-link">Mentions légales</a>
+                <a href="#" class="footer-link">Confidentialité</a>
+                <a href="#" class="footer-link">Conditions d’utilisation</a>
+            </div>
+        </div>
+        <div class="border-t border-cardBorder pt-[22px] flex flex-col sm:flex-row sm:justify-between gap-2 text-[11px] text-textFaint">
+            <p>© UnDocPourTous. Non affilié aux éditeurs des jeux cités.</p>
+            <p class="font-mono">FAIT POUR LES JOUEURS.</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>
