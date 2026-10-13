@@ -41,17 +41,23 @@ function scriptsInline(html) {
 const hachage = (code) =>
     `'sha256-${createHash('sha256').update(code.replace(/\r\n?/g, '\n'), 'utf8').digest('base64')}'`;
 
+// Anti-robot Cloudflare Turnstile : autorisé seulement sur les pages qui le déclarent
+// (<meta name="undoc-captcha" content="turnstile">), c'est-à-dire la page de connexion.
+const TURNSTILE = 'https://challenges.cloudflare.com';
+const avecCaptcha = (html) => /<meta\s+name\s*=\s*"undoc-captcha"\s+content\s*=\s*"turnstile"/i.test(html);
+
 export function politique(html, supabase) {
     const hote = new URL(supabase).host;
     const hachages = [...new Set(scriptsInline(html).map(hachage))];
+    const captcha = avecCaptcha(html);
     return [
         "default-src 'self'",
-        ["script-src 'self'", ...hachages].join(' '),
+        ["script-src 'self'", ...hachages, ...(captcha ? [TURNSTILE] : [])].join(' '),
         "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
         "font-src 'self' https://fonts.gstatic.com",
         "img-src 'self' data: https://cdn.discordapp.com",
-        `connect-src 'self' https://${hote} wss://${hote}`,
-        "frame-src 'none'",
+        `connect-src 'self' https://${hote} wss://${hote}${captcha ? ` ${TURNSTILE}` : ''}`,
+        captcha ? `frame-src ${TURNSTILE}` : "frame-src 'none'",
         "object-src 'none'",
         "base-uri 'self'",
         "form-action 'self'",

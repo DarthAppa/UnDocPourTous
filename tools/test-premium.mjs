@@ -63,7 +63,7 @@ try {
             );
             t.verif(
                 liens.length === 1 &&
-                    liens[0].href === 'connexion-pts.html?retour=albion-builder-tryhard.html' &&
+                    liens[0].href === 'connexion.html?retour=albion-builder-tryhard.html' &&
                     liens[0].classe.includes('card-link') &&
                     liens[0].txt.includes('Réservé aux abonnés Premium') &&
                     (await p.$$('#premium-zone .card-hint')).length === 1,
@@ -148,10 +148,10 @@ try {
         {
             const { p, erreurs, appelsFonctions } = await ouvrir(vp, 'albion-paiement.html', { session: null });
             await p.click('#payer');
-            await p.waitForURL(/connexion-pts\.html/, { timeout: 8000 }).catch(() => {});
+            await p.waitForURL(/connexion\.html/, { timeout: 8000 }).catch(() => {});
             t.verif(
-                p.url().endsWith('connexion-pts.html?retour=albion-paiement.html') && !appelsFonctions.length,
-                'paiement non connecté : renvoi vers connexion-pts.html?retour=albion-paiement.html',
+                p.url().endsWith('connexion.html?retour=albion-paiement.html') && !appelsFonctions.length,
+                'paiement non connecté : renvoi vers connexion.html?retour=albion-paiement.html',
             );
             t.verif(!erreurs.length, `aucune erreur JS ${erreurs.join(' | ')}`);
             await p.close();

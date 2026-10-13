@@ -5,7 +5,7 @@
 import { appelerFonction, etat } from './pts-auth.js';
 
 const STRIPE = 'https://checkout.stripe.com/';
-const CONNEXION = 'connexion-pts.html?retour=albion-paiement.html';
+const CONNEXION = 'connexion.html?retour=albion-paiement.html';
 const btn = document.getElementById('payer');
 const msg = document.getElementById('paiement-msg');
 

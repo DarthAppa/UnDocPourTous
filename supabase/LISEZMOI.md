@@ -159,10 +159,47 @@ Le test crée une base neuve, applique la migration deux fois, vérifie chaque r
 
 La logique des fonctions (CORS, statuts Stripe, vérification Discord…) se teste sans rien installer : `node tools/test-fonctions.mjs`.
 
+## 9. Comptes du site : Google, e-mail, anti-robot, e-mails
+
+On se connecte au site avec **Google** ou **e-mail + mot de passe** (page `connexion.html`).
+Discord n'est **pas** un moyen de connexion : on le **relie** à son compte (page `connexion-pts.html`
+ou profil) pour débloquer les outils Pack ta Small.
+
+Réglages déjà faits (Authentication) : liaison manuelle d'identités activée (« Manual linking »),
+mot de passe de 10 caractères minimum avec lettres et chiffres, redirections autorisées vers
+`connexion.html`, `connexion-pts.html` et `profil.html`.
+
+**Google** (Authentication › Sign In / Providers › Google) :
+
+1. Google Cloud Console › API et services › Écran de consentement OAuth : type « Externe », nom
+   « UnDocPourTous », e-mail d'assistance, domaine `undocpourtous.com`.
+2. Identifiants › Créer des identifiants › ID client OAuth › « Application Web » :
+    - Origines JavaScript autorisées : `https://undocpourtous.com`
+    - URI de redirection autorisés : `https://wibfiqtuqfddijjlfscs.supabase.co/auth/v1/callback`
+3. Copier l'ID client et le code secret dans Supabase › Providers › Google, activer, enregistrer.
+   Le bouton « Continuer avec Google » apparaît alors tout seul sur le site.
+
+**E-mails** : le serveur d'e-mails intégré à Supabase n'envoie qu'aux membres de l'équipe du projet,
+et très peu par heure. Pour de vraies inscriptions, brancher un SMTP (ex. Resend, gratuit jusqu'à
+3 000 e-mails/mois) dans Authentication › Emails › SMTP Settings, avec une adresse du domaine
+(`no-reply@undocpourtous.com`).
+
+**Anti-robot Cloudflare Turnstile** (gratuit) :
+
+1. Cloudflare › Turnstile › Ajouter un widget : domaine `undocpourtous.com`, mode « Managed ».
+2. Clé **publique** (Site Key) → `TURNSTILE_SITE_KEY` dans `pts-config.js` (elle est faite pour être visible).
+3. Clé **secrète** → Supabase › Authentication › Attack Protection › CAPTCHA (fournisseur Turnstile).
+   Activer les deux en même temps : sinon les inscriptions sont refusées.
+
+**Double authentification** : chacun l'active depuis son profil (application type Google
+Authenticator). La base l'exige ensuite pour lire ses données et les contenus réservés (migration
+`20261014090000_comptes_site.sql`).
+
 ## Ce que garantit la base (résumé)
 
 - Un visiteur non connecté (`anon`) ne lit rien dans ces 4 tables et ne peut appeler aucune fonction.
 - Un utilisateur connecté lit seulement **sa** ligne de `profils`, `abonnements` et `membres_pts`, et ne peut modifier que **son pseudo**.
 - Personne ne peut s'écrire un abonnement, se déclarer membre PTS ou publier un contenu depuis le navigateur : seules les fonctions (clé `service_role`) le peuvent.
-- Un contenu `premium` n'est lisible qu'avec un abonnement `actif`/`essai` non expiré ; un contenu `pts` qu'avec une vérification Discord de moins de 30 jours.
+- Un contenu `premium` n'est lisible qu'avec un abonnement `actif`/`essai` non expiré ; un contenu `pts` qu'avec une vérification Discord de moins de 30 jours, et seulement si ce Discord est **toujours relié** au compte.
+- Un compte qui a activé la double authentification doit avoir saisi son code (session `aal2`) pour lire ses données et les contenus réservés.
 - Supprimer un compte supprime aussi son profil, son abonnement et sa vérification PTS.

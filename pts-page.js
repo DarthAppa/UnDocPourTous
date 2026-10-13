@@ -34,15 +34,21 @@ export function appliquer(e) {
         }
     });
 
+    // Bouton vers connexion-pts.html : se connecter au site puis relier Discord (ou revérifier)
+    const texteLogin = btnLogin.querySelector('[data-texte]') || btnLogin.lastChild;
     if (e.connecte) {
-        btnLogin.hidden = true;
+        btnLogin.hidden = e.debloque;
+        texteLogin.textContent = e.discord ? 'Revérifier avec Discord' : 'Relier mon Discord';
         zone.hidden = false;
         zone.querySelector('[data-pseudo]').textContent = e.pseudo;
         zone.querySelector('[data-statut]').textContent = e.debloque
             ? 'Outils débloqués'
-            : 'Pas encore membre du serveur Pack ta Small : rejoins-le, puis reconnecte-toi.';
+            : e.discord
+              ? 'Pas encore membre du serveur Pack ta Small : rejoins-le, puis revérifie.'
+              : 'Relie ton Discord pour débloquer les outils.';
     } else {
         btnLogin.hidden = false;
+        texteLogin.textContent = 'Débloquer avec Discord';
         zone.hidden = true;
     }
 
@@ -50,13 +56,13 @@ export function appliquer(e) {
     afficherDonnees(e);
 
     if (note && !e.connecte && (e.inactif || new URLSearchParams(location.search).has('inactif'))) {
-        note.textContent = `Tu as été déconnecté après une période d’inactivité. Reconnecte-toi avec Discord pour retrouver les outils.`;
+        note.textContent = `Tu as été déconnecté après une période d’inactivité. Reconnecte-toi pour retrouver les outils.`;
         return;
     }
     if (note) {
         note.textContent = e.debloque
-            ? 'Connecté avec Discord : les outils sont débloqués.'
-            : 'Outils réservés aux membres du Discord Pack ta Small : connecte-toi avec Discord pour les débloquer.';
+            ? 'Discord vérifié : les outils sont débloqués.'
+            : 'Outils réservés aux membres du Discord Pack ta Small : connecte-toi à ton compte, puis relie ton Discord pour les débloquer.';
     }
 }
 

@@ -68,17 +68,17 @@ try {
         // 1. Non connecté : renvoi vers la connexion, retour sur le profil
         {
             const { p, erreurs } = await ouvrir(vp, { session: null });
-            await p.waitForURL(/connexion-pts\.html\?retour=profil\.html/, { timeout: 8000 }).catch(() => {});
+            await p.waitForURL(/connexion\.html\?retour=profil\.html/, { timeout: 8000 }).catch(() => {});
             t.verif(
-                p.url().endsWith('connexion-pts.html?retour=profil.html'),
-                'non connecté : redirection vers connexion-pts.html?retour=profil.html',
+                p.url().endsWith('connexion.html?retour=profil.html'),
+                'non connecté : redirection vers connexion.html?retour=profil.html',
             );
             await p.waitForTimeout(300);
             t.verif(
                 (await p.title()) === 'Connexion — UnDocPourTous' &&
-                    (await p.isVisible('[data-mode="site"]')) &&
-                    !(await p.isVisible('[data-mode="pts"]')),
-                'page de connexion en mode « site » (textes généraux, pas PTS)',
+                    (await p.isVisible('#form-connexion')) &&
+                    !(await p.isVisible('#pts-go')),
+                'page de connexion du site (e-mail / Google), pas la page Discord PTS',
             );
             t.verif(!erreurs.length, `aucune erreur JS ${erreurs.join(' | ')}`);
             await p.close();
@@ -99,9 +99,21 @@ try {
             );
             t.verif(
                 (await txt('email')) === 'joueur@example.com' &&
-                    (await txt('fournisseur')) === 'Discord' &&
+                    (await txt('fournisseur')) === 'E-mail, Discord' &&
                     (await txt('cree')).includes('2026'),
                 'e-mail, fournisseur et date de création affichés',
+            );
+            t.verif(
+                (await p.textContent('#btn-discord')).includes('Revérifier avec Discord') &&
+                    (await p.isVisible('#btn-delier-discord')),
+                'Discord relié : « Revérifier avec Discord » et « Délier mon Discord » (un autre moyen de connexion existe)',
+            );
+            await p
+                .waitForFunction(() => document.querySelector('[data-champ="mfa-statut"]').textContent.length > 0)
+                .catch(() => {});
+            t.verif(
+                (await p.isVisible('#btn-mfa-activer')) && (await p.isVisible('#form-mdp')),
+                'mot de passe modifiable et double authentification proposée',
             );
             t.verif(
                 (await txt('premium-statut')) === 'Actif' &&

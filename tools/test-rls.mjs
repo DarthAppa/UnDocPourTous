@@ -4,7 +4,7 @@
 // applique la migration deux fois (elle doit être rejouable), joue les cas puis supprime la base.
 // Il faut un rôle superutilisateur (créer une base, des rôles anon/authenticated/service_role).
 import pg from 'pg';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { randomUUID } from 'node:crypto';
 
 const URL_BASE = process.env.DATABASE_URL;
@@ -15,7 +15,12 @@ if (!URL_BASE) {
 
 const lire = (f) => readFileSync(new URL(`../${f}`, import.meta.url), 'utf8');
 const STUB = lire('supabase/tests/stub-supabase.sql');
-const MIGRATION = lire('supabase/migrations/20261013120000_securite_premium_profil.sql');
+// Toutes les migrations, dans l'ordre (comme `supabase db push`)
+const MIGRATIONS = readdirSync(new URL('../supabase/migrations/', import.meta.url))
+    .filter((f) => f.endsWith('.sql'))
+    .sort()
+    .map((f) => lire(`supabase/migrations/${f}`));
+const MIGRATION = MIGRATIONS.join('\n;\n');
 
 let echecs = 0;
 let reussites = 0;
@@ -43,11 +48,14 @@ const D = randomUUID();
 const E = randomUUID();
 
 // Exécute fn dans une transaction annulée, avec le rôle et l'utilisateur (JWT « sub ») donnés.
+// uid peut aussi être { sub, aal } pour simuler le niveau d'authentification (MFA).
 async function enTantQue(role, uid, fn) {
     await c.query('begin');
     try {
         await c.query(`set local role ${role}`);
-        if (uid) await c.query("select set_config('request.jwt.claim.sub', $1, true)", [uid]);
+        if (uid && typeof uid === 'object')
+            await c.query("select set_config('request.jwt.claims', $1, true)", [JSON.stringify(uid)]);
+        else if (uid) await c.query("select set_config('request.jwt.claim.sub', $1, true)", [uid]);
         return await fn();
     } finally {
         await c.query('rollback');
@@ -154,6 +162,17 @@ try {
         profils[E]?.pseudo?.length === 40 && profils[E]?.avatar_url === null,
         'pseudo tronqué à 40, avatar piégé ignoré',
     );
+
+    // Discord relié aux comptes A (111) et B (222), comme le fait Supabase Auth
+    const relierDiscord = (uid, discordId) =>
+        sql(
+            `insert into auth.identities (user_id, provider, provider_id, identity_data)
+             values ($1, 'discord', $2, jsonb_build_object('provider_id', $2::text))
+             on conflict (provider_id, provider) do nothing`,
+            [uid, discordId],
+        );
+    await relierDiscord(A, '111');
+    await relierDiscord(B, '222');
 
     console.log('\n[isolation entre utilisateurs]');
     await sql(
@@ -317,6 +336,51 @@ try {
     verif(m.premium === false && m.pts === false, 'sans utilisateur : tout à faux');
     m = (await lignes('authenticated', A, `select public.a_acces('autre') as x`))[0];
     verif(m.x === false, 'a_acces d’un niveau inconnu : faux');
+
+    console.log('\n[Discord relié au compte]');
+    await membre(true, 10);
+    verif(await voit(A, 'guide-pts'), 'PTS visible : membre vérifié et Discord toujours relié');
+    await sql(`delete from auth.identities where user_id = $1 and provider = 'discord'`, [A]);
+    verif(!(await voit(A, 'guide-pts')), 'Discord délié : accès PTS retiré tout de suite');
+    m = await acces(A);
+    verif(m.pts === false, 'mon_acces() : pts faux après avoir délié Discord');
+    await relierDiscord(A, '999');
+    verif(!(await voit(A, 'guide-pts')), 'un autre Discord que celui vérifié est relié : PTS refusé');
+    await sql(`delete from auth.identities where user_id = $1 and provider = 'discord'`, [A]);
+    await relierDiscord(A, '111');
+    verif(await voit(A, 'guide-pts'), 'Discord vérifié relié de nouveau : PTS rendu');
+    let doublon = 'ok';
+    try {
+        await sql(`insert into auth.identities (user_id, provider, provider_id) values ($1, 'discord', '111')`, [C]);
+    } catch (e) {
+        doublon = e.code;
+    }
+    verif(doublon === '23505', 'un même Discord ne peut pas être relié à deux comptes');
+
+    console.log('\n[double authentification (MFA)]');
+    await sql(`insert into auth.mfa_factors (user_id, status) values ($1, 'unverified')`, [B]);
+    verif(await voit(B, 'guide-premium'), 'MFA commencée mais pas validée : rien ne change');
+    await sql(`update auth.mfa_factors set status = 'verified' where user_id = $1`, [B]);
+    r = await lignes('authenticated', B, 'select * from public.abonnements');
+    verif(r.length === 0, 'MFA activée, session sans code (aal1) : abonnement illisible');
+    r = await lignes('authenticated', B, 'select id from public.profils');
+    verif(r.length === 0, 'MFA activée, session aal1 : profil illisible');
+    verif(!(await voit(B, 'guide-premium')), 'MFA activée, session aal1 : contenu premium invisible');
+    m = (await lignes('authenticated', B, 'select * from public.mon_acces()'))[0];
+    verif(m.premium === false && m.pts === false, 'MFA activée, session aal1 : mon_acces() tout à faux');
+    const B2 = { sub: B, aal: 'aal2' };
+    r = await lignes('authenticated', B2, 'select * from public.abonnements');
+    verif(r.length === 1, 'session validée par le code (aal2) : abonnement lisible');
+    verif(await voit(B2, 'guide-premium'), 'session aal2 : contenu premium visible');
+    m = (await lignes('authenticated', B2, 'select * from public.mon_acces()'))[0];
+    verif(m.premium === true && m.pts === true, 'session aal2 : mon_acces() premium et PTS');
+    verif(await voit(A, 'guide-pts'), 'compte sans MFA : aal1 suffit toujours');
+    const droitsMfa = (
+        await sql(`select
+            has_function_privilege('anon', 'public.mfa_ok()', 'execute') as anon_mfa,
+            has_function_privilege('authenticated', 'public.pts_valide(uuid)', 'execute') as auth_pts`)
+    ).rows[0];
+    verif(!droitsMfa.anon_mfa && !droitsMfa.auth_pts, 'mfa_ok() fermée à anon, pts_valide() fermée aux comptes');
 
     console.log('\n[service_role et contraintes]');
     verif(

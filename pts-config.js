@@ -1,4 +1,4 @@
-// Réglages de la connexion Discord des outils Pack ta Small.
+// Réglages des comptes du site et du déblocage Discord des outils Pack ta Small.
 // Même projet Supabase que l'extension PTS Companion (un seul compte pour les deux).
 // SUPABASE_URL et SUPABASE_ANON_KEY : Supabase › Project Settings › API.
 // La clé « anon public » est faite pour être visible dans le navigateur (elle est protégée
@@ -19,4 +19,15 @@ export const PTS_CONFIG = {
     // Déconnexion automatique après ce temps sans activité (souris, clavier, défilement, toucher).
     // Un avertissement s'affiche 1 minute avant.
     INACTIVITE_MINUTES: 30,
+
+    // Comptes du site : moyens de connexion proposés sur connexion.html.
+    // Google ne s'affiche que s'il est listé ici ET activé dans Supabase (Authentication › Providers).
+    CONNEXIONS: ['google', 'email'],
+    // Doit être identique au réglage Supabase (Authentication › Policies › mot de passe).
+    MDP_MIN: 10,
+
+    // Anti-robot Cloudflare Turnstile (inscription, connexion, mot de passe oublié).
+    // Clé PUBLIQUE du site (« Site Key »), faite pour être visible. Vide = pas d'anti-robot.
+    // La clé secrète va uniquement dans Supabase (Authentication › Attack Protection), jamais ici.
+    TURNSTILE_SITE_KEY: '',
 };

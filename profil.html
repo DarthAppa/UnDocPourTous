@@ -59,7 +59,7 @@
                 </nav>
 
                 <div class="flex items-center gap-2">
-                    <a href="connexion-pts.html" class="btn-login" aria-label="Connexion"
+                    <a href="connexion.html" class="btn-login" aria-label="Connexion"
                         ><img src="assets/icons/log-in.svg" alt="" /><span class="hidden sm:inline">Connexion</span></a
                     >
                     <button
@@ -134,7 +134,7 @@
                     <dl class="infos-compte">
                         <dt>E-mail</dt>
                         <dd data-champ="email"></dd>
-                        <dt>Connexion avec</dt>
+                        <dt>Se connecte avec</dt>
                         <dd data-champ="fournisseur"></dd>
                         <dt>Compte créé le</dt>
                         <dd data-champ="cree"></dd>
@@ -182,9 +182,89 @@
                     <span class="badge badge-pts self-start">PACK TA SMALL</span>
                     <h2 id="titre-pts" class="text-xl font-semibold">Pack ta Small</h2>
                     <p class="text-sm leading-[1.6]" data-champ="pts-statut"></p>
-                    <a href="connexion-pts.html?retour=profil.html" class="btn-ligne self-start"
-                        >Revérifier avec Discord</a
-                    >
+                    <p class="text-sm leading-[1.6] text-textMuted" data-champ="discord-statut"></p>
+                    <div class="flex flex-wrap gap-3">
+                        <button type="button" id="btn-discord" class="btn-ligne">Relier mon Discord</button>
+                        <button type="button" id="btn-delier-discord" class="btn-ligne btn-danger" hidden>
+                            Délier mon Discord
+                        </button>
+                    </div>
+                    <p id="discord-msg" class="text-[13px] min-h-[1.5em]" role="status" aria-live="polite"></p>
+                </section>
+
+                <section class="panneau lg:col-span-2" aria-labelledby="titre-acces">
+                    <h2 id="titre-acces" class="text-xl font-semibold">Mot de passe et double authentification</h2>
+                    <form id="form-mdp" class="flex flex-col gap-3 max-w-[480px]" novalidate>
+                        <p class="text-sm leading-[1.6] text-textMuted">
+                            Choisis un mot de passe pour pouvoir aussi te connecter avec ton e-mail, ou change celui que
+                            tu as.
+                        </p>
+                        <label for="champ-mdp" class="text-sm font-semibold">Nouveau mot de passe</label>
+                        <input
+                            id="champ-mdp"
+                            name="mdp"
+                            class="champ"
+                            type="password"
+                            autocomplete="new-password"
+                            required
+                            aria-describedby="aide-mdp"
+                        />
+                        <label for="champ-mdp2" class="text-sm font-semibold">Confirme le mot de passe</label>
+                        <input
+                            id="champ-mdp2"
+                            name="mdp2"
+                            class="champ"
+                            type="password"
+                            autocomplete="new-password"
+                            required
+                        />
+                        <p id="aide-mdp" class="text-xs text-textMuted">
+                            Au moins 10 caractères, avec des lettres et des chiffres.
+                        </p>
+                        <button type="submit" class="btn-ligne self-start">Enregistrer le mot de passe</button>
+                        <p id="mdp-msg" class="text-[13px] min-h-[1.5em]" role="status" aria-live="polite"></p>
+                    </form>
+
+                    <div class="flex flex-col gap-3 border-t border-cardBorder pt-5">
+                        <h3 class="text-base font-semibold">Double authentification</h3>
+                        <p class="text-sm leading-[1.6] text-textMuted" data-champ="mfa-statut"></p>
+                        <div class="flex flex-wrap gap-3">
+                            <button type="button" id="btn-mfa-activer" class="btn-ligne" hidden>
+                                Activer la double authentification
+                            </button>
+                            <button type="button" id="btn-mfa-desactiver" class="btn-ligne btn-danger" hidden>
+                                Désactiver la double authentification
+                            </button>
+                        </div>
+                        <form id="form-mfa-activation" class="flex flex-col gap-3 max-w-[480px]" hidden novalidate>
+                            <p class="text-sm leading-[1.6]">
+                                1. Scanne ce QR code avec ton application (Google Authenticator, Authy, 1Password…).
+                            </p>
+                            <div id="mfa-qr" class="mfa-qr"></div>
+                            <p class="text-xs text-textMuted">
+                                Pas de QR code possible ? Saisis cette clé dans l’application :
+                                <code id="mfa-secret" class="font-mono break-all"></code>
+                            </p>
+                            <label for="champ-mfa" class="text-sm font-semibold"
+                                >2. Saisis le code à 6 chiffres affiché</label
+                            >
+                            <input
+                                id="champ-mfa"
+                                name="code"
+                                class="champ sm:max-w-[200px]"
+                                type="text"
+                                inputmode="numeric"
+                                autocomplete="one-time-code"
+                                maxlength="7"
+                                required
+                            />
+                            <div class="flex flex-wrap gap-3">
+                                <button type="submit" class="btn-mint">Activer</button>
+                                <button type="button" id="btn-mfa-annuler" class="btn-ligne">Annuler</button>
+                            </div>
+                        </form>
+                        <p id="mfa-msg" class="text-[13px] min-h-[1.5em]" role="status" aria-live="polite"></p>
+                    </div>
                 </section>
 
                 <section class="panneau lg:col-span-2" aria-labelledby="titre-donnees-pts">
@@ -268,7 +348,7 @@
                     <div class="lg:w-[180px] flex flex-col gap-3">
                         <p class="footer-title">COMMUNAUTÉ</p>
                         <a href="#" class="footer-link">Discord</a>
-                        <a href="connexion-pts.html" class="footer-link">Connexion</a>
+                        <a href="connexion.html" class="footer-link">Connexion</a>
                         <a href="albion-premium.html" class="footer-link">Premium</a>
                     </div>
                     <div class="col-span-2 lg:col-span-1 lg:w-[220px] flex flex-col gap-3">

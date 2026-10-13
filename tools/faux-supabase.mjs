@@ -17,8 +17,22 @@ export const SESSION = {
         id: 'u1',
         email: 'joueur@example.com',
         created_at: '2026-01-02T10:00:00Z',
-        app_metadata: { provider: 'discord' },
+        app_metadata: { provider: 'email', providers: ['email', 'discord'] },
         user_metadata: { full_name: 'Testeur' },
+        identities: [
+            { provider: 'email', id: 'u1' },
+            { provider: 'discord', id: '111', identity_data: { provider_id: '111' } },
+        ],
+    },
+};
+
+// Compte du site sans Discord relié (connexion Google)
+export const SESSION_SANS_DISCORD = {
+    ...SESSION,
+    user: {
+        ...SESSION.user,
+        app_metadata: { provider: 'google', providers: ['google'] },
+        identities: [{ provider: 'google', id: 'g1' }],
     },
 };
 
@@ -77,8 +91,48 @@ export const FAUX_SUPABASE = `export function createClient(url) {
         return { error: null };
       },
       signInWithOAuth: async ({ provider, options }) => {
+        A.push({ type: 'oauth', provider });
         location.assign(url + '/auth/v1/authorize?provider=' + provider + '&redirect_to=' + encodeURIComponent(options.redirectTo));
         return { data: {}, error: null };
+      },
+      onAuthStateChange: () => ({ data: { subscription: { unsubscribe() {} } } }),
+      signInWithPassword: async ({ email }) => {
+        A.push({ type: 'password', email });
+        if ((F.erreurs || []).includes('connexion')) return { data: {}, error: { code: 'invalid_credentials', message: 'Invalid login credentials' } };
+        F.session = F.sessionApresConnexion || null;
+        return { data: { session: copie(F.session) }, error: null };
+      },
+      signUp: async ({ email, options }) => {
+        A.push({ type: 'signUp', email, nom: options && options.data && options.data.name });
+        return { data: { user: { id: 'nouveau', identities: [{}] }, session: null }, error: null };
+      },
+      resetPasswordForEmail: async (email) => {
+        A.push({ type: 'reset', email });
+        return { data: {}, error: null };
+      },
+      linkIdentity: async ({ provider, options }) => {
+        A.push({ type: 'link', provider, scopes: options && options.scopes });
+        location.assign(url + '/auth/v1/user/identities/authorize?provider=' + provider + '&redirect_to=' + encodeURIComponent(options.redirectTo));
+        return { data: {}, error: null };
+      },
+      unlinkIdentity: async (i) => {
+        A.push({ type: 'unlink', provider: i && i.provider });
+        if (F.session) F.session.user.identities = (F.session.user.identities || []).filter((x) => x.provider !== i.provider);
+        return { data: {}, error: null };
+      },
+      updateUser: async (attrs) => {
+        A.push({ type: 'updateUser', champs: Object.keys(attrs || {}) });
+        return { data: { user: F.session && F.session.user }, error: null };
+      },
+      mfa: {
+        getAuthenticatorAssuranceLevel: async () => ({
+          data: { currentLevel: F.aal || 'aal1', nextLevel: F.mfa ? 'aal2' : (F.aal || 'aal1') },
+          error: null,
+        }),
+        listFactors: async () => ({
+          data: { all: F.mfa ? [{ id: 'f1', status: 'verified' }] : [], totp: F.mfa ? [{ id: 'f1', status: 'verified', friendly_name: 'Téléphone' }] : [] },
+          error: null,
+        }),
       },
     },
   };

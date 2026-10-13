@@ -113,7 +113,7 @@ async function afficher() {
                 'Réservé aux abonnés Premium',
                 'Connecte-toi pour y accéder si tu es abonné, ou pour t’abonner.',
                 'Se connecter →',
-                `connexion-pts.html?retour=${ici}`,
+                `connexion.html?retour=${ici}`,
             );
             return;
         }
@@ -133,7 +133,7 @@ async function afficher() {
         article.append(nettoyer(contenu.html));
         zone.replaceChildren(article);
         dire('');
-        surveillerInactivite(`connexion-pts.html?retour=${ici}&inactif=1`);
+        surveillerInactivite(`connexion.html?retour=${ici}&inactif=1`);
     } catch {
         dire('Impossible de charger le contenu pour le moment. Réessaie dans un instant.', 'erreur');
     } finally {

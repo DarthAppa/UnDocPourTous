@@ -1,0 +1,359 @@
+<!doctype html>
+<html lang="fr" class="no-js">
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self' https://challenges.cloudflare.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://cdn.discordapp.com; connect-src 'self' https://wibfiqtuqfddijjlfscs.supabase.co wss://wibfiqtuqfddijjlfscs.supabase.co https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+        />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Connexion — UnDocPourTous</title>
+        <meta
+            name="description"
+            content="Connecte-toi ou crée ton compte UnDocPourTous avec Google ou ton e-mail : profil, Premium et outils réservés."
+        />
+        <meta property="og:site_name" content="UnDocPourTous" />
+        <meta property="og:title" content="Connexion — UnDocPourTous" />
+        <meta
+            property="og:description"
+            content="Connecte-toi ou crée ton compte UnDocPourTous avec Google ou ton e-mail : profil, Premium et outils réservés."
+        />
+        <meta name="robots" content="noindex" />
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content="fr_FR" />
+        <!-- Anti-robot Cloudflare Turnstile autorisé sur cette page (voir tools/csp.mjs) -->
+        <meta name="undoc-captcha" content="turnstile" />
+
+        <!-- Polices -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+            href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Lora:wght@700&family=Cinzel:wght@600;700&display=swap"
+            rel="stylesheet"
+        />
+
+        <link rel="stylesheet" href="style.css" />
+        <link rel="stylesheet" href="assets/css/tailwind.css" />
+        <script src="script.js" defer></script>
+        <script type="module" src="entete.js"></script>
+        <script type="module" src="connexion.js"></script>
+    </head>
+
+    <body class="bg-darkBg text-textLight font-sans antialiased">
+        <!-- ================= EN-TÊTE ================= -->
+        <header class="site-header sticky top-0 z-50">
+            <div class="wrap">
+                <a href="index.html" class="flex items-center gap-3" aria-label="UnDocPourTous, accueil">
+                    <img class="brand-logo" src="assets/img/marque/logo-header.webp" alt="" width="56" height="56" />
+                    <span class="text-lg font-bold text-textLight">UnDocPourTous</span>
+                </a>
+
+                <nav class="hidden md:flex items-center gap-9 text-sm font-medium" aria-label="Navigation principale">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                    <a href="index.html#jeux" class="nav-link">Jeux</a>
+                    <a href="albion-gratuit.html" class="nav-link">Outils</a>
+                    <a href="#" class="nav-link">Discord</a>
+                </nav>
+
+                <div class="flex items-center gap-2">
+                    <a href="connexion.html" class="btn-login" aria-label="Connexion" aria-current="page"
+                        ><img src="assets/icons/log-in.svg" alt="" /><span class="hidden sm:inline">Connexion</span></a
+                    >
+                    <button
+                        type="button"
+                        id="burger"
+                        class="md:hidden grid place-items-center w-10 h-10 text-textLight"
+                        aria-label="Menu"
+                        aria-expanded="false"
+                        aria-controls="mobile-menu"
+                    >
+                        <svg
+                            class="w-6 h-6"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            aria-hidden="true"
+                        >
+                            <path d="M4 7h16M4 12h16M4 17h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Menu mobile -->
+            <nav
+                id="mobile-menu"
+                class="md:hidden hidden border-t border-cardBorder bg-darkBg"
+                aria-label="Navigation mobile"
+            >
+                <div class="wrap py-4 flex flex-col gap-4 text-sm font-medium">
+                    <a href="index.html" class="nav-link">Accueil</a>
+                    <a href="index.html#jeux" class="nav-link">Jeux</a>
+                    <a href="albion-gratuit.html" class="nav-link">Outils</a>
+                    <a href="#" class="nav-link">Discord</a>
+                </div>
+            </nav>
+        </header>
+
+        <main class="wrap pt-8 pb-16 flex flex-col gap-8">
+            <nav aria-label="Fil d’Ariane" class="crumbs">
+                <span><a href="index.html">Accueil</a></span>
+                <span><span class="sep" aria-hidden="true">/</span><span aria-current="page">Connexion</span></span>
+            </nav>
+
+            <section class="panneau compte-panneau mx-auto w-full max-w-[480px]" aria-labelledby="titre-compte">
+                <div class="flex flex-col gap-2">
+                    <p class="font-mono font-medium text-[11px] text-mintFree">COMPTE UNDOCPOURTOUS</p>
+                    <h1 id="titre-compte" class="text-2xl sm:text-3xl font-semibold">Connexion</h1>
+                    <p id="sous-titre" class="text-sm leading-[1.6] text-textMuted">
+                        Un seul compte pour ton profil, le Premium et les outils réservés.
+                    </p>
+                </div>
+
+                <noscript>
+                    <p class="text-sm leading-[1.6] text-textMuted">
+                        La connexion a besoin de JavaScript. Active-le dans ton navigateur, puis recharge la page.
+                    </p>
+                </noscript>
+
+                <!-- Connexion et inscription -->
+                <div data-vue="accueil" class="flex flex-col gap-5">
+                    <div class="compte-onglets" role="tablist" aria-label="Connexion ou création de compte">
+                        <button
+                            type="button"
+                            role="tab"
+                            id="onglet-connexion"
+                            aria-controls="form-connexion"
+                            aria-selected="true"
+                            data-onglet="connexion"
+                        >
+                            Se connecter
+                        </button>
+                        <button
+                            type="button"
+                            role="tab"
+                            id="onglet-inscription"
+                            aria-controls="form-inscription"
+                            aria-selected="false"
+                            tabindex="-1"
+                            data-onglet="inscription"
+                        >
+                            Créer un compte
+                        </button>
+                    </div>
+
+                    <button type="button" id="btn-google" class="btn-google" hidden>
+                        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+                            <path
+                                fill="#4285F4"
+                                d="M23.52 12.27c0-.85-.08-1.67-.22-2.45H12v4.64h6.46a5.52 5.52 0 0 1-2.4 3.62v3h3.88c2.27-2.09 3.58-5.17 3.58-8.81z"
+                            />
+                            <path
+                                fill="#34A853"
+                                d="M12 24c3.24 0 5.96-1.07 7.94-2.91l-3.88-3c-1.07.72-2.45 1.15-4.06 1.15-3.12 0-5.77-2.11-6.71-4.94H1.27v3.1A12 12 0 0 0 12 24z"
+                            />
+                            <path
+                                fill="#FBBC05"
+                                d="M5.29 14.3A7.2 7.2 0 0 1 4.91 12c0-.8.14-1.57.38-2.3v-3.1H1.27A12 12 0 0 0 0 12c0 1.94.46 3.77 1.27 5.4l4.02-3.1z"
+                            />
+                            <path
+                                fill="#EA4335"
+                                d="M12 4.77c1.76 0 3.34.61 4.58 1.8l3.43-3.43C17.95 1.19 15.24 0 12 0A12 12 0 0 0 1.27 6.6l4.02 3.1C6.23 6.88 8.88 4.77 12 4.77z"
+                            />
+                        </svg>
+                        Continuer avec Google
+                    </button>
+                    <p id="separateur" class="compte-ou" hidden><span>ou avec ton e-mail</span></p>
+
+                    <form
+                        id="form-connexion"
+                        role="tabpanel"
+                        aria-labelledby="onglet-connexion"
+                        class="compte-form"
+                        novalidate
+                    >
+                        <label class="compte-champ"
+                            ><span>E-mail</span
+                            ><input class="champ" type="email" name="email" autocomplete="email" required
+                        /></label>
+                        <label class="compte-champ"
+                            ><span>Mot de passe</span
+                            ><input class="champ" type="password" name="mdp" autocomplete="current-password" required
+                        /></label>
+                        <button type="button" class="compte-lien self-start" data-aller="oublie">
+                            Mot de passe oublié ?
+                        </button>
+                        <button type="submit" class="btn-mint">Se connecter</button>
+                    </form>
+
+                    <form
+                        id="form-inscription"
+                        role="tabpanel"
+                        aria-labelledby="onglet-inscription"
+                        class="compte-form"
+                        hidden
+                        novalidate
+                    >
+                        <label class="compte-champ"
+                            ><span>Pseudo</span
+                            ><input
+                                class="champ"
+                                type="text"
+                                name="pseudo"
+                                autocomplete="nickname"
+                                minlength="2"
+                                maxlength="32"
+                                required
+                        /></label>
+                        <label class="compte-champ"
+                            ><span>E-mail</span
+                            ><input class="champ" type="email" name="email" autocomplete="email" required
+                        /></label>
+                        <label class="compte-champ"
+                            ><span>Mot de passe</span
+                            ><input
+                                class="champ"
+                                type="password"
+                                name="mdp"
+                                autocomplete="new-password"
+                                required
+                                aria-describedby="aide-mdp"
+                        /></label>
+                        <p id="aide-mdp" class="text-xs text-textMuted" data-aide-mdp>
+                            Au moins 10 caractères, avec des lettres et des chiffres.
+                        </p>
+                        <label class="compte-case"
+                            ><input type="checkbox" name="cgu" required /><span
+                                >J’accepte les conditions d’utilisation et la politique de confidentialité.</span
+                            ></label
+                        >
+                        <button type="submit" class="btn-mint">Créer mon compte</button>
+                    </form>
+                </div>
+
+                <!-- Mot de passe oublié -->
+                <form data-vue="oublie" id="form-oublie" class="compte-form" hidden novalidate>
+                    <p class="text-sm leading-[1.6] text-textMuted">
+                        Saisis l’e-mail de ton compte : tu recevras un lien pour choisir un nouveau mot de passe.
+                    </p>
+                    <label class="compte-champ"
+                        ><span>E-mail</span
+                        ><input class="champ" type="email" name="email" autocomplete="email" required
+                    /></label>
+                    <button type="submit" class="btn-mint">Envoyer le lien</button>
+                    <button type="button" class="compte-lien self-start" data-aller="accueil">← Retour</button>
+                </form>
+
+                <!-- Nouveau mot de passe (arrivée par le lien reçu par e-mail) -->
+                <form data-vue="nouveau-mdp" id="form-nouveau-mdp" class="compte-form" hidden novalidate>
+                    <label class="compte-champ"
+                        ><span>Nouveau mot de passe</span
+                        ><input
+                            class="champ"
+                            type="password"
+                            name="mdp"
+                            autocomplete="new-password"
+                            required
+                            aria-describedby="aide-mdp-2"
+                    /></label>
+                    <label class="compte-champ"
+                        ><span>Confirme le mot de passe</span
+                        ><input class="champ" type="password" name="mdp2" autocomplete="new-password" required
+                    /></label>
+                    <p id="aide-mdp-2" class="text-xs text-textMuted" data-aide-mdp>
+                        Au moins 10 caractères, avec des lettres et des chiffres.
+                    </p>
+                    <button type="submit" class="btn-mint">Enregistrer le mot de passe</button>
+                </form>
+
+                <!-- Code de double authentification -->
+                <form data-vue="mfa" id="form-mfa" class="compte-form" hidden novalidate>
+                    <p class="text-sm leading-[1.6] text-textMuted">
+                        Ton compte est protégé par la double authentification. Saisis le code à 6 chiffres affiché dans
+                        ton application (Google Authenticator, Authy…).
+                    </p>
+                    <label class="compte-champ"
+                        ><span>Code</span
+                        ><input
+                            class="champ"
+                            type="text"
+                            name="code"
+                            inputmode="numeric"
+                            autocomplete="one-time-code"
+                            pattern="[0-9 ]{6,7}"
+                            maxlength="7"
+                            required
+                    /></label>
+                    <button type="submit" class="btn-mint">Valider</button>
+                    <button type="button" class="compte-lien self-start" data-deconnexion>Se déconnecter</button>
+                </form>
+
+                <!-- Message : e-mail envoyé, etc. -->
+                <div data-vue="info" class="flex flex-col gap-3" hidden>
+                    <p class="text-sm leading-[1.6]" data-info></p>
+                    <button type="button" class="compte-lien self-start" data-aller="accueil">← Retour</button>
+                </div>
+
+                <div id="anti-robot" class="anti-robot"></div>
+                <p id="compte-msg" class="text-[13px] min-h-[1.5em]" role="status" aria-live="polite"></p>
+
+                <ul class="text-[12px] leading-[1.6] text-textMuted flex flex-col gap-1">
+                    <li>Ton mot de passe est chiffré par notre hébergeur (Supabase) : personne ne peut le lire.</li>
+                    <li>
+                        Les outils Pack ta Small demandent en plus de relier ton Discord, depuis
+                        <a href="pts.html" class="underline">la page Pack ta Small</a> ou ton profil.
+                    </li>
+                </ul>
+            </section>
+        </main>
+
+        <!-- ================= PIED DE PAGE ================= -->
+        <footer class="site-footer">
+            <div class="wrap flex flex-col gap-7">
+                <div class="grid grid-cols-2 lg:flex lg:justify-between gap-x-6 gap-y-8">
+                    <div class="col-span-2 lg:col-span-1 lg:w-[430px] flex flex-col gap-3.5">
+                        <div class="flex items-center gap-3">
+                            <img
+                                class="brand-logo"
+                                src="assets/img/marque/logo-header.webp"
+                                alt=""
+                                width="56"
+                                height="56"
+                            />
+                            <span class="text-lg font-bold text-textLight">UnDocPourTous</span>
+                        </div>
+                        <p class="text-[13px] leading-[1.6] text-textMuted">
+                            Des outils pour comprendre votre jeu.<br />Et aller plus loin, à votre rythme.
+                        </p>
+                    </div>
+                    <div class="lg:w-[180px] flex flex-col gap-3">
+                        <p class="footer-title">EXPLORER</p>
+                        <a href="index.html" class="footer-link">Accueil</a>
+                        <a href="index.html#jeux" class="footer-link">Jeux</a>
+                        <a href="albion-gratuit.html" class="footer-link">Outils gratuits</a>
+                    </div>
+                    <div class="lg:w-[180px] flex flex-col gap-3">
+                        <p class="footer-title">COMMUNAUTÉ</p>
+                        <a href="#" class="footer-link">Discord</a>
+                        <a href="connexion.html" class="footer-link">Connexion</a>
+                        <a href="albion-premium.html" class="footer-link">Premium</a>
+                    </div>
+                    <div class="col-span-2 lg:col-span-1 lg:w-[220px] flex flex-col gap-3">
+                        <p class="footer-title">INFORMATIONS</p>
+                        <a href="#" class="footer-link">Mentions légales</a>
+                        <a href="#" class="footer-link">Confidentialité</a>
+                        <a href="#" class="footer-link">Conditions d’utilisation</a>
+                    </div>
+                </div>
+                <div
+                    class="border-t border-cardBorder pt-[22px] flex flex-col sm:flex-row sm:justify-between gap-2 text-[11px] text-textFaint"
+                >
+                    <p>© UnDocPourTous. Non affilié aux éditeurs des jeux cités.</p>
+                    <p class="font-mono">FAIT POUR LES JOUEURS.</p>
+                </div>
+            </div>
+        </footer>
+    </body>
+</html>

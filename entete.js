@@ -23,7 +23,7 @@ if (sessionEnregistree()) {
         const texte = a.querySelector('span');
         if (texte) texte.textContent = 'Mon profil';
     });
-    document.querySelectorAll('a.footer-link[href="connexion-pts.html"]').forEach((a) => {
+    document.querySelectorAll('a.footer-link[href="connexion.html"]').forEach((a) => {
         a.href = 'profil.html';
         a.textContent = 'Mon profil';
         a.setAttribute('aria-label', 'Mon profil');

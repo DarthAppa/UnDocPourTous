@@ -13,9 +13,22 @@ import {
     exporterMesDonnees,
     supprimerCompte,
     surveillerInactivite,
+    relierDiscord,
+    delierDiscord,
+    urlConnexion,
     PSEUDO_MIN,
     PSEUDO_MAX,
 } from './pts-auth.js';
+import {
+    MDP_MIN,
+    mdpValide,
+    messageErreur,
+    changerMotDePasse,
+    etatMfa,
+    commencerMfa,
+    validerCodeMfa,
+    desactiverMfa,
+} from './compte.js';
 
 const $ = (id) => document.getElementById(id);
 const champ = (nom) => document.querySelector(`[data-champ="${nom}"]`);
@@ -26,7 +39,7 @@ const dire = (el, texte, ton = '') => {
 };
 const attendre = (ms) => new Promise((ok) => setTimeout(ok, ms));
 
-const CONNEXION = 'connexion-pts.html?retour=profil.html';
+const CONNEXION = urlConnexion('profil.html');
 const AVATAR_DISCORD = 'https://cdn.discordapp.com/';
 const FOURNISSEURS = { discord: 'Discord', email: 'E-mail', google: 'Google', twitch: 'Twitch', apple: 'Apple' };
 const STATUTS = {
@@ -77,7 +90,9 @@ function afficherAvatar(url, pseudo) {
 function afficherProfil(p) {
     champ('pseudo').textContent = p.pseudo;
     champ('email').textContent = p.email || '—';
-    champ('fournisseur').textContent = FOURNISSEURS[p.fournisseur] || p.fournisseur || '—';
+    const moyens = (p.fournisseurs?.length ? p.fournisseurs : [p.fournisseur]).filter(Boolean);
+    champ('fournisseur').textContent = moyens.map((f) => FOURNISSEURS[f] || f).join(', ') || '—';
+    afficherDiscord(p);
     champ('cree').textContent = dateFr(p.creeLe);
     $('champ-pseudo').value = p.pseudo;
     afficherAvatar(p.avatarUrl, p.pseudo);
@@ -141,6 +156,171 @@ async function suivrePaiement() {
     }
     dire(statut, 'Paiement reçu. Ton accès s’affichera ici dès qu’il sera activé : recharge la page dans un instant.');
 }
+
+// ---------- Discord relié (outils Pack ta Small) ----------
+function afficherDiscord(p) {
+    champ('discord-statut').textContent = p.discord
+        ? 'Discord relié à ton compte. Revérifie si tu viens de rejoindre le serveur ou si ta vérification a plus de 30 jours.'
+        : 'Aucun Discord relié. Relie le tien pour débloquer les outils Pack ta Small.';
+    $('btn-discord').textContent = p.discord ? 'Revérifier avec Discord' : 'Relier mon Discord';
+    // Délier n'est possible que s'il reste un autre moyen de se connecter (Google, e-mail).
+    $('btn-delier-discord').hidden = !p.discord || (p.fournisseurs || []).length < 2;
+}
+
+$('btn-discord')?.addEventListener('click', async (ev) => {
+    const b = ev.currentTarget;
+    b.disabled = true;
+    dire($('discord-msg'), 'Ouverture de Discord…');
+    try {
+        await relierDiscord('profil.html');
+    } catch (e) {
+        b.disabled = false;
+        dire(
+            $('discord-msg'),
+            e?.code === 'indisponible'
+                ? 'Relier Discord n’est pas encore activé sur le site.'
+                : 'Discord n’a pas pu s’ouvrir. Réessaie dans un instant.',
+            'erreur',
+        );
+    }
+});
+
+$('btn-delier-discord')?.addEventListener('click', async (ev) => {
+    const b = ev.currentTarget;
+    b.disabled = true;
+    dire($('discord-msg'), 'Retrait de Discord…');
+    try {
+        await delierDiscord();
+        const [p, a] = await Promise.all([monProfil(), monAcces().catch(() => null)]);
+        if (p) afficherDiscord(p);
+        afficherAcces(a);
+        dire(
+            $('discord-msg'),
+            'Discord retiré de ton compte. Les outils Pack ta Small sont de nouveau verrouillés.',
+            'ok',
+        );
+    } catch (e) {
+        dire(
+            $('discord-msg'),
+            e?.code === 'refuse'
+                ? 'Impossible : Discord est ton seul moyen de connexion. Choisis d’abord un mot de passe ci-dessous.'
+                : 'Impossible de retirer Discord pour le moment. Réessaie dans un instant.',
+            'erreur',
+        );
+    }
+    b.disabled = false;
+});
+
+// ---------- Mot de passe ----------
+$('aide-mdp').textContent = `Au moins ${MDP_MIN} caractères, avec des lettres et des chiffres.`;
+$('form-mdp')?.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const form = ev.currentTarget;
+    const msg = $('mdp-msg');
+    const mdp = $('champ-mdp').value;
+    if (!mdpValide(mdp)) {
+        dire(
+            msg,
+            `Mot de passe trop faible : au moins ${MDP_MIN} caractères, avec des lettres et des chiffres.`,
+            'erreur',
+        );
+        return;
+    }
+    if (mdp !== $('champ-mdp2').value) {
+        dire(msg, 'Les deux mots de passe ne sont pas identiques.', 'erreur');
+        return;
+    }
+    const bouton = form.querySelector('button[type="submit"]');
+    bouton.disabled = true;
+    dire(msg, 'Enregistrement…');
+    try {
+        await changerMotDePasse(mdp);
+        form.reset();
+        dire(msg, 'Mot de passe enregistré.', 'ok');
+    } catch (e) {
+        dire(msg, messageErreur(e), 'erreur');
+    }
+    bouton.disabled = false;
+});
+
+// ---------- Double authentification ----------
+const msgMfa = $('mfa-msg');
+let facteurEnCours = null;
+async function afficherMfa() {
+    try {
+        const m = await etatMfa();
+        champ('mfa-statut').textContent = m.actif
+            ? 'Activée : un code de ton application est demandé à chaque connexion.'
+            : 'Désactivée. Active-la pour protéger ton compte même si ton mot de passe fuit.';
+        $('btn-mfa-activer').hidden = m.actif;
+        $('btn-mfa-desactiver').hidden = !m.actif;
+        $('btn-mfa-desactiver').dataset.facteur = m.facteurs[0]?.id || '';
+    } catch {
+        champ('mfa-statut').textContent = 'État de la double authentification illisible pour le moment.';
+    }
+}
+$('btn-mfa-activer')?.addEventListener('click', async (ev) => {
+    const b = ev.currentTarget;
+    b.disabled = true;
+    dire(msgMfa, 'Préparation…');
+    try {
+        const { factorId, qr, secret } = await commencerMfa();
+        facteurEnCours = factorId;
+        if (typeof qr === 'string' && qr.startsWith('data:image/')) {
+            const img = document.createElement('img');
+            img.alt = 'QR code à scanner avec ton application';
+            img.width = 164;
+            img.height = 164;
+            img.src = qr;
+            $('mfa-qr').replaceChildren(img);
+        }
+        $('mfa-secret').textContent = secret;
+        $('form-mfa-activation').hidden = false;
+        b.hidden = true;
+        dire(msgMfa, '');
+        $('champ-mfa').focus();
+    } catch (e) {
+        dire(msgMfa, messageErreur(e), 'erreur');
+    }
+    b.disabled = false;
+});
+$('btn-mfa-annuler')?.addEventListener('click', async () => {
+    $('form-mfa-activation').hidden = true;
+    if (facteurEnCours) await desactiverMfa(facteurEnCours).catch(() => {});
+    facteurEnCours = null;
+    dire(msgMfa, '');
+    afficherMfa();
+});
+$('form-mfa-activation')?.addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    const form = ev.currentTarget;
+    const bouton = form.querySelector('button[type="submit"]');
+    bouton.disabled = true;
+    try {
+        await validerCodeMfa(facteurEnCours, $('champ-mfa').value);
+        facteurEnCours = null;
+        form.reset();
+        form.hidden = true;
+        dire(msgMfa, 'Double authentification activée.', 'ok');
+        afficherMfa();
+    } catch (e) {
+        dire(msgMfa, messageErreur(e), 'erreur');
+    }
+    bouton.disabled = false;
+});
+$('btn-mfa-desactiver')?.addEventListener('click', async (ev) => {
+    const b = ev.currentTarget;
+    b.disabled = true;
+    dire(msgMfa, 'Désactivation…');
+    try {
+        await desactiverMfa(b.dataset.facteur);
+        dire(msgMfa, 'Double authentification désactivée.', 'ok');
+        afficherMfa();
+    } catch (e) {
+        dire(msgMfa, messageErreur(e), 'erreur');
+    }
+    b.disabled = false;
+});
 
 // ---------- Formulaire du pseudo ----------
 $('form-pseudo')?.addEventListener('submit', async (ev) => {
@@ -302,5 +482,9 @@ $('form-suppression')?.addEventListener('submit', async (ev) => {
     contenu.hidden = false;
     dire(statut, '');
     afficherDonneesPts();
+    afficherMfa();
+    if (e.verification === 'echec')
+        dire($('discord-msg'), 'Vérification Discord impossible pour le moment. Réessaie dans un instant.', 'erreur');
+    else if (e.verification === 'ok') dire($('discord-msg'), 'Discord vérifié.', 'ok');
     if (params.get('paiement') === 'ok') suivrePaiement();
 })();

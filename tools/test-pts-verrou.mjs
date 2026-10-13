@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
 import { mkdirSync, existsSync } from 'node:fs';
 import { demarrer } from './serveur.mjs';
 import { PTS_CONFIG } from '../pts-config.js';
-import { preparer, SESSION, texteDebordement } from './faux-supabase.mjs';
+import { preparer, SESSION, SESSION_SANS_DISCORD, texteDebordement } from './faux-supabase.mjs';
 
 // Requête vers Discord ? (comparaison du nom d'hôte, pas d'une simple sous-chaîne)
 const versDiscord = (u) => {
@@ -88,8 +88,10 @@ try {
             'connecté non membre : cartes toujours verrouillées vers le Discord',
         );
         verif(
-            (await p.isVisible('#pts-compte')) && !(await p.isVisible('#pts-login')),
-            'connecté : zone compte affichée, bouton masqué',
+            (await p.isVisible('#pts-compte')) &&
+                (await p.isVisible('#pts-login')) &&
+                (await p.textContent('#pts-login')).includes('Relier mon Discord'),
+            'connecté sans Discord vérifié : zone compte affichée et bouton « Relier mon Discord »',
         );
 
         // 3. Connecté et membre : débloqué
@@ -102,6 +104,7 @@ try {
             }),
         );
         c = await etatCartes(p);
+        verif(!(await p.isVisible('#pts-login')), 'débloqué : bouton « Relier mon Discord » masqué');
         verif(
             c[0].href === 'pts-encyclopedie.html' &&
                 c[1].href === 'pts-builder.html' &&
@@ -198,23 +201,68 @@ try {
             verif(p.url().endsWith('pts.html?verrou=1'), 'outil ouvert sans connexion : renvoi vers pts.html');
         }
 
-        // 5. Page de connexion (Supabase configuré) : le clic part vers l'autorisation Discord de Supabase
+        // 5. Page « Débloquer les outils », pas connecté au site : le bouton mène à la connexion du site
         await p.goto(serveur.url + 'connexion-pts.html', { waitUntil: 'networkidle' });
-        await p.screenshot({ path: `shots/connexion-pts-${vp.nom}.png`, fullPage: true }); // avant le clic (la page est quittée ensuite)
+        await p.waitForFunction(() => document.getElementById('pts-msg').textContent.includes('Étape 1'));
+        await p.screenshot({ path: `shots/connexion-pts-${vp.nom}.png`, fullPage: true });
         const largeur = await debordement(vp.width);
-        const depart = p
-            .waitForRequest((r) => r.url().startsWith(`${PTS_CONFIG.SUPABASE_URL}/auth/v1/authorize`), {
-                timeout: 5000,
-            })
-            .catch(() => null);
-        await p.click('#pts-go');
-        const req = await depart;
         verif(
-            !!req &&
-                new URL(req.url()).searchParams.get('provider') === 'discord' &&
-                new URL(new URL(req.url()).searchParams.get('redirect_to')).pathname.endsWith('/connexion-pts.html'),
-            'connexion : le bouton lance l’autorisation Discord avec retour sur connexion-pts.html',
+            (await p.textContent('#pts-go')).includes('Se connecter ou créer un compte'),
+            'pas connecté : « Se connecter ou créer un compte » (Discord n’est plus une connexion au site)',
         );
+        await p.click('#pts-go');
+        await p.waitForURL(/connexion\.html\?retour=connexion-pts\.html/, { timeout: 5000 }).catch(() => {});
+        verif(
+            p.url().endsWith('/connexion.html?retour=connexion-pts.html'),
+            'pas connecté : renvoi vers connexion.html, retour ensuite sur connexion-pts.html',
+        );
+        await p.screenshot({ path: `shots/connexion-site-${vp.nom}.png`, fullPage: true });
+        const largeurSite = await debordement(vp.width);
+        verif(largeurSite.ok, `connexion.html : ${texteDebordement(largeurSite)}`);
+
+        // 5b. Connecté au site (Google), Discord pas encore relié : le bouton RELIE Discord au compte
+        {
+            const q = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+            q.setDefaultTimeout(10000);
+            const err = [];
+            q.on('pageerror', (e) => err.push(e.message));
+            await preparer(q, { serveurUrl: serveur.url, faux: { session: SESSION_SANS_DISCORD } });
+            await q.goto(serveur.url + 'connexion-pts.html?retour=pts.html', { waitUntil: 'networkidle' });
+            await q.waitForFunction(() => document.getElementById('pts-go').textContent.includes('Relier mon Discord'));
+            const depart = q
+                .waitForRequest(
+                    (r) => r.url().startsWith(`${PTS_CONFIG.SUPABASE_URL}/auth/v1/user/identities/authorize`),
+                    { timeout: 5000 },
+                )
+                .catch(() => null);
+            await q.click('#pts-go');
+            const req = await depart;
+            const appels = await q.evaluate(() => globalThis.__APPELS__ || []).catch(() => []);
+            verif(
+                !!req &&
+                    new URL(req.url()).searchParams.get('provider') === 'discord' &&
+                    new URL(new URL(req.url()).searchParams.get('redirect_to')).pathname.endsWith(
+                        '/connexion-pts.html',
+                    ),
+                'connecté sans Discord : « Relier mon Discord » ajoute Discord au compte (retour sur connexion-pts.html)',
+            );
+            verif(!appels.some((a) => a.type === 'oauth'), 'relier Discord ne crée pas de nouvelle connexion Discord');
+            verif(!err.length, `relier Discord : aucune erreur JS ${err.join(' | ')}`);
+            await q.close();
+        }
+
+        // 5c. Compte avec double authentification, code pas encore saisi : considéré comme non connecté
+        {
+            const q = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+            await preparer(q, { serveurUrl: serveur.url, faux: { session: SESSION, mfa: true } });
+            await q.goto(serveur.url + 'connexion.html?retour=pts.html', { waitUntil: 'networkidle' });
+            await q.waitForFunction(() => !document.getElementById('form-mfa').hidden).catch(() => {});
+            verif(
+                await q.isVisible('#form-mfa'),
+                'double authentification activée, code non saisi : connexion.html demande le code',
+            );
+            await q.close();
+        }
 
         verif(largeur.ok, texteDebordement(largeur));
         verif(!erreurs.length, `aucune erreur JS ${erreurs.join(' | ')}`);

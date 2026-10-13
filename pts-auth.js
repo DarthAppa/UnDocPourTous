@@ -1,7 +1,10 @@
-// Module d'authentification du site (Supabase Auth, fournisseur Discord).
-// - Connexion, déconnexion, déconnexion automatique des inactifs, garde des pages outils PTS.
-// - Appartenance au serveur Pack ta Small : la SOURCE DE VÉRITÉ est la table membres_pts,
-//   écrite uniquement par l'Edge Function verifier-guilde (le navigateur ne décide de rien).
+// Module d'authentification du site (Supabase Auth).
+// - Compte du site : Google ou e-mail + mot de passe (connexion.html, module compte.js).
+// - Discord n'est PAS un moyen de connexion au site : on le RELIE à son compte pour débloquer
+//   les outils PTS (relierDiscord), puis le serveur vérifie l'appartenance au serveur Discord.
+// - Déconnexion, déconnexion automatique des inactifs, garde des pages outils PTS.
+// - Appartenance au serveur Pack ta Small : la SOURCE DE VÉRITÉ est la base (membres_pts + Discord
+//   toujours relié), écrite uniquement par l'Edge Function verifier-guilde (le navigateur ne décide de rien).
 // - Profil, accès Premium, contenus réservés, Edge Functions, export et suppression du compte.
 // La base ne laisse lire à chacun que ses propres lignes (RLS).
 import { PTS_CONFIG as C } from './pts-config.js';
@@ -50,7 +53,24 @@ async function sessionCourante() {
 
 function pseudo(user) {
     const m = user?.user_metadata || {};
-    return m.custom_claims?.global_name || m.full_name || m.name || m.user_name || 'joueur';
+    const email = typeof user?.email === 'string' ? user.email.split('@')[0] : '';
+    return m.custom_claims?.global_name || m.full_name || m.name || m.user_name || email || 'joueur';
+}
+
+// Le compte a-t-il un Discord relié ? (identité enregistrée par Supabase Auth)
+export function discordRelie(user) {
+    return (Array.isArray(user?.identities) ? user.identities : []).some((i) => i?.provider === 'discord');
+}
+
+// Double authentification : la session doit être validée par le code (aal2) si le compte l'a activée.
+async function mfaManquante(sb) {
+    try {
+        const { data, error } = (await sb.auth.mfa?.getAuthenticatorAssuranceLevel?.()) || {};
+        if (error || !data) return false;
+        return data.nextLevel === 'aal2' && data.currentLevel !== 'aal2';
+    } catch {
+        return false;
+    }
 }
 
 // Erreur normalisée : e.code ∈ non-configure, non-connecte, refuse, indisponible,
@@ -62,10 +82,20 @@ function erreur(code, statut = 0) {
     return e;
 }
 
-// État courant : { configure, connecte, membre, debloque, pseudo, verification }
+// État courant : { configure, connecte, membre, debloque, pseudo, discord, verification, mfaRequis }
 // verification : null (rien à vérifier), 'ok' ou 'echec' (juste après un retour de Discord)
+// discord : un compte Discord est relié au compte du site
+// mfaRequis : connecté avec mot de passe, mais le code de double authentification n'a pas été saisi
 export async function etat() {
-    const vide = { configure, connecte: false, membre: false, debloque: false, pseudo: '', verification: null };
+    const vide = {
+        configure,
+        connecte: false,
+        membre: false,
+        debloque: false,
+        pseudo: '',
+        discord: false,
+        verification: null,
+    };
     const { sb, session } = await sessionCourante();
     if (!session) return vide;
 
@@ -75,16 +105,28 @@ export async function etat() {
         return { ...vide, inactif: true };
     }
 
-    // Juste après la connexion, Discord fournit un jeton : le serveur vérifie l'appartenance.
+    // Double authentification activée mais pas encore validée : on reste « non connecté ».
+    if (await mfaManquante(sb)) return { ...vide, mfaRequis: true };
+
+    // Juste après avoir relié (ou revérifié) Discord, un jeton Discord est fourni : le serveur vérifie.
     let verification = null;
     if (session.provider_token) verification = await verifierServeur(sb, session);
 
-    const membre = await estMembre(sb, session);
-    return { configure, connecte: true, membre, debloque: membre, pseudo: pseudo(session.user), verification };
+    const discord = discordRelie(session.user);
+    const membre = discord && (await estMembre(sb, session));
+    return {
+        configure,
+        connecte: true,
+        membre,
+        debloque: membre,
+        pseudo: pseudo(session.user),
+        discord,
+        verification,
+    };
 }
 
 async function estMembre(sb, session) {
-    if (!C.GUILD_ID) return true; // aucun serveur exigé : tout compte connecté passe
+    if (!C.GUILD_ID) return true; // aucun serveur exigé : tout compte avec Discord relié passe
     const { data, error } = await sb
         .from('membres_pts')
         .select('membre, verifie_le')
@@ -135,18 +177,48 @@ function verifierServeur(sb, session) {
     return verifEnCours;
 }
 
-// Lance la connexion Discord ; au retour, l'utilisateur arrive sur connexion-pts.html.
-export async function connexion(retour = 'pts.html') {
-    if (!/^[a-z0-9-]+\.html$/.test(retour)) retour = 'pts.html'; // jamais de redirection hors du site
-    const sb = await supabase();
+// Page de destination autorisée après une connexion : uniquement une page du site.
+export function pageSure(page, defaut = 'index.html') {
+    return typeof page === 'string' && /^[a-z0-9-]+\.html$/.test(page) ? page : defaut;
+}
+
+// Adresse de la page de connexion du site (Google, e-mail), avec la page où revenir ensuite.
+export function urlConnexion(retour = 'index.html', extra = '') {
+    return `connexion.html?retour=${pageSure(retour)}${extra}`;
+}
+
+// Relie le Discord du joueur à son compte du site (ou revérifie s'il est déjà relié).
+// Il faut être connecté au site. Au retour, l'utilisateur arrive sur connexion-pts.html,
+// avec un jeton Discord à usage unique que le serveur utilise pour vérifier l'appartenance.
+export async function relierDiscord(retour = 'pts.html') {
+    retour = pageSure(retour, 'pts.html'); // jamais de redirection hors du site
+    const { sb, session } = await sessionCourante();
     if (!sb) throw erreur('non-configure');
-    noterActivite(); // nouvelle session : le compteur d'inactivité repart de zéro
+    if (!session) throw erreur('non-connecte');
+    noterActivite();
     const url = new URL('connexion-pts.html', location.href);
     url.searchParams.set('retour', retour);
-    await sb.auth.signInWithOAuth({
-        provider: 'discord',
-        options: { redirectTo: url.href, scopes: 'identify guilds' },
-    });
+    const options = { redirectTo: url.href, scopes: 'identify guilds' };
+    // Déjà relié : on repasse par Discord pour obtenir un jeton neuf (même compte, Discord le reconnaît).
+    // Pas encore relié : on ajoute Discord comme identité du compte actuel.
+    const { error } = discordRelie(session.user)
+        ? await sb.auth.signInWithOAuth({ provider: 'discord', options })
+        : await sb.auth.linkIdentity({ provider: 'discord', options });
+    if (error) throw erreur(error.code === 'manual_linking_disabled' ? 'indisponible' : 'serveur');
+}
+
+// Retire Discord du compte : l'accès aux outils PTS disparaît aussitôt (la base l'exige).
+// Impossible si Discord est le seul moyen de se connecter au compte.
+export async function delierDiscord() {
+    const { sb, session } = await sessionCourante();
+    if (!session) throw erreur('non-connecte');
+    const ids = session.user.identities || [];
+    const discord = ids.find((i) => i?.provider === 'discord');
+    if (!discord) return;
+    if (ids.length < 2) throw erreur('refuse');
+    const { error } = await sb.auth.unlinkIdentity(discord);
+    if (error) throw erreur('serveur');
+    await sb.auth.refreshSession().catch(() => {});
 }
 
 function purgerSessionLocale() {
@@ -272,12 +344,20 @@ export async function monProfil() {
     const u = session.user;
     const { data, error } = await sb.from('profils').select('pseudo, avatar_url, cree_le').eq('id', u.id).maybeSingle();
     if (error) throw erreur('lecture-impossible');
+    const identites = Array.isArray(u.identities) ? u.identities.map((i) => i?.provider).filter(Boolean) : [];
+    const fournisseurs = identites.length
+        ? identites
+        : Array.isArray(u.app_metadata?.providers)
+          ? u.app_metadata.providers
+          : [u.app_metadata?.provider].filter(Boolean);
     return {
         id: u.id,
         pseudo: data?.pseudo || pseudo(u),
         avatarUrl: data?.avatar_url || null,
         email: u.email || '',
         fournisseur: u.app_metadata?.provider || '',
+        fournisseurs: [...new Set(fournisseurs)],
+        discord: discordRelie(u),
         creeLe: data?.cree_le || u.created_at || null,
     };
 }
