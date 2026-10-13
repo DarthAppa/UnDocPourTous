@@ -15,7 +15,10 @@ const warn = (f, m) => alertes.push(`${f} : ${m}`);
 function fichiersSuivis() {
     try {
         const out = execSync('git ls-files --cached --others --exclude-standard', { encoding: 'utf8' });
-        return out.split('\n').filter(Boolean).filter((f) => existsSync(f) && statSync(f).isFile());
+        return out
+            .split('\n')
+            .filter(Boolean)
+            .filter((f) => existsSync(f) && statSync(f).isFile());
     } catch {
         return readdirSync('.').filter((f) => statSync(f).isFile());
     }
@@ -34,7 +37,11 @@ const SECRETS = [
     [/AIza[0-9A-Za-z_-]{35}/, 'clé API Google'],
     [/-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----/, 'clé privée'],
     [/[MN][A-Za-z\d]{23,25}\.[\w-]{6}\.[\w-]{27,}/, 'token de bot Discord'],
-    [/service_role/i, 'clé Supabase service_role (ne doit jamais être côté navigateur)'],
+    // JWT Supabase dont le contenu contient "role":"service_role" (base64)
+    [
+        /eyJ[\w-]+\.[\w-]*InJvbGUiOiJzZXJ2aWNlX3JvbGUi[\w-]*\.[\w-]+/,
+        'clé Supabase service_role (jamais côté navigateur)',
+    ],
 ];
 for (const f of texte) {
     if (f.startsWith('tools/regles.mjs')) continue;
@@ -73,20 +80,28 @@ for (const p of pages) {
     else if (p !== 'index.html' && !new RegExp(`\\s[—-]\\s${NOM}$`).test(titre))
         err(p, `<title> doit finir par « — ${NOM} » (actuel : « ${titre} »)`);
 
-    if (!new RegExp(`property="og:site_name"\\s+content="${NOM}"|content="${NOM}"\\s+property="og:site_name"`).test(head))
+    if (
+        !new RegExp(`property="og:site_name"\\s+content="${NOM}"|content="${NOM}"\\s+property="og:site_name"`).test(
+            head,
+        )
+    )
         err(p, `og:site_name="${NOM}" manquant`);
     if (!/<meta[^>]+name="description"/i.test(head)) warn(p, 'meta description manquante');
 
     if (GENEREES.has(p)) continue; // pages générées : seules les règles de base ci-dessus
 
-    if (!/<script[^>]+src="script\.js"[^>]*\bdefer\b/i.test(head)) err(p, 'script.js doit être chargé dans le <head> avec defer');
+    if (!/<script[^>]+src="script\.js"[^>]*\bdefer\b/i.test(head))
+        err(p, 'script.js doit être chargé dans le <head> avec defer');
     if (!/tailwind-config\.js/.test(head)) warn(p, 'tailwind-config.js non chargé');
     if (!/<link[^>]+href="style\.css"/i.test(head)) err(p, 'style.css non chargé dans le <head>');
-    if (!/class="[^"]*\bno-js\b/.test(html.match(/<html[^>]*>/i)?.[0] || '')) warn(p, '<html> sans classe no-js (contenu .reveal sans JS ?)');
+    if (!/class="[^"]*\bno-js\b/.test(html.match(/<html[^>]*>/i)?.[0] || ''))
+        warn(p, '<html> sans classe no-js (contenu .reveal sans JS ?)');
     if ((html.match(/<h1[\s>]/gi) || []).length !== 1) err(p, 'il faut exactement un <h1>');
 
     // Couleurs : uniquement les tokens (pas de bg-[#hex], text-[rgb(...)] etc.)
-    for (const m of html.matchAll(/\b(?:bg|text|border|from|to|via|ring|fill|stroke|shadow|outline|decoration)-\[(#|rgb|hsl)[^\]]*\]/g))
+    for (const m of html.matchAll(
+        /\b(?:bg|text|border|from|to|via|ring|fill|stroke|shadow|outline|decoration)-\[(#|rgb|hsl)[^\]]*\]/g,
+    ))
         err(p, `couleur en dur « ${m[0]} » → utiliser un token (${TOKENS.join(', ')})`);
 
     // Cartes : un seul lien, pas de bouton dedans
@@ -104,7 +119,8 @@ for (const p of pages) {
     }
     // Ancres internes
     for (const m of html.matchAll(/href="#([^"]+)"/g))
-        if (!new RegExp(`id="${m[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`).test(html)) err(p, `ancre #${m[1]} sans id correspondant`);
+        if (!new RegExp(`id="${m[1].replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"`).test(html))
+            err(p, `ancre #${m[1]} sans id correspondant`);
     if (/href="#"/.test(html)) warn(p, 'lien href="#" vide');
 
     // Images : alt obligatoire, pas d'image hors assets/img
@@ -114,17 +130,21 @@ for (const p of pages) {
         if (src && !/^(https?:|data:)/.test(src) && !src.startsWith('assets/')) warn(p, `image hors assets/ : ${src}`);
     }
     // Textes en anglais oubliés (indices fréquents)
-    if (/>\s*(Read more|Learn more|Sign in|Log in|Sign up|Coming soon|Download)\s*</i.test(html)) warn(p, 'texte en anglais détecté');
+    if (/>\s*(Read more|Learn more|Sign in|Log in|Sign up|Coming soon|Download)\s*</i.test(html))
+        warn(p, 'texte en anglais détecté');
 }
 
 // 4. Tokens de couleur : tailwind-config.js et style.css doivent rester alignés
 if (existsSync('tailwind-config.js') && existsSync('style.css')) {
     const tw = readFileSync('tailwind-config.js', 'utf8');
     const vars = new Set(
-        [...readFileSync('style.css', 'utf8').matchAll(/--[\w-]+\s*:\s*(#[0-9a-f]{3,8})/gi)].map((m) => m[1].toLowerCase()),
+        [...readFileSync('style.css', 'utf8').matchAll(/--[\w-]+\s*:\s*(#[0-9a-f]{3,8})/gi)].map((m) =>
+            m[1].toLowerCase(),
+        ),
     );
     for (const [, nom, hex] of tw.matchAll(/(\w+)\s*:\s*'(#[0-9a-fA-F]{3,8})'/g))
-        if (!vars.has(hex.toLowerCase())) err('style.css', `token ${nom} (${hex}) sans variable --xxx équivalente dans style.css`);
+        if (!vars.has(hex.toLowerCase()))
+            err('style.css', `token ${nom} (${hex}) sans variable --xxx équivalente dans style.css`);
 }
 
 // Rapport

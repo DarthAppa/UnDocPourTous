@@ -2,7 +2,10 @@
   "extends": ["stylelint-config-standard"],
   "ignoreFiles": ["node_modules/**", "shots/**", "docs-prives/**", "Claude outputs/**", "assets/**"],
   "rules": {
-    "at-rule-no-unknown": [true, { "ignoreAtRules": ["tailwind", "apply", "layer", "config", "theme", "utility", "variant", "custom-variant"] }],
+    "at-rule-no-unknown": [
+      true,
+      { "ignoreAtRules": ["tailwind", "apply", "layer", "config", "theme", "utility", "variant", "custom-variant"] }
+    ],
     "selector-class-pattern": null,
     "custom-property-pattern": null,
     "keyframes-name-pattern": null,
@@ -17,6 +20,9 @@
     "comment-empty-line-before": null,
     "declaration-empty-line-before": null,
     "rule-empty-line-before": null,
+    "at-rule-empty-line-before": null,
+    "custom-property-empty-line-before": null,
+    "declaration-block-single-line-max-declarations": null,
     "declaration-block-no-redundant-longhand-properties": null,
     "shorthand-property-no-redundant-values": null,
     "property-no-vendor-prefix": null,
