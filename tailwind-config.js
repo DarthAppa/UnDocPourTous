@@ -19,12 +19,16 @@ tailwind.config = {
                 brandOrange: '#F5A065',     // premium
                 brandOrangeHover: '#F7B27C',
                 premiumDeep: '#30231E',     // fond badge / formule premium
-                holo: '#5EE7FF'
+                holo: '#5EE7FF',
+                ptsInk: '#070909',          // Pack ta Small : fond
+                ptsGold: '#D9A64F',         // Pack ta Small : or vif
+                ptsGoldPale: '#D8C091'      // Pack ta Small : or pâle (texte)
             },
             fontFamily: {
                 sans: ['Inter', 'sans-serif'],
                 mono: ['"IBM Plex Mono"', 'monospace'],
-                serif: ['Lora', 'serif']
+                serif: ['Lora', 'serif'],
+                pts: ['Cinzel', 'Georgia', 'serif']
             }
         }
     }
