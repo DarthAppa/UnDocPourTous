@@ -26,6 +26,8 @@ export function appliquer(e) {
             a.target = '_blank';
             a.rel = 'noopener';
             a.classList.add('is-locked');
+            badge.innerHTML = '<img src="assets/icons/lock-keyhole.svg" alt="">VERROUILLÉ';
+            badge.className = 'badge badge-pts pts-lock-badge';
             hint.textContent = e.connecte ? 'Rejoindre le serveur Pack ta Small →' : 'Rejoindre le Discord pour débloquer →';
         }
     });
@@ -71,7 +73,9 @@ async function afficherDonnees(e) {
             return;
         }
         const maj = d.majCollection ? new Date(d.majCollection).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—';
-        txt.innerHTML = `Collection : <b>${d.nbCartes} cartes</b> (mise à jour le ${maj}) · Replays : <b>${d.nbReplays}</b>`;
+        const nbCartes = Number(d.nbCartes) || 0;   // nombres forcés : rien d'externe n'est injecté en HTML
+        const nbReplays = Number(d.nbReplays) || 0;
+        txt.innerHTML = `Collection : <b>${nbCartes} cartes</b> (mise à jour le ${maj}) · Replays : <b>${nbReplays}</b>`;
     } catch {
         txt.textContent = 'Impossible de lire tes données PTS pour le moment.';
     }
@@ -79,6 +83,7 @@ async function afficherDonnees(e) {
 
 zone?.querySelector('[data-deconnexion]')?.addEventListener('click', async () => {
     await deconnexion();
+    history.replaceState(null, '', 'pts.html');   // pas de faux message « inactivité » après une déconnexion voulue
     appliquer({ connecte: false, debloque: false, membre: false, pseudo: '' });
 });
 

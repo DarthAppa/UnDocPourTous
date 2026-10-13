@@ -68,6 +68,7 @@ async function verifierServeur(session) {
 
 // Lance la connexion Discord ; au retour, l'utilisateur arrive sur connexion-pts.html.
 export async function connexion(retour = 'pts.html') {
+    if (!/^[a-z0-9-]+\.html$/.test(retour)) retour = 'pts.html';   // jamais de redirection hors du site
     const sb = await supabase();
     if (!sb) throw new Error('non-configure');
     noterActivite();   // nouvelle session : le compteur d'inactivité repart de zéro
@@ -79,11 +80,27 @@ export async function connexion(retour = 'pts.html') {
     });
 }
 
+// Déconnexion fiable : l'état local est effacé d'abord, même hors ligne.
+// scope 'local' : ne coupe pas la session de l'extension PTS Companion (même projet Supabase).
 export async function deconnexion() {
-    const sb = await supabase();
+    arreterSurveillance();
     ecrire(null);
-    try { localStorage.removeItem('pts-derniere-activite'); } catch { /* bloqué */ }
-    if (sb) await sb.auth.signOut();
+    try { localStorage.removeItem(CLE_ACTIVITE); } catch { /* bloqué */ }
+    let erreur = null;
+    try {
+        const sb = await supabase();
+        if (sb) ({ error: erreur } = await sb.auth.signOut({ scope: 'local' }));
+    } catch (e) {
+        erreur = e;
+    }
+    if (erreur) {
+        // Hors ligne ou CDN injoignable : on purge quand même la session Supabase stockée
+        try {
+            const cle = `sb-${new URL(C.SUPABASE_URL).hostname.split('.')[0]}-auth-token`;
+            localStorage.removeItem(cle);
+            localStorage.removeItem(`${cle}-code-verifier`);
+        } catch { /* bloqué */ }
+    }
 }
 
 // Pages outils : renvoie vers la page Pack ta Small si les outils ne sont pas débloqués.
@@ -116,9 +133,19 @@ export function inactifDepuisTrop() {
 }
 
 let surveillance = null;
+let arretEcoute = null;
+function arreterSurveillance() {
+    clearInterval(surveillance);
+    surveillance = null;
+    arretEcoute?.abort();
+    arretEcoute = null;
+    cacherAvertissement();
+}
 export function surveillerInactivite() {
     if (surveillance || !C.INACTIVITE_MINUTES) return;
     if (!derniereActivite()) noterActivite();
+    arretEcoute = new AbortController();
+    const options = { passive: true, capture: true, signal: arretEcoute.signal };
     let derniereEcriture = 0;
     const activite = () => {
         const n = Date.now();
@@ -126,13 +153,14 @@ export function surveillerInactivite() {
         cacherAvertissement();
     };
     ['pointerdown', 'pointermove', 'keydown', 'scroll', 'wheel', 'touchstart'].forEach((ev) =>
-        addEventListener(ev, activite, { passive: true, capture: true }));
-    document.addEventListener('visibilitychange', () => { if (!document.hidden) verifier(); });
+        addEventListener(ev, activite, options));
+    document.addEventListener('visibilitychange', () => { if (!document.hidden) verifier(); }, { signal: arretEcoute.signal });
 
     async function verifier() {
-        const reste = limite() - (Date.now() - derniereActivite());
+        const d = derniereActivite();
+        if (!d) { arreterSurveillance(); return; }   // déconnecté (bouton ou autre onglet) : plus rien à surveiller
+        const reste = limite() - (Date.now() - d);
         if (reste <= 0) {
-            clearInterval(surveillance);
             await deconnexion();
             location.replace('pts.html?inactif=1');
         } else if (reste <= 60e3) afficherAvertissement(Math.ceil(reste / 1000));
@@ -147,7 +175,9 @@ let bandeau = null;
 function afficherAvertissement(secondes) {
     if (!bandeau) {
         bandeau = document.createElement('div');
-        bandeau.setAttribute('role', 'alert');
+        bandeau.id = 'pts-avertissement';
+        bandeau.setAttribute('role', 'status');   // annoncé poliment, pas relu en boucle toutes les 5 s
+        bandeau.setAttribute('aria-live', 'polite');
         bandeau.style.cssText = 'position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9999;width:min(520px, calc(100% - 32px));box-sizing:border-box;'
             + 'padding:12px 18px;border-radius:10px;background:#070909;color:#D8C091;border:1px solid #D9A64F;'
             + 'box-shadow:0 10px 30px rgba(0,0,0,.6);font:600 14px/1.4 Inter,system-ui,sans-serif;text-align:center';
