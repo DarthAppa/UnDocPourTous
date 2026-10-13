@@ -1,4 +1,4 @@
-# UnDocPourTout — site statique
+# UnDocPourTous — site statique
 
 Site de guides et d'outils gratuits pour joueurs (Albion Online, Path of Exile, World of Warcraft).
 Hébergé sur GitHub Pages, branche `main`, domaine dans `CNAME`.

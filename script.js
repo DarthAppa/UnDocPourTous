@@ -1,5 +1,5 @@
 // ==========================================
-//   UnDocPourTout — Script principal
+//   UnDocPourTous — Script principal
 // ==========================================
 document.documentElement.classList.replace('no-js', 'js');
 

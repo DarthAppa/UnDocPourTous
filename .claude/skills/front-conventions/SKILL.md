@@ -1,9 +1,9 @@
 ---
 name: front-conventions
-description: Conventions HTML, CSS, JS et Tailwind du site UnDocPourTout. À utiliser dès qu'on écrit ou modifie index.html, style.css, script.js ou une nouvelle page.
+description: Conventions HTML, CSS, JS et Tailwind du site UnDocPourTous. À utiliser dès qu'on écrit ou modifie index.html, style.css, script.js ou une nouvelle page.
 ---
 
-# Conventions front UnDocPourTout
+# Conventions front UnDocPourTous
 
 ## HTML
 - Squelette unique : `<!DOCTYPE html>`, `<html lang="fr" class="no-js">`, un seul `<head>`, un seul `<body>`.
