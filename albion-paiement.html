@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="fr" class="no-js">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Paiement — Optimiseur de build perso — UnDocPourTous</title>
+    <meta name="description" content="Choisissez votre formule Premium et finalisez votre accès à l’Optimiseur de build perso pour Albion Online.">
+
+    <!-- Polices -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Lora:wght@700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind (CDN) + couleurs du site -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="tailwind-config.js"></script>
+
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+</head>
+
+<body class="bg-darkBg text-textLight font-sans antialiased">
+
+<!-- ================= EN-TÊTE ================= -->
+<header class="site-header sticky top-0 z-50">
+    <div class="wrap">
+        <a href="index.html" class="flex items-center gap-3" aria-label="UnDocPourTous, accueil">
+            <img src="assets/icons/embleme.svg" alt="" width="36" height="36">
+            <span class="text-lg font-bold text-textLight">UnDocPourTous</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-9 text-sm font-medium" aria-label="Navigation principale">
+            <a href="index.html" class="nav-link">Accueil</a>
+            <a href="index.html#jeux" class="nav-link">Jeux</a>
+            <a href="albion-gratuit.html" class="nav-link">Outils</a>
+            <a href="#" class="nav-link">Discord</a>
+        </nav>
+
+        <div class="flex items-center gap-2">
+            <a href="#" class="btn-login" aria-label="Connexion"><img src="assets/icons/log-in.svg" alt=""><span class="hidden sm:inline">Connexion</span></a>
+            <button id="burger" class="md:hidden grid place-items-center w-10 h-10 text-textLight" aria-label="Menu" aria-expanded="false" aria-controls="mobile-menu">
+                <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Menu mobile -->
+    <nav id="mobile-menu" class="md:hidden hidden border-t border-cardBorder bg-darkBg" aria-label="Navigation mobile">
+        <div class="wrap py-4 flex flex-col gap-4 text-sm font-medium">
+            <a href="index.html" class="nav-link">Accueil</a>
+            <a href="index.html#jeux" class="nav-link">Jeux</a>
+            <a href="albion-gratuit.html" class="nav-link">Outils</a>
+            <a href="#" class="nav-link">Discord</a>
+        </div>
+    </nav>
+</header>
+
+<main class="wrap pt-8 pb-16 flex flex-col gap-8">
+    <nav aria-label="Fil d’Ariane" class="crumbs">
+            <span><a href="index.html">Accueil</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><a href="albion.html">Albion Online</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><a href="albion-premium.html">Premium</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><span aria-current="page">Paiement</span></span>
+        </nav>
+
+    <section class="pt-3 pb-2 flex flex-col gap-3.5 reveal">
+        <p class="font-mono font-medium text-[11px] text-brandOrange">ALBION ONLINE / ACCÈS PREMIUM</p>
+        <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-semibold">Débloquer Optimiseur de build perso</h1>
+        <p class="text-base leading-[1.6] text-textMuted">Choisissez votre formule, puis finalisez votre accès à l’outil.</p>
+    </section>
+
+    <div class="flex flex-col lg:flex-row gap-8 lg:items-start">
+        <div class="flex flex-col gap-6 lg:w-[800px] lg:max-w-[62%] shrink-0 w-full">
+            <fieldset class="flex flex-col gap-5">
+                <legend class="flex items-center gap-3 mb-5"><span class="font-mono text-[11px] text-brandOrange">01</span><span class="text-lg font-semibold">Votre formule</span></legend>
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+
+                    <label class="plan">
+                        <input type="radio" name="formule" value="Mensuel">
+                        <span class="flex items-center justify-between"><span class="text-lg font-semibold">Mensuel</span><span class="dot" aria-hidden="true"></span></span>
+                        <span class="text-xs leading-normal text-textMuted">Un accès au rythme du mois.</span>
+                        <span class="text-[13px] text-textFaint">Tarif à renseigner</span>
+                    </label>
+
+                    <label class="plan">
+                        <input type="radio" name="formule" value="Saisonnier" checked>
+                        <span class="flex items-center justify-between"><span class="text-lg font-semibold">Saisonnier</span><span class="dot" aria-hidden="true"></span></span>
+                        <span class="text-xs leading-normal text-textMuted">Pour accompagner votre saison.</span>
+                        <span class="text-[13px] text-textFaint">Tarif à renseigner</span>
+                        <span class="font-mono text-[10px] font-semibold text-brandOrange">LE PLUS CHOISI</span>
+                    </label>
+
+                    <label class="plan">
+                        <input type="radio" name="formule" value="À vie">
+                        <span class="flex items-center justify-between"><span class="text-lg font-semibold">À vie</span><span class="dot" aria-hidden="true"></span></span>
+                        <span class="text-xs leading-normal text-textMuted">Pour voir plus loin.</span>
+                        <span class="text-[13px] text-textFaint">Tarif à renseigner</span>
+                    </label>
+                </div>
+            </fieldset>
+
+            <article class="flex flex-col sm:flex-row overflow-hidden bg-cardBg border border-cardBorder rounded-2xl sm:min-h-[214px]">
+                <img src="assets/img/maquette/outil-build-perso.webp" alt="" width="1152" height="928" class="w-full h-48 sm:h-auto sm:w-[248px] object-cover shrink-0">
+                <div class="flex flex-col gap-4 items-start p-6">
+                    <span class="badge badge-premium"><img src="assets/icons/lock-keyhole.svg" alt="">PREMIUM</span>
+                    <h2 class="text-[23px] font-semibold">Optimiseur de build perso</h2>
+                    <p class="text-sm leading-[1.6] text-textMuted">Affinez votre équipement selon votre personnage et votre façon de jouer.</p>
+                </div>
+            </article>
+
+            <a href="albion-premium.html" class="text-[13px] text-textMuted hover:text-textLight">← Revenir aux outils Premium</a>
+        </div>
+
+        <aside class="flex-1 min-w-0 flex flex-col gap-6 p-5 sm:p-7 bg-cardBg border border-cardBorder rounded-2xl" aria-label="Paiement">
+            <h2 class="flex items-center gap-3"><span class="font-mono text-[11px] font-normal text-brandOrange">02</span><span class="text-lg font-semibold">Votre paiement</span></h2>
+            <p class="flex justify-between py-4 border-y border-cardBorder text-[13px]"><span class="text-textMuted">Formule sélectionnée</span><strong id="formule-choisie" class="font-semibold">Saisonnier</strong></p>
+            <div class="flex flex-col items-center justify-center gap-4 min-h-[214px] p-6 bg-footerBg border border-dashed border-cardBorder rounded-lg text-center">
+                <img src="assets/icons/credit-card.svg" alt="" width="32" height="32">
+                <p class="text-sm">Espace de paiement</p>
+                <p class="text-xs leading-[1.6] text-textMuted">Le formulaire et le montant de votre paiement s’afficheront ici.</p>
+            </div>
+            <button type="button" class="btn-premium w-full">Payer et accéder</button>
+            <p class="flex items-center justify-center gap-2 text-xs text-textMuted"><img src="assets/icons/lock-keyhole-14.svg" alt="" width="14" height="14">Paiement sécurisé</p>
+        </aside>
+    </div>
+</main>
+
+<!-- ================= PIED DE PAGE ================= -->
+<footer class="site-footer">
+    <div class="wrap flex flex-col gap-7">
+        <div class="grid grid-cols-2 lg:flex lg:justify-between gap-x-6 gap-y-8">
+            <div class="col-span-2 lg:col-span-1 lg:w-[430px] flex flex-col gap-3.5">
+                <div class="flex items-center gap-3">
+                    <img src="assets/icons/embleme.svg" alt="" width="36" height="36">
+                    <span class="text-lg font-bold text-textLight">UnDocPourTous</span>
+                </div>
+                <p class="text-[13px] leading-[1.6] text-textMuted">Des outils pour comprendre votre jeu.<br>Et aller plus loin, à votre rythme.</p>
+            </div>
+            <div class="lg:w-[180px] flex flex-col gap-3">
+                <p class="footer-title">EXPLORER</p>
+                <a href="index.html" class="footer-link">Accueil</a>
+                <a href="index.html#jeux" class="footer-link">Jeux</a>
+                <a href="albion-gratuit.html" class="footer-link">Outils gratuits</a>
+            </div>
+            <div class="lg:w-[180px] flex flex-col gap-3">
+                <p class="footer-title">COMMUNAUTÉ</p>
+                <a href="#" class="footer-link">Discord</a>
+                <a href="#" class="footer-link">Connexion</a>
+                <a href="albion-premium.html" class="footer-link">Premium</a>
+            </div>
+            <div class="col-span-2 lg:col-span-1 lg:w-[220px] flex flex-col gap-3">
+                <p class="footer-title">INFORMATIONS</p>
+                <a href="#" class="footer-link">Mentions légales</a>
+                <a href="#" class="footer-link">Confidentialité</a>
+                <a href="#" class="footer-link">Conditions d’utilisation</a>
+            </div>
+        </div>
+        <div class="border-t border-cardBorder pt-[22px] flex flex-col sm:flex-row sm:justify-between gap-2 text-[11px] text-textFaint">
+            <p>© UnDocPourTous. Non affilié aux éditeurs des jeux cités.</p>
+            <p class="font-mono">FAIT POUR LES JOUEURS.</p>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

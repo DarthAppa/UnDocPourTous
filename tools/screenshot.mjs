@@ -29,7 +29,7 @@ for (const s of sizes) {
     await p.waitForTimeout(800);
 
     const scrollW = await p.evaluate(() => document.documentElement.scrollWidth);
-    const file = `shots/${s.name}.png`;
+    const file = `shots/${page.replace(/\.html$/, '')}-${s.name}.png`;
     await p.screenshot({ path: file, fullPage: true });
 
     console.log(`\n[${s.name} ${s.width}px] -> ${file}`);

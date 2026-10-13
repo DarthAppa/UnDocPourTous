@@ -1,3 +1,12 @@
 node_modules/
 shots/
 .claude/settings.local.json
+.env
+.env.*
+!.env.example
+
+# Notes privées (juridique, business) : jamais publiées sur GitHub Pages
+docs-prives/
+
+# Fichiers de travail générés par Claude (simulations, brouillons) : jamais publiés
+Claude outputs/
