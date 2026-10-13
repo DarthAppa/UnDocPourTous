@@ -9,6 +9,7 @@ import { clientStripe, Stripe } from '../_shared/stripe.ts';
 import {
     abonnementDeLEvenement,
     doitAppliquer,
+    estAbonnementPremium,
     evenementTraite,
     ligneAbonnement,
     userIdDeLEvenement,
@@ -76,6 +77,12 @@ Deno.serve(async (req) => {
             .eq('user_id', userId)
             .maybeSingle();
         if (erreurLecture) throw new Error('lecture abonnements');
+        // Prix autre que Premium : jamais d'accès. Abonnement inconnu → ignoré ; abonnement suivi
+        // (offre changée dans le portail) → plus d'accès.
+        if (!estAbonnementPremium(abonnement, env('STRIPE_PRICE_PREMIUM'))) {
+            if (existante?.stripe_subscription_id !== abonnement.id) return json(200, { recu: true, ignore: true });
+            nouvelle.statut = 'expire';
+        }
         if (!doitAppliquer(existante, nouvelle)) return json(200, { recu: true, ignore: true });
 
         const { error } = await admin.from('abonnements').upsert(nouvelle, { onConflict: 'user_id' });

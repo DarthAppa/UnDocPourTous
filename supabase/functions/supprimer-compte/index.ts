@@ -21,22 +21,37 @@ servir('supprimer-compte', async (req, corps) => {
         .maybeSingle();
     if (error) throw new Error('lecture abonnements');
 
-    // 1. Résilier l'abonnement Stripe d'abord : pas de compte supprimé encore facturé.
-    if (aResilier(ligne)) {
-        const stripe = clientStripe();
-        if (!stripe) {
+    // 1. Résilier TOUS les abonnements Stripe de ce compte d'abord : pas de compte supprimé encore
+    //    facturé. La table ne suit qu'un abonnement : on cherche aussi chez Stripe ceux posés avec
+    //    metadata.user_id (double paiement, deux onglets…).
+    const stripe = clientStripe();
+    if (!stripe) {
+        if (aResilier(ligne)) {
             console.error('supprimer-compte : abonnement à résilier mais Stripe non configuré');
             return { statut: 503, corps: { erreur: 'Suppression impossible pour le moment, contacte-nous' } };
         }
+    } else {
         try {
-            const abonnement = await stripe.subscriptions.retrieve(ligne!.stripe_subscription_id);
-            if (statutStripeResiliable(abonnement.status)) await stripe.subscriptions.cancel(abonnement.id);
-        } catch (e) {
-            // Abonnement introuvable chez Stripe : rien à résilier. Toute autre erreur : on s'arrête.
-            if ((e as { code?: string })?.code !== 'resource_missing') {
-                console.error('supprimer-compte : résiliation Stripe impossible', (e as { type?: string })?.type);
-                return { statut: 502, corps: { erreur: 'Résiliation impossible pour le moment, réessaie plus tard' } };
+            const ids = new Set<string>();
+            if (aResilier(ligne)) ids.add(ligne!.stripe_subscription_id);
+            // utilisateur.id est un uuid vérifié (JWT) : aucune injection possible dans la requête de recherche.
+            for await (const s of stripe.subscriptions.search({
+                query: `metadata['user_id']:'${utilisateur.id}'`,
+                limit: 100,
+            }))
+                ids.add(s.id);
+            for (const id of ids) {
+                try {
+                    const abonnement = await stripe.subscriptions.retrieve(id);
+                    if (statutStripeResiliable(abonnement.status)) await stripe.subscriptions.cancel(abonnement.id);
+                } catch (e) {
+                    // Abonnement introuvable chez Stripe : rien à résilier. Toute autre erreur : on s'arrête.
+                    if ((e as { code?: string })?.code !== 'resource_missing') throw e;
+                }
             }
+        } catch (e) {
+            console.error('supprimer-compte : résiliation Stripe impossible', (e as { type?: string })?.type);
+            return { statut: 502, corps: { erreur: 'Résiliation impossible pour le moment, réessaie plus tard' } };
         }
     }
 

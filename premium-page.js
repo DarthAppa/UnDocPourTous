@@ -29,6 +29,8 @@ const BALISES_INTERDITES = new Set([
     'template',
     'set',
     'animate',
+    'style', // maquillage de la page (position:fixed…) : le contenu garde le style du site
+    'form', // formulaires vers l'extérieur (déjà bloqués par la CSP form-action, double sécurité)
 ]);
 const ATTRIBUTS_URL = new Set(['href', 'xlink:href', 'src', 'action', 'formaction', 'poster', 'data', 'background']);
 
@@ -63,6 +65,9 @@ export function nettoyer(html) {
             if (
                 nom.startsWith('on') ||
                 nom === 'srcdoc' ||
+                nom === 'style' ||
+                nom === 'srcset' ||
+                nom === 'ping' ||
                 (ATTRIBUTS_URL.has(nom) && urlDangereuse(nom, valeur, balise))
             )
                 el.removeAttribute(name);

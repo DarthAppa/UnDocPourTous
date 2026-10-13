@@ -63,7 +63,7 @@ npx supabase secrets set STRIPE_WEBHOOK_SECRET=...
 | ----------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `SITE_URL`              | adresse du site, pour les retours après paiement (`profil.html`, `albion-paiement.html`)                                                                    |
 | `SITE_ORIGINS`          | sites autorisés à appeler les fonctions (séparés par des virgules, sans `/` final) ; ajouter `,http://127.0.0.1:5500` seulement le temps d'un test en local |
-| `GUILD_ID`              | id du serveur Discord PTS ; vide = n'importe quel compte Discord est accepté                                                                                |
+| `GUILD_ID`              | id du serveur Discord PTS ; `*` = n’importe quel compte Discord (vide = vérification refusée, par sécurité)                                                 |
 | `STRIPE_SECRET_KEY`     | clé secrète Stripe (`sk_test_…` pour les essais, `sk_live_…` en vrai)                                                                                       |
 | `STRIPE_PRICE_PREMIUM`  | id du prix de l'abonnement (`price_…`), voir étape 5                                                                                                        |
 | `STRIPE_WEBHOOK_SECRET` | secret de signature du webhook (`whsec_…`), voir étape 5                                                                                                    |

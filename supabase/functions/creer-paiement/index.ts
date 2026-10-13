@@ -30,11 +30,26 @@ servir('creer-paiement', async (req, corps) => {
     if (ligne && donneAcces(ligne.statut, ligne.fin))
         return { statut: 409, corps: { erreur: 'Tu as déjà un abonnement actif : gère-le depuis ton profil' } };
 
+    // Le webhook n'est peut-être pas encore passé (deux onglets, double clic, paiement en cours) :
+    // on demande à Stripe s'il existe déjà un abonnement vivant pour ce compte, et on réutilise son client.
+    let customerId: string | null = ligne?.stripe_customer_id ?? null;
+    for await (const s of stripe.subscriptions.search({
+        query: `metadata['user_id']:'${utilisateur.id}'`,
+        limit: 100,
+    })) {
+        if (['active', 'trialing', 'past_due', 'unpaid', 'incomplete', 'paused'].includes(s.status))
+            return {
+                statut: 409,
+                corps: { erreur: 'Un abonnement existe déjà pour ton compte : gère-le depuis ton profil' },
+            };
+        customerId ??= typeof s.customer === 'string' ? s.customer : s.customer.id;
+    }
+
     const session = await stripe.checkout.sessions.create(
         parametresCheckout({
             userId: utilisateur.id,
             email: utilisateur.email ?? null,
-            customerId: ligne?.stripe_customer_id ?? null,
+            customerId,
             priceId,
             base,
         }),

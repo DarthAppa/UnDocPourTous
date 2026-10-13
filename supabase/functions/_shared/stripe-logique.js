@@ -49,6 +49,14 @@ export function finDePeriode(abonnement) {
     return typeof secondes === 'number' ? new Date(secondes * 1000).toISOString() : null;
 }
 
+// L'abonnement Stripe porte-t-il le prix Premium ? (même compte Stripe pour d'autres offres,
+// ou changement d'offre dans le portail : seul ce prix donne accès au contenu Premium)
+export function estAbonnementPremium(abonnement, priceId) {
+    if (typeof priceId !== 'string' || !/^price_[A-Za-z0-9]+$/.test(priceId)) return false;
+    const items = abonnement?.items?.data ?? [];
+    return items.some((i) => idStripe(i?.price) === priceId);
+}
+
 // Ligne de la table abonnements à partir d'un abonnement Stripe (objet relu chez Stripe).
 export function ligneAbonnement(abonnement, userId, maintenant = new Date()) {
     return {

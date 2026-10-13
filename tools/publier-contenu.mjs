@@ -69,7 +69,8 @@ const env = { ...lireEnv(), ...process.env };
 const cle = env.SUPABASE_SERVICE_ROLE_KEY ?? '';
 const url = (env.SUPABASE_URL || URL_PAR_DEFAUT).replace(/\/+$/, '');
 if (!cle) stop('SUPABASE_SERVICE_ROLE_KEY manquante dans .env (voir .env.example)');
-if (!/^https:\/\/[a-z0-9.-]+$/.test(url)) stop('SUPABASE_URL invalide (https://<projet>.supabase.co)');
+// Seulement un projet Supabase : la clé service_role ne doit jamais partir vers un autre hôte
+if (!/^https:\/\/[a-z0-9]+\.supabase\.co$/.test(url)) stop('SUPABASE_URL invalide (https://<projet>.supabase.co)');
 
 let reponse;
 try {

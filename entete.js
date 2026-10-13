@@ -3,6 +3,10 @@
 // (La session peut avoir expiré : profil.html renverra alors vers la connexion.)
 import { PTS_CONFIG as C } from './pts-config.js';
 
+// Anti-clickjacking : GitHub Pages ne permet pas l'en-tête frame-ancestors, donc si le site est
+// affiché dans le cadre d'une autre page, on le masque (personne ne peut faire cliquer à notre place).
+if (window.top !== window.self) document.documentElement.hidden = true;
+
 function sessionEnregistree() {
     try {
         const ref = new URL(C.SUPABASE_URL).hostname.split('.')[0];

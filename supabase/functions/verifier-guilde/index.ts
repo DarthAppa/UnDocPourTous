@@ -9,10 +9,18 @@ servir('verifier-guilde', async (req, corps) => {
     const utilisateur = await utilisateurDuJwt(req, admin);
     if (!utilisateur) return { statut: 401, corps: { erreur: 'Connexion requise' } };
 
+    // Fermé par défaut : GUILD_ID oublié = erreur, pas « tout le monde est membre ».
+    // Pour accepter n'importe quel compte Discord, il faut l'écrire exprès : GUILD_ID=*
+    const guilde = (env('GUILD_ID') ?? '').trim();
+    if (!guilde) {
+        console.error('verifier-guilde : secret GUILD_ID manquant');
+        return { statut: 503, corps: { erreur: 'Vérification indisponible pour le moment' } };
+    }
+
     const resultat = await verifierMembre({
         providerToken: corps.provider_token,
         idDiscordAttendu: idDiscordDuCompte(utilisateur),
-        guildId: env('GUILD_ID'),
+        guildId: guilde === '*' ? '' : guilde,
         fetch,
     });
     if (!resultat.ok) return { statut: resultat.statut, corps: { erreur: resultat.erreur } };

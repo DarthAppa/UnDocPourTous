@@ -95,6 +95,21 @@ async function estMembre(sb, session) {
     return data.membre === true && age >= 0 && age < C.VERIF_JOURS * 864e5;
 }
 
+// Retire provider_token / provider_refresh_token de la session enregistrée (droits identify + guilds)
+function oublierJetonDiscord() {
+    try {
+        const cle = `sb-${new URL(C.SUPABASE_URL).hostname.split('.')[0]}-auth-token`;
+        const session = JSON.parse(localStorage.getItem(cle));
+        if (session && (session.provider_token || session.provider_refresh_token)) {
+            delete session.provider_token;
+            delete session.provider_refresh_token;
+            localStorage.setItem(cle, JSON.stringify(session));
+        }
+    } catch {
+        /* stockage bloqué ou illisible */
+    }
+}
+
 // Un seul appel même si plusieurs scripts demandent l'état en même temps
 let verifEnCours = null;
 function verifierServeur(sb, session) {
@@ -108,9 +123,10 @@ function verifierServeur(sb, session) {
         }
         // Le jeton Discord n'a plus d'utilité : une session rafraîchie ne le contient plus.
         try {
-            await sb.auth.refreshSession();
+            const { error } = await sb.auth.refreshSession();
+            if (error) throw error;
         } catch {
-            /* réseau : il disparaîtra au prochain rafraîchissement */
+            oublierJetonDiscord(); // rafraîchissement impossible : on retire quand même le jeton du stockage
         }
         return resultat;
     })().finally(() => {
