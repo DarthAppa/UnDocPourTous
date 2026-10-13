@@ -1,0 +1,25 @@
+{
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": "explicit",
+    "source.fixAll.stylelint": "explicit"
+  },
+  "css.validate": false,
+  "stylelint.validate": ["css"],
+  "eslint.useFlatConfig": true,
+  "files.insertFinalNewline": true,
+  "files.trimTrailingWhitespace": true,
+  "tailwindCSS.includeLanguages": { "html": "html" },
+  "files.exclude": { "shots": true },
+  "search.exclude": {
+    "node_modules": true,
+    "shots": true,
+    "pts-encyclopedie.html": true,
+    "pts-builder.html": true,
+    "package-lock.json": true
+  },
+  "cSpell.language": "fr,en",
+  "cSpell.words": ["UnDocPourTous", "Albion", "Supabase", "Tailwind", "Playwright", "PTS"],
+  "liveServer.settings.port": 5500
+}
