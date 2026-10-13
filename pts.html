@@ -25,11 +25,10 @@
             rel="stylesheet"
         />
 
-        <!-- Tailwind (CDN) + couleurs du site -->
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="tailwind-config.js"></script>
-
         <link rel="stylesheet" href="style.css" />
+        <!-- Tailwind compilé (npm run build:css), APRÈS style.css : même ordre effectif que l'ancien CDN,
+             qui injectait sa feuille en fin d'en-tête. Les utilitaires gardent donc la priorité. -->
+        <link rel="stylesheet" href="assets/css/tailwind.css" />
         <script src="script.js" defer></script>
         <script type="module" src="pts-page.js"></script>
     </head>

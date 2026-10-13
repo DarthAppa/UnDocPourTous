@@ -1,6 +1,10 @@
-// Config Tailwind partagée par toutes les pages (chargée juste après le CDN Tailwind).
-// Chaque couleur a son équivalent --var dans style.css : à modifier aux deux endroits.
-tailwind.config = {
+// Config Tailwind du site (compilée par tools/build-css.mjs → assets/css/tailwind.css).
+// Chaque couleur a son équivalent --var dans style.css : à modifier aux deux endroits,
+// puis lancer `npm run build:css` et committer assets/css/tailwind.css (GitHub Pages ne compile rien).
+module.exports = {
+    // Pages faites à la main + scripts du site. Les pages Pack ta Small générées
+    // (pts-encyclopedie.html, pts-builder.html) ont leur propre CSS et n'utilisent pas Tailwind.
+    content: ['./*.html', './*.js', '!./pts-encyclopedie.html', '!./pts-builder.html'],
     theme: {
         extend: {
             colors: {
@@ -32,4 +36,5 @@ tailwind.config = {
             },
         },
     },
+    plugins: [],
 };

@@ -6,6 +6,7 @@
     "shot": "node tools/screenshot.mjs",
     "serve": "node tools/serve.mjs",
     "import:pts": "node tools/import-pts.mjs",
+    "build:css": "node tools/build-css.mjs",
     "test:pts": "node tools/test-pts-verrou.mjs",
     "verif": "node tools/verif.mjs",
     "verif:rapide": "node tools/verif.mjs --rapide",
@@ -21,6 +22,8 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@supabase/supabase-js": "2.117.2",
+    "esbuild": "0.28.2",
     "eslint": "^10.12.0",
     "globals": "^17.13.0",
     "html-validate": "^11.16.2",
@@ -28,6 +31,7 @@
     "prettier": "^3.9.10",
     "simple-git-hooks": "^2.14.0",
     "stylelint": "^17.16.0",
-    "stylelint-config-standard": "^40.0.0"
+    "stylelint-config-standard": "^40.0.0",
+    "tailwindcss": "3.4.19"
   }
 }

@@ -24,7 +24,6 @@ export default [
             sourceType: 'module',
             globals: {
                 ...globals.browser,
-                tailwind: 'writable', // CDN Tailwind
                 supabase: 'readonly', // CDN Supabase
             },
         },
