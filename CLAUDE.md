@@ -9,6 +9,7 @@ Hébergé sur GitHub Pages, branche `main`, domaine dans `CNAME`.
 - `style.css` : tout ce que Tailwind ne fait pas bien (décors, animations, composants `.btn-primary`, `.game-card`, `.tool-card`…)
 - `script.js` : interactions (dropdowns, menu mobile, parallaxe, apparition au scroll)
 - `tools/screenshot.mjs` : captures desktop + mobile pour vérifier le rendu
+- Pack ta Small (fan game, logo et typo officiels autorisés) : `pts.html` (page du jeu, gabarit du site) ; `pts-encyclopedie.html` et `pts-builder.html` sont GÉNÉRÉES par `npm run import:pts` depuis `../1_PTS/Encyclopedie` (Partie1, Partie2) : ne pas les modifier à la main, modifier la source ou `tools/import-pts.mjs` puis relancer
 
 ## Commandes
 - Vérifier le rendu : `npm run shot` / `node tools/screenshot.mjs page.html` (captures dans `shots/`, affiche les erreurs console et le débordement horizontal)
