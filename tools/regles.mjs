@@ -34,9 +34,10 @@ const SECRETS = [
     [/whsec_[0-9a-zA-Z]{10,}/, 'secret webhook Stripe'],
     [/gh[pousr]_[0-9A-Za-z]{30,}/, 'token GitHub'],
     [/xox[abpr]-[0-9A-Za-z-]{10,}/, 'token Slack'],
-    [/AIza[0-9A-Za-z_-]{35}/, 'clé API Google'],
+    // (?<![A-Za-z0-9+/]) : ignore les faux positifs au milieu d'une image en base64
+    [/(?<![A-Za-z0-9+/])AIza[0-9A-Za-z_-]{35}(?![A-Za-z0-9+/])/, 'clé API Google'],
     [/-----BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY-----/, 'clé privée'],
-    [/[MN][A-Za-z\d]{23,25}\.[\w-]{6}\.[\w-]{27,}/, 'token de bot Discord'],
+    [/(?<![A-Za-z0-9+/])[MN][A-Za-z\d]{23,25}\.[\w-]{6}\.[\w-]{27,}/, 'token de bot Discord'],
     // JWT Supabase dont le contenu contient "role":"service_role" (base64)
     [
         /eyJ[\w-]+\.[\w-]*InJvbGUiOiJzZXJ2aWNlX3JvbGUi[\w-]*\.[\w-]+/,

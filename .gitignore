@@ -20,3 +20,11 @@ assets/img/logo-undocpourtous.png
 
 # Images officielles Albion (logo du jeu dedans, droits Sandbox) : usage local uniquement, jamais publiées
 assets/img/assets_albion_public/
+
+# Fichiers système et rapports de test
+Thumbs.db
+desktop.ini
+.DS_Store
+npm-debug.log*
+test-results/
+playwright-report/
