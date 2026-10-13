@@ -27,7 +27,7 @@ export function urlSupabase(racine = RACINE) {
 const TYPES_JS = /^(|module|text\/javascript|application\/javascript|text\/ecmascript)$/i;
 function scriptsInline(html) {
     const liste = [];
-    for (const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi)) {
+    for (const m of html.matchAll(/<script\b([^>]*)>([\s\S]*?)<\/script[^>]*>/gi)) {
         const attrs = m[1];
         if (/\bsrc\s*=/i.test(attrs)) continue;
         const type = (attrs.match(/\btype\s*=\s*["']?([^"'\s>]*)/i)?.[1] ?? '').trim();
@@ -61,7 +61,7 @@ export function politique(html, supabase) {
 
 // Gestionnaires inline et URL javascript: (bloqués par la CSP) — hors contenu des <script>/<style>
 export function gestionnairesInline(html) {
-    const balisage = html.replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1\s*>/gi, '').replace(/<!--[\s\S]*?-->/g, '');
+    const balisage = html.replace(/<(script|style)\b[^>]*>[\s\S]*?<\/\1[^>]*>/gi, '').replace(/<!--[\s\S]*?-->/g, '');
     const trouves = [];
     for (const m of balisage.matchAll(/<[a-z][^>]*>/gi)) {
         for (const a of m[0].matchAll(/\s(on[a-z]+)\s*=/gi)) trouves.push(`${a[1]}= dans ${m[0].slice(0, 80)}`);

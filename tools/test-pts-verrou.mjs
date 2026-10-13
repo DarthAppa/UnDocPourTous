@@ -6,6 +6,16 @@ import { demarrer } from './serveur.mjs';
 import { PTS_CONFIG } from '../pts-config.js';
 import { preparer, SESSION, texteDebordement } from './faux-supabase.mjs';
 
+// Requête vers Discord ? (comparaison du nom d'hôte, pas d'une simple sous-chaîne)
+const versDiscord = (u) => {
+    try {
+        const h = new URL(u).hostname;
+        return h === 'discord.com' || h.endsWith('.discord.com');
+    } catch {
+        return false;
+    }
+};
+
 const serveur = await demarrer();
 const browser = await chromium.launch();
 mkdirSync('shots', { recursive: true });
@@ -208,7 +218,7 @@ try {
 
         verif(largeur.ok, texteDebordement(largeur));
         verif(!erreurs.length, `aucune erreur JS ${erreurs.join(' | ')}`);
-        verif(!requetesExternes.some((u) => /discord\.com/.test(u)), 'aucune requête du navigateur vers discord.com');
+        verif(!requetesExternes.some(versDiscord), 'aucune requête du navigateur vers discord.com');
         await p.close();
 
         // 6. Appartenance lue dans membres_pts (source de vérité serveur)
@@ -290,7 +300,7 @@ try {
                 const refresh = await q.evaluate(() => globalThis.__APPELS__.some((a) => a.type === 'refresh'));
                 verif(refresh, `${cas} : refreshSession appelé quand même (le jeton Discord quitte le stockage)`);
             }
-            verif(!ext.some((u) => /discord\.com/.test(u)), `${cas} : aucune requête vers discord.com`);
+            verif(!ext.some(versDiscord), `${cas} : aucune requête vers discord.com`);
             verif(!err.length, `${cas} : aucune erreur JS ${err.join(' | ')}`);
             await q.close();
         }

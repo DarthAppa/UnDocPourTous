@@ -95,7 +95,15 @@ for (const p of pages) {
     if (!/<script[^>]+src="script\.js"[^>]*\bdefer\b/i.test(head))
         err(p, 'script.js doit être chargé dans le <head> avec defer');
     if (!/<link[^>]+href="assets\/css\/tailwind\.css"/i.test(head)) err(p, 'assets/css/tailwind.css non chargé');
-    if (/cdn\.tailwindcss\.com/.test(html))
+    if (
+        [...html.matchAll(/\b(?:src|href)="(https:[^"]+)"/g)].some((m) => {
+            try {
+                return new URL(m[1]).hostname === 'cdn.tailwindcss.com';
+            } catch {
+                return false;
+            }
+        })
+    )
         err(p, 'CDN Tailwind → utiliser assets/css/tailwind.css (npm run build:css)');
     if (!/<link[^>]+href="style\.css"/i.test(head)) err(p, 'style.css non chargé dans le <head>');
     if (!/class="[^"]*\bno-js\b/.test(html.match(/<html[^>]*>/i)?.[0] || ''))
