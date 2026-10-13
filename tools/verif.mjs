@@ -17,6 +17,9 @@ const etapes = [
     ['CSS (Stylelint)', 'npx --no-install stylelint "**/*.css"'],
     ['HTML (html-validate)', `npx --no-install html-validate ${pagesSources.join(' ')}`],
     ['Règles maison (CLAUDE.md)', 'node tools/regles.mjs'],
+    ['CSS Tailwind à jour', 'node tools/build-css.mjs --check'],
+    ['Classes Tailwind présentes', 'node tools/classes-tailwind.mjs'],
+    ['CSP à jour', 'node tools/csp.mjs --check'],
 ];
 if (pkg.scripts?.['test:pts'] && existsSync('tools/test-pts-verrou.mjs'))
     etapes.push(['Tests verrou PTS', 'npm run test:pts']);

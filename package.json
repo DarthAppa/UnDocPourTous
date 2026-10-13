@@ -8,6 +8,7 @@
     "import:pts": "node tools/import-pts.mjs",
     "build:css": "node tools/build-css.mjs",
     "vendor:supabase": "node tools/vendor-supabase.mjs",
+    "csp": "node tools/csp.mjs",
     "test:pts": "node tools/test-pts-verrou.mjs",
     "verif": "node tools/verif.mjs",
     "verif:rapide": "node tools/verif.mjs --rapide",
