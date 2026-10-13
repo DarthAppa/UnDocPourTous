@@ -791,6 +791,10 @@ button.pts-discord {
     opacity: 1;
     transform: none;
 }
+/* Une carte « Bientôt » apparaît directement grisée (sinon elle s'allume puis s'éteint après l'animation) */
+.js .card-soon.reveal.visible {
+    opacity: 0.55;
+}
 
 @media (prefers-reduced-motion: reduce) {
     *,
