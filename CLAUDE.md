@@ -10,6 +10,7 @@ Hébergé sur GitHub Pages, branche `main`, domaine dans `CNAME`.
 - `script.js` : interactions (dropdowns, menu mobile, parallaxe, apparition au scroll)
 - `tools/screenshot.mjs` : captures desktop + mobile pour vérifier le rendu
 - Pack ta Small (fan game, logo et typo officiels autorisés) : `pts.html` (page du jeu, gabarit du site) ; `pts-encyclopedie.html` et `pts-builder.html` sont GÉNÉRÉES par `npm run import:pts` depuis `../1_PTS/Encyclopedie` (Partie1, Partie2) : ne pas les modifier à la main, modifier la source ou `tools/import-pts.mjs` puis relancer
+- Verrou PTS (« si connecté avec Discord ET membre du serveur PTS → outils débloqués, sinon les cartes mènent au Discord PTS ») : `pts-config.js` (réglages Supabase + id du serveur), `pts-auth.js` (connexion, état, garde des pages outils), `pts-page.js` (cartes de `pts.html`), `connexion-pts.html` + `pts-connexion.js` (page de connexion). Tester : `npm run test:pts`. `npm run shot` passe par un serveur local (`tools/serveur.mjs`) pour que les modules JS marchent
 
 ## Commandes
 - Vérifier le rendu : `npm run shot` / `node tools/screenshot.mjs page.html` (captures dans `shots/`, affiche les erreurs console et le débordement horizontal)

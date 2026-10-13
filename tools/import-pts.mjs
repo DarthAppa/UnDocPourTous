@@ -91,6 +91,11 @@ for (const outil of OUTILS) {
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
 <!-- Généré par tools/import-pts.mjs depuis ${outil.source} : ne pas modifier à la main -->
+<!-- Verrou : page affichée seulement si connecté avec Discord et membre du serveur Pack ta Small (pts-auth.js) -->
+<script>document.documentElement.classList.add('pts-attente');</script>
+<style>html.pts-attente body{visibility:hidden}</style>
+<noscript><style>html.pts-attente body{visibility:visible}</style></noscript>
+<script type="module">import { garde } from './pts-auth.js'; garde();</script>
 ${tete}
 </head>
 <body>

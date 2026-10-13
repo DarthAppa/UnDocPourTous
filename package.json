@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "shot": "node tools/screenshot.mjs",
-    "import:pts": "node tools/import-pts.mjs"
+    "import:pts": "node tools/import-pts.mjs",
+    "test:pts": "node tools/test-pts-verrou.mjs"
   },
   "devDependencies": {
     "playwright": "^1.48.0"

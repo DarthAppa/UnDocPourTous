@@ -22,6 +22,7 @@
 
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
+    <script type="module" src="pts-page.js"></script>
 </head>
 
 <body class="bg-darkBg text-textLight font-sans antialiased">
@@ -78,46 +79,52 @@
             <p class="text-[15px] leading-[1.65]">Le jeu de cartes des joueurs d’Albion : collectionne les cartes, draft ton équipe de 20 et affronte les autres packs au ladder et en tournoi. Ici, tout ce qu’il faut pour comprendre le jeu et préparer ta compo.</p>
         </div>
         <div class="flex flex-wrap items-center gap-3">
-            <a href="https://www.packtasmall.fr" target="_blank" rel="noopener" class="pts-discord"><img src="assets/img/pts/icon-discord.webp" alt="" width="436" height="572">Se connecter avec Discord</a>
-            <a href="https://discord.gg/DX8wNgJAGV" target="_blank" rel="noopener" class="pts-link">Rejoindre le Discord PTS →</a>
+            <a href="connexion-pts.html" id="pts-login" class="pts-discord"><img src="assets/img/pts/icon-discord.webp" alt="" width="436" height="572">Se connecter avec Discord</a>
+            <div id="pts-compte" class="pts-compte" hidden>
+                <img src="assets/img/pts/icon-discord.webp" alt="" width="436" height="572">
+                <div class="flex flex-col"><span class="text-[12px] text-textMuted">Connecté : <b data-pseudo class="text-textLight"></b></span><span data-statut class="text-[13px] font-semibold text-ptsGold"></span></div>
+                <button type="button" data-deconnexion class="pts-link text-[13px]">Se déconnecter</button>
+            </div>
+            <a href="https://discord.gg/packtasmall" target="_blank" rel="noopener" class="pts-link">Rejoindre le Discord PTS →</a>
         </div>
     </section>
 
     <section class="flex flex-col gap-5" aria-labelledby="pts-outils">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 reveal">
             <div class="flex flex-col gap-2">
-                <p class="font-mono font-medium text-[11px] text-ptsGold">PACK TA SMALL / ACCÈS LIBRE</p>
+                <p class="font-mono font-medium text-[11px] text-ptsGold">PACK TA SMALL / MEMBRES DU DISCORD</p>
                 <h2 id="pts-outils" class="pts-title text-3xl sm:text-4xl">Les outils</h2>
+                <p id="pts-verrou-note" class="text-[14px] text-ptsGoldPale">Outils réservés aux membres du Discord Pack ta Small : connecte-toi avec Discord pour les débloquer.</p>
             </div>
-            <p class="text-[13px] text-textMuted">Données relevées le 12/10/2026 · sans compte</p>
+            <p class="text-[13px] text-textMuted">Données relevées le 12/10/2026</p>
         </div>
 
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <a href="pts-encyclopedie.html" class="tool-card tool-card-pts card-link reveal" style="--d:0s">
+            <a href="https://discord.gg/packtasmall" target="_blank" rel="noopener" data-outil="pts-encyclopedie.html" data-hint-ouvert="Ouvrir l’encyclopédie →" class="tool-card tool-card-pts card-link is-locked reveal" style="--d:0s">
                 <div class="tool-card-visual">
                     <img class="cover" src="assets/img/pts/albion-background.webp" alt="" width="1536" height="1024" loading="lazy">
                     <img class="pts-visual-crest" src="assets/img/pts/logo-crest.webp" alt="" width="795" height="449" loading="lazy">
-                    <span class="badge badge-free"><img src="assets/icons/check.svg" alt="">GRATUIT</span>
+                    <span class="badge badge-pts pts-lock-badge"><img src="assets/icons/lock-keyhole.svg" alt="">VERROUILLÉ</span>
                 </div>
                 <div class="flex flex-col gap-3 p-[22px] flex-1">
                     <h3 class="pts-title text-2xl leading-[1.2]">Encyclopédie</h3>
                     <p class="text-[14px] leading-[1.6] text-textMuted">Tout le jeu, bien rangé : les chapitres du guide officiel condensés, les armes et leurs options, les cartes spéciales, les Callers, les packs et leurs taux, l’économie, le ladder, les maths des combats mesurées sur les replays et la collection complète avec les visuels.</p>
                     <ul class="flex flex-wrap gap-2"><li class="chip chip-pts">22 chapitres</li><li class="chip chip-pts">39 armes</li><li class="chip chip-pts">125 synergies</li><li class="chip chip-pts">590 cartes</li></ul>
-                    <p class="flex items-center justify-between h-6 mt-auto pt-2"><span class="card-hint text-[13px] font-semibold">Ouvrir l’encyclopédie →</span><span class="font-mono text-[10px] text-textFaint">PACK TA SMALL</span></p>
+                    <p class="flex items-center justify-between h-6 mt-auto pt-2"><span class="card-hint text-[13px] font-semibold">Rejoindre le Discord pour débloquer →</span><span class="font-mono text-[10px] text-textFaint">PACK TA SMALL</span></p>
                 </div>
             </a>
 
-            <a href="pts-builder.html" class="tool-card tool-card-pts card-link reveal" style="--d:0.1s">
+            <a href="https://discord.gg/packtasmall" target="_blank" rel="noopener" data-outil="pts-builder.html" data-hint-ouvert="Ouvrir le builder →" class="tool-card tool-card-pts card-link is-locked reveal" style="--d:0.1s">
                 <div class="tool-card-visual">
                     <img class="cover" src="assets/img/pts/albion-background.webp" alt="" width="1536" height="1024" loading="lazy" style="object-position: right 40%">
                     <span class="pts-visual-slots" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
-                    <span class="badge badge-free"><img src="assets/icons/check.svg" alt="">GRATUIT</span>
+                    <span class="badge badge-pts pts-lock-badge"><img src="assets/icons/lock-keyhole.svg" alt="">VERROUILLÉ</span>
                 </div>
                 <div class="flex flex-col gap-3 p-[22px] flex-1">
                     <h3 class="pts-title text-2xl leading-[1.2]">Builder général</h3>
                     <p class="text-[14px] leading-[1.6] text-textMuted">Compose ton équipe de 20 avec tous les joueurs du jeu ou avec ta collection. Cible les synergies, verrouille tes joueurs et laisse l’optimiseur proposer 3 compos, avec le Collectif calculé comme sur le site et un win rate estimé.</p>
                     <ul class="flex flex-wrap gap-2"><li class="chip chip-pts">Équipe de 20</li><li class="chip chip-pts">3 compos proposées</li><li class="chip chip-pts">Collectif calculé</li></ul>
-                    <p class="flex items-center justify-between h-6 mt-auto pt-2"><span class="card-hint text-[13px] font-semibold">Ouvrir le builder →</span><span class="font-mono text-[10px] text-textFaint">PACK TA SMALL</span></p>
+                    <p class="flex items-center justify-between h-6 mt-auto pt-2"><span class="card-hint text-[13px] font-semibold">Rejoindre le Discord pour débloquer →</span><span class="font-mono text-[10px] text-textFaint">PACK TA SMALL</span></p>
                 </div>
             </a>
         </div>

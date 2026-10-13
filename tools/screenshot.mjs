@@ -2,11 +2,11 @@
 // Usage : node tools/screenshot.mjs [page.html]   (défaut : index.html)
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { pathToFileURL } from 'node:url';
+import { demarrer } from './serveur.mjs';
 
 const page = process.argv[2] || 'index.html';
-const url = pathToFileURL(resolve(page)).href;
+const serveur = await demarrer();   // http:// local : nécessaire pour les modules JS (pages Pack ta Small)
+const url = serveur.url + page;
 const sizes = [
     { name: 'desktop', width: 1280, height: 900 },
     { name: 'mobile', width: 390, height: 844 },
@@ -40,5 +40,6 @@ for (const s of sizes) {
 }
 
 await browser.close();
+serveur.fermer();
 console.log(problems ? `\n${problems} problème(s) à corriger.` : '\nAucun problème détecté.');
 process.exit(problems ? 1 : 0);
