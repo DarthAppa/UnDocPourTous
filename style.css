@@ -46,6 +46,13 @@ body { background: var(--bg-dark); overflow-x: hidden; }
 .btn-login:hover { border-color: var(--mint-line); background: #18212f; }
 .btn-login img { width: 16px; height: 16px; }
 
+/* ---------- Logo (coque commune) ---------- */
+.brand-logo { width: 56px; height: 56px; flex-shrink: 0; filter: drop-shadow(0 0 6px rgba(94, 231, 255, .18)); transition: filter .25s, transform .25s; }
+a:hover > .brand-logo, a:focus-visible > .brand-logo { filter: drop-shadow(0 0 10px rgba(94, 231, 255, .45)) drop-shadow(0 0 4px rgba(245, 160, 101, .35)); transform: translateY(-1px); }
+.site-footer .brand-logo { width: 44px; height: 44px; }
+@media (max-width: 389px) { .site-header .brand-logo { width: 48px; height: 48px; } }
+@media (prefers-reduced-motion: reduce) { .brand-logo { transition: none; } a:hover > .brand-logo { transform: none; } }
+
 /* ---------- Pied de page ---------- */
 .site-footer { background: var(--bg-footer); border-top: 1px solid var(--border-card); padding-block: 40px 28px; }
 .footer-title { font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: var(--text-faint); }

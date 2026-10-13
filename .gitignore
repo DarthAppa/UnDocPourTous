@@ -10,3 +10,13 @@ docs-prives/
 
 # Fichiers de travail générés par Claude (simulations, brouillons) : jamais publiés
 Claude outputs/
+
+# Cache Python
+__pycache__/
+
+# Brouillons du logo (gros PNG de travail) : seuls assets/img/marque/ sont publiés
+assets/img/logo-travail/
+assets/img/logo-undocpourtous.png
+
+# Images officielles Albion (logo du jeu dedans, droits Sandbox) : usage local uniquement, jamais publiées
+assets/img/assets_albion_public/

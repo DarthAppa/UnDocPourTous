@@ -9,6 +9,7 @@ const CDN = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/+esm';
 
 export const configure = !C.SUPABASE_URL.includes('REMPLACER') && !C.SUPABASE_ANON_KEY.includes('REMPLACER');
 export const INVITATION = C.INVITATION;
+export { supabase as getClient };   // client Supabase partagé (fenêtre de connexion du site)
 
 let client = null;
 async function supabase() {

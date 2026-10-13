@@ -4,8 +4,8 @@
 // La clé « anon public » est faite pour être visible dans le navigateur (elle est protégée
 // par les règles RLS de la base). Ne JAMAIS mettre ici la clé « service_role ».
 export const PTS_CONFIG = {
-    SUPABASE_URL: 'https://REMPLACER.supabase.co',
-    SUPABASE_ANON_KEY: 'REMPLACER_PAR_LA_CLE_ANON',
+    SUPABASE_URL: 'https://wibfiqtuqfddijjlfscs.supabase.co',
+    SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpYmZpcXR1cWZkZGlqamxmc2NzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4NTAwNjIsImV4cCI6MjEwNzQyNjA2Mn0.qAzmjV3jlSREIXY7Nrc0-lWMm5h1XK3DM51z6PFiFUc',
 
     // Serveur Discord « PACK TA SMALL » : il faut en être membre pour débloquer les outils.
     // Mettre '' pour débloquer avec n'importe quel compte Discord.
@@ -18,4 +18,6 @@ export const PTS_CONFIG = {
     // Déconnexion automatique après ce temps sans activité (souris, clavier, défilement, toucher).
     // Un avertissement s'affiche 1 minute avant.
     INACTIVITE_MINUTES: 30
+
+    
 };

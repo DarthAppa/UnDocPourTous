@@ -9,7 +9,7 @@ const TYPES = {
     '.jpg': 'image/jpeg', '.ico': 'image/x-icon', '.woff2': 'font/woff2'
 };
 
-export function demarrer(racine = process.cwd()) {
+export function demarrer(racine = process.cwd(), port = 0) {
     const base = resolve(racine);
     const srv = createServer(async (req, res) => {
         const chemin = decodeURIComponent(new URL(req.url, 'http://x').pathname);
@@ -20,5 +20,5 @@ export function demarrer(racine = process.cwd()) {
             res.writeHead(200, { 'Content-Type': TYPES[extname(fichier)] || 'application/octet-stream' }).end(data);
         } catch { res.writeHead(404).end(); }
     });
-    return new Promise((ok) => srv.listen(0, '127.0.0.1', () => ok({ url: `http://127.0.0.1:${srv.address().port}/`, fermer: () => srv.close() })));
+    return new Promise((ok) => srv.listen(port, '127.0.0.1', () => ok({ url: `http://127.0.0.1:${srv.address().port}/`, fermer: () => srv.close() })));
 }
