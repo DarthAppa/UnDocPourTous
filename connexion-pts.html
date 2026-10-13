@@ -2,6 +2,11 @@
 <html lang="fr" class="no-js">
     <head>
         <meta charset="UTF-8" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://cdn.discordapp.com; connect-src 'self' https://wibfiqtuqfddijjlfscs.supabase.co wss://wibfiqtuqfddijjlfscs.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+        />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Connexion Pack ta Small — UnDocPourTous</title>
         <meta
@@ -26,12 +31,12 @@
             rel="stylesheet"
         />
 
-        <!-- Tailwind (CDN) + couleurs du site -->
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="tailwind-config.js"></script>
-
         <link rel="stylesheet" href="style.css" />
+        <!-- Tailwind compilé (npm run build:css), APRÈS style.css : même ordre effectif que l'ancien CDN,
+             qui injectait sa feuille en fin d'en-tête. Les utilitaires gardent donc la priorité. -->
+        <link rel="stylesheet" href="assets/css/tailwind.css" />
         <script src="script.js" defer></script>
+        <script type="module" src="entete.js"></script>
         <script type="module" src="pts-connexion.js"></script>
     </head>
 
@@ -115,9 +120,13 @@
                     />
                 </div>
                 <h1 id="titre-connexion" class="pts-title text-2xl sm:text-3xl">Connexion avec Discord</h1>
-                <p class="text-[15px] leading-[1.65] max-w-[460px]">
+                <p class="text-[15px] leading-[1.65] max-w-[460px]" data-mode="pts">
                     Connecte-toi avec ton compte Discord pour débloquer l’Encyclopédie et le Builder général. Ils sont
                     réservés aux membres du serveur Pack ta Small.
+                </p>
+                <p class="text-[15px] leading-[1.65] max-w-[460px]" data-mode="site" hidden>
+                    Connecte-toi avec ton compte Discord pour accéder à ton profil UnDocPourTous, à ton abonnement
+                    Premium et aux outils réservés.
                 </p>
 
                 <button type="button" id="pts-go" class="pts-discord">
@@ -131,6 +140,7 @@
                     aria-live="polite"
                 ></p>
                 <a
+                    data-mode="pts"
                     id="pts-rejoindre"
                     href="https://discord.gg/packtasmall"
                     target="_blank"
@@ -141,14 +151,17 @@
 
                 <ul class="pts-login-infos text-left text-[13px] leading-[1.6] text-textMuted">
                     <li>
-                        Ce que Discord nous transmet : ton pseudo et la liste de tes serveurs, uniquement pour vérifier
-                        que tu es membre de Pack ta Small.
+                        Ce que Discord nous transmet : ton pseudo, ton avatar, ton e-mail et la liste de tes serveurs.
+                        La liste des serveurs sert uniquement à vérifier, côté serveur, si tu es membre de Pack ta
+                        Small.
                     </li>
                     <li>Aucun mot de passe ne passe par UnDocPourTous, et rien n’est publié en ton nom.</li>
                 </ul>
             </section>
 
-            <p class="text-center"><a href="pts.html" class="pts-link">← Retour aux outils Pack ta Small</a></p>
+            <p class="text-center">
+                <a href="pts.html" id="pts-retour" class="pts-link">← Retour aux outils Pack ta Small</a>
+            </p>
         </main>
 
         <!-- ================= PIED DE PAGE ================= -->

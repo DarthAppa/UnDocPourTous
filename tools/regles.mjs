@@ -64,8 +64,9 @@ for (const f of texte) {
 }
 
 // 3. Règles par page HTML
-const TOKENS = existsSync('tailwind-config.js')
-    ? [...readFileSync('tailwind-config.js', 'utf8').matchAll(/(\w+)\s*:\s*'#/g)].map((m) => m[1])
+const CONFIG_TW = 'tailwind.config.cjs';
+const TOKENS = existsSync(CONFIG_TW)
+    ? [...readFileSync(CONFIG_TW, 'utf8').matchAll(/(\w+)\s*:\s*'#/g)].map((m) => m[1])
     : [];
 for (const p of pages) {
     const html = readFileSync(p, 'utf8');
@@ -93,7 +94,17 @@ for (const p of pages) {
 
     if (!/<script[^>]+src="script\.js"[^>]*\bdefer\b/i.test(head))
         err(p, 'script.js doit être chargé dans le <head> avec defer');
-    if (!/tailwind-config\.js/.test(head)) warn(p, 'tailwind-config.js non chargé');
+    if (!/<link[^>]+href="assets\/css\/tailwind\.css"/i.test(head)) err(p, 'assets/css/tailwind.css non chargé');
+    if (
+        [...html.matchAll(/\b(?:src|href)="(https:[^"]+)"/g)].some((m) => {
+            try {
+                return new URL(m[1]).hostname === 'cdn.tailwindcss.com';
+            } catch {
+                return false;
+            }
+        })
+    )
+        err(p, 'CDN Tailwind → utiliser assets/css/tailwind.css (npm run build:css)');
     if (!/<link[^>]+href="style\.css"/i.test(head)) err(p, 'style.css non chargé dans le <head>');
     if (!/class="[^"]*\bno-js\b/.test(html.match(/<html[^>]*>/i)?.[0] || ''))
         warn(p, '<html> sans classe no-js (contenu .reveal sans JS ?)');
@@ -135,9 +146,9 @@ for (const p of pages) {
         warn(p, 'texte en anglais détecté');
 }
 
-// 4. Tokens de couleur : tailwind-config.js et style.css doivent rester alignés
-if (existsSync('tailwind-config.js') && existsSync('style.css')) {
-    const tw = readFileSync('tailwind-config.js', 'utf8');
+// 4. Tokens de couleur : tailwind.config.cjs et style.css doivent rester alignés
+if (existsSync(CONFIG_TW) && existsSync('style.css')) {
+    const tw = readFileSync(CONFIG_TW, 'utf8');
     const vars = new Set(
         [...readFileSync('style.css', 'utf8').matchAll(/--[\w-]+\s*:\s*(#[0-9a-f]{3,8})/gi)].map((m) =>
             m[1].toLowerCase(),

@@ -777,6 +777,166 @@ button.pts-discord {
     outline-offset: 3px;
 }
 
+/* ---------- Compte : profil, contenus réservés, messages ---------- */
+.panneau {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+    padding: 20px;
+    border-radius: 16px;
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+}
+@media (min-width: 640px) {
+    .panneau {
+        padding: 28px;
+    }
+}
+.panneau[hidden],
+.profil-grille[hidden] {
+    display: none;
+}
+.btn-ligne {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    color: var(--text-main);
+    background: transparent;
+    border: 1px solid var(--border-card);
+    cursor: pointer;
+    transition:
+        border-color 0.2s,
+        color 0.2s;
+}
+.btn-ligne:hover {
+    border-color: var(--mint);
+}
+.btn-ligne.btn-danger:hover {
+    border-color: var(--orange);
+    color: var(--orange);
+}
+.btn-mint:disabled,
+.btn-premium:disabled,
+.btn-ligne:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+}
+.btn-premium[hidden],
+.btn-ligne[hidden] {
+    display: none;
+}
+.champ {
+    width: 100%;
+    min-height: 44px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 15px;
+    color: var(--text-main);
+    background: var(--bg-footer);
+    border: 1px solid var(--border-card);
+}
+.champ[aria-invalid='true'] {
+    border-color: var(--orange);
+}
+.profil-avatar {
+    display: grid;
+    place-items: center;
+    flex-shrink: 0;
+    width: 72px;
+    height: 72px;
+    overflow: hidden;
+    border-radius: 50%;
+    background: var(--bg-icon);
+    border: 1px solid var(--border-card);
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--mint);
+}
+.profil-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+.infos-compte {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 6px 16px;
+    font-size: 14px;
+}
+.infos-compte dt {
+    color: var(--text-muted);
+}
+.infos-compte dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+}
+[data-ton='ok'] {
+    color: var(--mint);
+}
+[data-ton='erreur'] {
+    color: var(--orange);
+}
+.dialogue {
+    width: min(480px, calc(100% - 32px));
+    max-width: 100%;
+    padding: 0;
+    border-radius: 16px;
+    color: var(--text-main);
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+}
+.dialogue::backdrop {
+    background: rgba(8, 12, 18, 0.8);
+}
+
+/* Contenu Premium chargé depuis la base (rédigé par l'admin) */
+.contenu-premium {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+    font-size: 15px;
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+}
+.contenu-premium h2 {
+    margin-top: 12px;
+    font-size: 24px;
+    font-weight: 600;
+}
+.contenu-premium h3 {
+    margin-top: 8px;
+    font-size: 18px;
+    font-weight: 600;
+}
+.contenu-premium ul,
+.contenu-premium ol {
+    padding-left: 22px;
+    list-style: disc;
+}
+.contenu-premium a {
+    color: var(--orange);
+    text-decoration: underline;
+}
+.contenu-premium img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+}
+.contenu-premium table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
 /* ==========================================
    Apparition au scroll (seulement si JS actif)
    ========================================== */

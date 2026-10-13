@@ -1,0 +1,4 @@
+Contact: https://github.com/DarthAppa/UnDocPourTous/security/advisories/new
+Expires: 2027-10-13T00:00:00.000Z
+Preferred-Languages: fr, en
+Canonical: https://undocpourtous.com/.well-known/security.txt

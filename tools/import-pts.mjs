@@ -5,6 +5,7 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { appliquerCsp, gestionnairesInline, urlSupabase } from './csp.mjs';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = resolve(ROOT, process.argv[2] || '../1_PTS/Encyclopedie');
@@ -100,6 +101,7 @@ for (const outil of OUTILS) {
 <style>html.pts-attente body{visibility:hidden}</style>
 <noscript><style>html.pts-attente body{visibility:visible}</style></noscript>
 <script type="module">import { garde } from './pts-auth.js'; garde();</script>
+<script type="module" src="entete.js"></script>
 ${tete}
 </head>
 <body>
@@ -108,6 +110,9 @@ ${corps.trim()}
 </body>
 </html>
 `;
-    writeFileSync(resolve(ROOT, outil.cible), page);
+    // CSP : scripts inline autorisés par hachage, rien d'autre (voir tools/csp.mjs)
+    for (const g of gestionnairesInline(page))
+        console.warn(`  ! ${outil.source} : ${g} → bloqué par la CSP, à réécrire en addEventListener`);
+    writeFileSync(resolve(ROOT, outil.cible), appliquerCsp(page, urlSupabase(ROOT)));
     console.log(`${outil.source} -> ${outil.cible} (${Math.round(page.length / 1024)} Ko)`);
 }

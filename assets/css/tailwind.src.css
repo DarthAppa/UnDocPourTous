@@ -1,0 +1,4 @@
+/* Entrée Tailwind : compilée par tools/build-css.mjs vers assets/css/tailwind.css (ne pas éditer la sortie). */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

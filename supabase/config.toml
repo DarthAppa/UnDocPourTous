@@ -1,0 +1,20 @@
+# Configuration Supabase CLI (minimale). Le projet en ligne : wibfiqtuqfddijjlfscs.
+# Mode d'emploi : supabase/LISEZMOI.md
+project_id = "wibfiqtuqfddijjlfscs"
+
+# verify_jwt = true : Supabase refuse l'appel sans JWT utilisateur valide, avant même la fonction.
+[functions.verifier-guilde]
+verify_jwt = true
+
+[functions.creer-paiement]
+verify_jwt = true
+
+[functions.portail-abonnement]
+verify_jwt = true
+
+[functions.supprimer-compte]
+verify_jwt = true
+
+# Stripe n'a pas de JWT Supabase : la fonction vérifie elle-même la signature Stripe.
+[functions.stripe-webhook]
+verify_jwt = false

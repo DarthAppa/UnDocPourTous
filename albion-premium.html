@@ -2,6 +2,11 @@
 <html lang="fr" class="no-js">
     <head>
         <meta charset="UTF-8" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://cdn.discordapp.com; connect-src 'self' https://wibfiqtuqfddijjlfscs.supabase.co wss://wibfiqtuqfddijjlfscs.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+        />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Outils Premium Albion Online — UnDocPourTous</title>
         <meta
@@ -25,12 +30,12 @@
             rel="stylesheet"
         />
 
-        <!-- Tailwind (CDN) + couleurs du site -->
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="tailwind-config.js"></script>
-
         <link rel="stylesheet" href="style.css" />
+        <!-- Tailwind compilé (npm run build:css), APRÈS style.css : même ordre effectif que l'ancien CDN,
+             qui injectait sa feuille en fin d'en-tête. Les utilitaires gardent donc la priorité. -->
+        <link rel="stylesheet" href="assets/css/tailwind.css" />
         <script src="script.js" defer></script>
+        <script type="module" src="entete.js"></script>
     </head>
 
     <body class="bg-darkBg text-textLight font-sans antialiased">
@@ -114,7 +119,7 @@
             <section aria-label="Catalogue des outils Premium">
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                     <a
-                        href="albion-paiement.html"
+                        href="albion-builder-tryhard.html"
                         class="tool-card card-link reveal"
                         style="--d: 0s; --card-accent: var(--orange)"
                     >
@@ -137,7 +142,7 @@
                                 Le builder poussé, optimisé pour votre personnage et votre façon de jouer.
                             </p>
                             <p class="flex items-center justify-between h-6 mt-auto">
-                                <span class="card-hint text-[13px] font-semibold">Débloquer →</span
+                                <span class="card-hint text-[13px] font-semibold">Accéder →</span
                                 ><span class="font-mono text-[10px] text-textFaint">ALBION ONLINE</span>
                             </p>
                         </div>
