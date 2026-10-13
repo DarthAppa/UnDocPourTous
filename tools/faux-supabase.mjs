@@ -25,6 +25,8 @@ export const SESSION = {
 export const FAUX_SUPABASE = `export function createClient(url) {
   const F = globalThis.__FAUX__ || {};
   F.tables = F.tables || {};
+  // Comme le vrai client : une session rafraîchie (sans jeton Discord) le reste après navigation
+  try { if (F.session && sessionStorage.getItem('__faux_sans_jeton')) delete F.session.provider_token; } catch {}
   const A = (globalThis.__APPELS__ = globalThis.__APPELS__ || []);
   const copie = (o) => (o == null ? o : JSON.parse(JSON.stringify(o)));
   function requete(table) {
@@ -64,6 +66,7 @@ export const FAUX_SUPABASE = `export function createClient(url) {
       refreshSession: async () => {
         A.push({ type: 'refresh' });
         if (F.session) delete F.session.provider_token;
+        try { sessionStorage.setItem('__faux_sans_jeton', '1'); } catch {}
         return { data: { session: copie(F.session ?? null) }, error: null };
       },
       signOut: async (o) => {
