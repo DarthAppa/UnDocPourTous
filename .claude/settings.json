@@ -2,20 +2,52 @@
   "permissions": {
     "allow": [
       "Bash(npm run shot*)",
+      "Bash(npm run verif*)",
+      "Bash(npm run format*)",
+      "Bash(npm run lint*)",
+      "Bash(npm run regles*)",
+      "Bash(npm run test*)",
       "Bash(node tools/screenshot.mjs*)",
+      "Bash(node tools/verif.mjs*)",
+      "Bash(node tools/regles.mjs*)",
+      "Bash(npx prettier*)",
+      "Bash(npx eslint*)",
+      "Bash(npx stylelint*)",
+      "Bash(npx html-validate*)",
       "Bash(npm install*)",
       "Bash(npx playwright install*)",
       "Bash(git status*)",
       "Bash(git diff*)",
       "Bash(git log*)",
+      "Bash(git show*)",
+      "Bash(git branch*)",
+      "Bash(git switch*)",
       "Bash(git add*)",
       "Bash(git commit*)",
+      "Bash(gh pr view*)",
+      "Bash(gh pr checks*)",
+      "Bash(gh pr diff*)",
+      "Bash(gh run view*)",
+      "Bash(gh run list*)",
       "WebFetch(domain:tailwindcss.com)",
       "WebFetch(domain:v3.tailwindcss.com)",
       "WebFetch(domain:developer.mozilla.org)"
     ],
-    "ask": [
-      "Bash(git push*)"
+    "ask": ["Bash(git push*)", "Bash(gh pr create*)", "Bash(gh pr merge*)"],
+    "deny": ["Bash(git push --force*)", "Bash(git push -f*)", "Read(./.env)", "Read(./.env.*)"]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node \"$CLAUDE_PROJECT_DIR/.claude/hooks/avant-pr.mjs\"",
+            "timeout": 600
+          }
+        ]
+      }
     ]
   }
 }

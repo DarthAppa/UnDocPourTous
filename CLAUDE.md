@@ -14,6 +14,7 @@ Hébergé sur GitHub Pages, branche `main`, domaine dans `CNAME`.
 
 ## Commandes
 - Vérifier le rendu : `npm run shot` / `node tools/screenshot.mjs page.html` (captures dans `shots/`, affiche les erreurs console et le débordement horizontal)
+- Tout vérifier : `npm run verif` (voir plus bas)
 - Première installation : `npm install` puis `npx playwright install chromium`
 - Outils installés sur le PC (Windows) : Node 24 / npm 11, Git 2.56, Python 3.12 (`python`, `py -3.12`) + Pillow (`py -3.12 -m pip install ...`), Python 3.13 en plus (`py -3.13`), GitHub CLI `gh` 2.102, `clasp` 3.4 (Google Apps Script : `clasp push`, `clasp pull`), Docker 29 (Docker Desktop doit être lancé).
 - Prévu : panels Google Apps Script (clasp), bot Discord Node.js (discord.js), abonnements Stripe, VPS avec Docker.
@@ -35,3 +36,12 @@ Hébergé sur GitHub Pages, branche `main`, domaine dans `CNAME`.
 ## Git
 - Commits courts en français, ex. `feat: carte Lost Ark`, `fix: débordement mobile du hero`.
 - Ne pas committer `node_modules/` ni `shots/`.
+- Jamais de push direct sur `main` : branche `feat/…`, `fix/…` ou `chore/…` puis pull request (skill `pull-request`, ou `/publier`).
+
+## Vérification du code (obligatoire avant toute PR)
+- IMPORTANT : `npm run verif` doit être vert avant de dire qu'une tâche est finie, avant un push et avant une PR (skill `verif-code`). `npm run verif:rapide` = sans captures, pour itérer.
+- Contenu : Prettier (formatage), ESLint (JS), Stylelint (CSS), html-validate (HTML), `tools/regles.mjs` (règles de ce fichier : titres, `og:site_name`, tokens, cartes, liens/images, secrets), `npm run test:pts` s'il existe, captures 390/1280px de chaque page.
+- Triple verrou : hook git `pre-push` (installé par `npm install`), hook Claude `.claude/hooks/avant-pr.mjs` avant `gh pr create`, GitHub Actions `.github/workflows/verif.yml` sur chaque PR.
+- Corriger la cause, jamais la règle : pas de `eslint-disable`, pas de `--no-verify`, pas d'ignore élargi sans accord.
+- `npm run format` corrige le formatage ; `npm run lint:fix` une partie du JS/CSS.
+- Skills : `verif-code`, `revue-code` (relecture), `corriger-bug`, `securite`, `pull-request`, `publier`, plus `verif-visuelle`, `audit-front`, `front-conventions`.

@@ -1,0 +1,10 @@
+node_modules/
+shots/
+docs-prives/
+Claude outputs/
+assets/
+package-lock.json
+tools/__pycache__/
+# Pages générées par npm run import:pts : on corrige la source, pas le résultat
+pts-encyclopedie.html
+pts-builder.html

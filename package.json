@@ -6,10 +6,29 @@
     "shot": "node tools/screenshot.mjs",
     "serve": "node tools/serve.mjs",
     "import:pts": "node tools/import-pts.mjs",
-    "test:pts": "node tools/test-pts-verrou.mjs"
+    "test:pts": "node tools/test-pts-verrou.mjs",
+    "verif": "node tools/verif.mjs",
+    "verif:rapide": "node tools/verif.mjs --rapide",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "lint": "eslint . && stylelint \"**/*.css\" && html-validate *.html",
+    "lint:fix": "eslint . --fix && stylelint \"**/*.css\" --fix",
+    "regles": "node tools/regles.mjs",
+    "prepare": "simple-git-hooks"
+  },
+  "simple-git-hooks": {
+    "pre-push": "npm run --if-present verif"
   },
   "devDependencies": {
-    "playwright": "^1.48.0"
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.12.0",
+    "globals": "^17.13.0",
+    "html-validate": "^11.16.2",
+    "playwright": "^1.48.0",
+    "prettier": "^3.9.10",
+    "simple-git-hooks": "^2.14.0",
+    "stylelint": "^17.16.0",
+    "stylelint-config-standard": "^40.0.0"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.7",
