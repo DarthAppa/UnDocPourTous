@@ -24,6 +24,7 @@ Hébergé sur GitHub Pages, branche `main`, domaine dans `CNAME`.
 - Pas de logos officiels des jeux (droits) : noms en texte stylisé uniquement.
 - IMPORTANT : nom officiel du site « UnDocPourTous » (un seul mot, U, D, P, T majuscules, S final), jamais « UnDocPourTout ». Seule variante tolérée : « Un Doc Pour Tous » en toutes lettres. Dans le code généré, le nom est défini une seule fois (constante, ex. `site.nom` dans les données) et réutilisé partout.
 - Chaque page : `<title>` au format « Sujet — UnDocPourTous » et `og:site_name="UnDocPourTous"`.
+- Cartes = un seul lien sur toute leur surface (`.card-link`), sans bouton dedans ; indice en texte (`.card-hint`) ; cartes « Bientôt » (`.card-soon`) non cliquables.
 - Textes du site en français.
 - Mobile d'abord : tester à 390px et 1280px, aucune barre de défilement horizontale.
 - Le contenu doit rester visible sans JS (les classes `.reveal` ne cachent qu'avec `.js` sur `<html>`).

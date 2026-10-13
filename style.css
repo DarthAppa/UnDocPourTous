@@ -84,9 +84,7 @@ body { background: var(--bg-dark); overflow-x: hidden; }
 .game-card {
     position: relative; display: flex; flex-direction: column; overflow: hidden;
     background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 16px;
-    transition: transform .3s cubic-bezier(.4, 0, .2, 1), border-color .3s;
 }
-.game-card:hover { transform: translateY(-4px); border-color: var(--mint-line); }
 .game-card-visual { position: relative; height: 362px; }
 .game-card-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .game-card-visual::after {
@@ -94,12 +92,29 @@ body { background: var(--bg-dark); overflow-x: hidden; }
     background: linear-gradient(180deg, rgba(11,15,23,0) 0%, rgba(11,15,23,.1) 45%, var(--bg-card) 100%);
 }
 .game-card-title { position: absolute; z-index: 1; left: 28px; right: 28px; bottom: 22px; color: var(--text-main); }
-.btn-enter {
-    display: flex; align-items: center; justify-content: space-between; height: 42px; padding-inline: 16px;
-    background: var(--mint-deep); border: .5px solid var(--mint); border-radius: 8px; color: var(--mint);
-    transition: background .2s;
+
+/* ---------- Cartes = un seul lien sur toute la surface ---------- */
+.card-link { --card-accent: var(--mint); cursor: pointer; transition: transform .25s cubic-bezier(.4, 0, .2, 1), border-color .25s, box-shadow .25s; }
+.category-premium, .invite { --card-accent: var(--orange); }
+.card-link:hover {
+    transform: translateY(-4px); border-color: var(--card-accent);
+    box-shadow: 0 0 0 1px var(--card-accent), 0 14px 34px -12px color-mix(in srgb, var(--card-accent) 45%, transparent);
 }
-.btn-enter:hover { background: #1b3a35; }
+.card-link:focus-visible { outline: 2px solid var(--card-accent); outline-offset: 4px; border-radius: 16px; }
+.card-hint { color: var(--card-accent); transition: transform .25s; }
+.card-link:hover .card-hint { transform: translateX(3px); }
+.game-card .card-hint, .tool-card .card-hint { display: flex; justify-content: space-between; align-items: center; }
+.tool-card .card-hint { display: inline; }
+.invite {
+    display: flex; flex-direction: column; gap: 12px; padding: 25px 28px; border-radius: 16px;
+    background: var(--bg-card); border: 1px solid var(--border-card);
+}
+@media (min-width: 640px) { .invite { flex-direction: row; align-items: center; justify-content: space-between; } }
+
+/* Carte « Bientôt » : visible, grisée, non cliquable */
+.card-soon { cursor: default; opacity: .55; }
+.card-soon img { filter: grayscale(1); }
+.card-soon .card-hint { color: var(--text-faint); }
 
 /* ---------- Catégorie d'outils (page du jeu) ---------- */
 .category {
@@ -122,9 +137,7 @@ body { background: var(--bg-dark); overflow-x: hidden; }
 .tool-card {
     display: flex; flex-direction: column; overflow: hidden;
     background: var(--bg-card); border: 1px solid var(--border-card); border-radius: 16px;
-    transition: transform .25s, border-color .25s;
 }
-.tool-card:hover { transform: translateY(-3px); border-color: var(--mint-line); }
 .tool-card-visual { position: relative; height: 164px; }
 .tool-card-visual img.cover { width: 100%; height: 100%; object-fit: cover; }
 .tool-card-visual .badge { position: absolute; top: 18px; left: 18px; }
