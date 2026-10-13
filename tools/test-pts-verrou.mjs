@@ -1,22 +1,20 @@
-// Teste la logique « si connecté avec Discord → outils débloqués » des pages Pack ta Small.
+// Teste la logique « si connecté avec Discord ET membre (table membres_pts) → outils débloqués » des pages Pack ta Small.
 // Usage : npm run test:pts   (captures des états dans shots/)
 import { chromium } from 'playwright';
 import { mkdirSync, existsSync } from 'node:fs';
 import { demarrer } from './serveur.mjs';
 import { PTS_CONFIG } from '../pts-config.js';
+import { preparer, SESSION, texteDebordement } from './faux-supabase.mjs';
 
-// Faux client Supabase : le test ne dépend ni du CDN jsDelivr ni du vrai projet Supabase.
-const FAUX_SUPABASE = `export function createClient(url) {
-  const vide = { data: [], error: null, count: 0 };
-  const q = { select: () => q, eq: () => q, order: () => q, limit: () => Promise.resolve(vide), then: (r) => r(vide) };
-  return { from: () => q, auth: {
-    getSession: async () => ({ data: { session: null } }),
-    signOut: async () => ({ error: null }),
-    signInWithOAuth: async ({ provider, options }) => {
-      location.assign(url + '/auth/v1/authorize?provider=' + provider + '&redirect_to=' + encodeURIComponent(options.redirectTo));
-      return { data: {}, error: null };
-    } } };
-}`;
+// Requête vers Discord ? (comparaison du nom d'hôte, pas d'une simple sous-chaîne)
+const versDiscord = (u) => {
+    try {
+        const h = new URL(u).hostname;
+        return h === 'discord.com' || h.endsWith('.discord.com');
+    } catch {
+        return false;
+    }
+};
 
 const serveur = await demarrer();
 const browser = await chromium.launch();
@@ -45,10 +43,14 @@ try {
         console.log(`\n[${vp.nom}]`);
         const p = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
         p.setDefaultTimeout(10000);
-        await p.route('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@*/**', (r) =>
-            r.fulfill({ contentType: 'text/javascript', body: FAUX_SUPABASE }),
-        );
-        await p.route(`${PTS_CONFIG.SUPABASE_URL}/**`, (r) => r.abort()); // jamais de vrai départ vers Supabase/Discord
+        const { requetesExternes, debordement } = await preparer(p, { serveurUrl: serveur.url }); // visiteur sans session
+        await p.addInitScript(() => {
+            try {
+                localStorage.setItem('pts-acces', '{"membre":true}'); // ancien cache : doit être purgé
+            } catch {
+                /* page d'erreur (départ vers Discord coupé) */
+            }
+        });
         const erreurs = [];
         p.on('pageerror', (e) => erreurs.push(e.message));
 
@@ -61,6 +63,10 @@ try {
             'non connecté : les 2 cartes sont verrouillées et mènent au Discord PTS',
         );
         verif(await p.isVisible('#pts-login'), 'non connecté : bouton « Se connecter avec Discord » visible');
+        verif(
+            await p.evaluate(() => localStorage.getItem('pts-acces') === null),
+            'ancien cache local « pts-acces » purgé au chargement (plus de source de vérité locale)',
+        );
         verif(
             (await p.getAttribute('#pts-login', 'href')) === 'connexion-pts.html',
             'le bouton mène à la page de connexion',
@@ -195,7 +201,7 @@ try {
         // 5. Page de connexion (Supabase configuré) : le clic part vers l'autorisation Discord de Supabase
         await p.goto(serveur.url + 'connexion-pts.html', { waitUntil: 'networkidle' });
         await p.screenshot({ path: `shots/connexion-pts-${vp.nom}.png`, fullPage: true }); // avant le clic (la page est quittée ensuite)
-        const largeur = await p.evaluate(() => document.documentElement.scrollWidth);
+        const largeur = await debordement(vp.width);
         const depart = p
             .waitForRequest((r) => r.url().startsWith(`${PTS_CONFIG.SUPABASE_URL}/auth/v1/authorize`), {
                 timeout: 5000,
@@ -210,9 +216,130 @@ try {
             'connexion : le bouton lance l’autorisation Discord avec retour sur connexion-pts.html',
         );
 
-        verif(largeur <= vp.width, `pas de débordement horizontal (${largeur}px)`);
+        verif(largeur.ok, texteDebordement(largeur));
         verif(!erreurs.length, `aucune erreur JS ${erreurs.join(' | ')}`);
+        verif(!requetesExternes.some(versDiscord), 'aucune requête du navigateur vers discord.com');
         await p.close();
+
+        // 6. Appartenance lue dans membres_pts (source de vérité serveur)
+        const maintenant = new Date().toISOString();
+        const ilYa40j = new Date(Date.now() - 40 * 864e5).toISOString();
+        for (const [cas, ligne, attendu] of [
+            ['membre (membres_pts.membre = true)', { user_id: 'u1', membre: true, verifie_le: maintenant }, true],
+            [
+                'non membre (membres_pts.membre = false)',
+                { user_id: 'u1', membre: false, verifie_le: maintenant },
+                false,
+            ],
+            ['vérification de plus de 30 jours', { user_id: 'u1', membre: true, verifie_le: ilYa40j }, false],
+            ['aucune ligne membres_pts', null, false],
+        ]) {
+            const q = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+            q.setDefaultTimeout(10000);
+            const err = [];
+            q.on('pageerror', (e) => err.push(e.message));
+            const { appelsFonctions } = await preparer(q, {
+                serveurUrl: serveur.url,
+                faux: { session: SESSION, tables: ligne ? { membres_pts: ligne } : {} },
+            });
+            await q.goto(serveur.url + 'pts.html', { waitUntil: 'networkidle' });
+            await q.waitForFunction(() => !document.getElementById('pts-compte').hidden);
+            const cartes = await etatCartes(q);
+            const lu = await q.evaluate(() =>
+                globalThis.__APPELS__.some((a) => a.type === 'from' && a.table === 'membres_pts'),
+            );
+            verif(
+                lu && cartes.every((x) => x.verrou === !attendu) && !appelsFonctions.length && !err.length,
+                `session sans jeton Discord, ${cas} : outils ${attendu ? 'débloqués' : 'verrouillés'} (lu dans membres_pts, aucun appel serveur)`,
+            );
+            await q.close();
+        }
+
+        // 7. Retour de Discord (provider_token) : vérification par l'Edge Function, puis refreshSession
+        for (const [cas, reponse] of [
+            ['succès', { status: 200, body: { membre: true, verifie_le: maintenant } }],
+            ['échec serveur', { status: 500, body: { erreur: 'interne' } }],
+        ]) {
+            const q = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+            q.setDefaultTimeout(10000);
+            const err = [];
+            q.on('pageerror', (e) => err.push(e.message));
+            const ok = reponse.status === 200;
+            const { appelsFonctions, requetesExternes: ext } = await preparer(q, {
+                serveurUrl: serveur.url,
+                faux: {
+                    session: { ...SESSION, provider_token: 'discord-xyz' },
+                    tables: ok ? { membres_pts: { user_id: 'u1', membre: true, verifie_le: maintenant } } : {},
+                },
+                fonctions: { 'verifier-guilde': reponse },
+            });
+            await q.goto(serveur.url + 'connexion-pts.html?code=abc&retour=pts.html');
+            if (ok) {
+                await q.waitForURL(/\/pts\.html$/, { timeout: 8000 }).catch(() => {});
+                verif(q.url().endsWith('/pts.html'), 'retour de Discord, membre : redirection vers pts.html');
+            } else {
+                await q.waitForFunction(() => document.getElementById('pts-msg').textContent.includes('impossible'));
+                verif(
+                    (await q.textContent('#pts-msg')).includes('Vérification impossible pour le moment') &&
+                        q.url().includes('connexion-pts.html') &&
+                        !(await q.isDisabled('#pts-go')),
+                    'retour de Discord, échec du serveur : « Vérification impossible pour le moment », pas de redirection',
+                );
+            }
+            const v = appelsFonctions.filter((a) => a.nom === 'verifier-guilde');
+            verif(
+                v.length === 1 &&
+                    v[0].methode === 'POST' &&
+                    v[0].corps?.provider_token === 'discord-xyz' &&
+                    Object.keys(v[0].corps).length === 1 &&
+                    v[0].headers.authorization === 'Bearer jwt-test' &&
+                    v[0].headers.apikey === PTS_CONFIG.SUPABASE_ANON_KEY,
+                `${cas} : verifier-guilde appelée une fois (POST, {provider_token}, JWT et apikey)`,
+            );
+            if (!ok) {
+                const refresh = await q.evaluate(() => globalThis.__APPELS__.some((a) => a.type === 'refresh'));
+                verif(refresh, `${cas} : refreshSession appelé quand même (le jeton Discord quitte le stockage)`);
+            }
+            verif(!ext.some(versDiscord), `${cas} : aucune requête vers discord.com`);
+            verif(!err.length, `${cas} : aucune erreur JS ${err.join(' | ')}`);
+            await q.close();
+        }
+
+        // 8. Ordre exact sur une même page : verifier-guilde puis refreshSession (appel direct du module)
+        {
+            const q = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+            const { appelsFonctions } = await preparer(q, {
+                serveurUrl: serveur.url,
+                faux: {
+                    session: { ...SESSION, provider_token: 'discord-xyz' },
+                    tables: { membres_pts: { user_id: 'u1', membre: true, verifie_le: maintenant } },
+                },
+                fonctions: { 'verifier-guilde': { status: 200, body: { membre: true, verifie_le: maintenant } } },
+            });
+            await q.goto(serveur.url + 'index.html', { waitUntil: 'networkidle' });
+            const r = await q.evaluate(async () => {
+                const avant = globalThis.__APPELS__.length;
+                const e = await (await import('/pts-auth.js')).etat();
+                const apres = globalThis.__APPELS__.slice(avant);
+                const second = await (await import('/pts-auth.js')).etat(); // jeton disparu : plus d'appel
+                return {
+                    e,
+                    types: apres.map((a) => a.type),
+                    second,
+                    jeton: !!globalThis.__FAUX__.session.provider_token,
+                };
+            });
+            verif(
+                r.e.debloque &&
+                    r.e.verification === 'ok' &&
+                    r.types.includes('refresh') &&
+                    !r.jeton &&
+                    r.second.verification === null &&
+                    appelsFonctions.length === 1,
+                'etat() : verifier-guilde puis refreshSession, jeton Discord retiré, pas de 2e vérification',
+            );
+            await q.close();
+        }
     }
 } catch (e) {
     console.error(`\n  ✗ test interrompu : ${e.message.split('\n')[0]}`);

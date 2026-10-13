@@ -6,6 +6,9 @@
     "shot": "node tools/screenshot.mjs",
     "serve": "node tools/serve.mjs",
     "import:pts": "node tools/import-pts.mjs",
+    "build:css": "node tools/build-css.mjs",
+    "vendor:supabase": "node tools/vendor-supabase.mjs",
+    "csp": "node tools/csp.mjs",
     "test:pts": "node tools/test-pts-verrou.mjs",
     "verif": "node tools/verif.mjs",
     "verif:rapide": "node tools/verif.mjs --rapide",
@@ -14,20 +17,30 @@
     "lint": "eslint . && stylelint \"**/*.css\" && html-validate *.html",
     "lint:fix": "eslint . --fix && stylelint \"**/*.css\" --fix",
     "regles": "node tools/regles.mjs",
-    "prepare": "simple-git-hooks"
+    "prepare": "simple-git-hooks",
+    "test:profil": "node tools/test-profil.mjs",
+    "test:premium": "node tools/test-premium.mjs",
+    "test:fonctions": "node tools/test-fonctions.mjs",
+    "test:rls": "node tools/test-rls.mjs",
+    "publier:contenu": "node tools/publier-contenu.mjs",
+    "build": "node tools/build-css.mjs && node tools/csp.mjs"
   },
   "simple-git-hooks": {
     "pre-push": "npm run --if-present verif"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@supabase/supabase-js": "2.117.2",
+    "esbuild": "0.28.2",
     "eslint": "^10.12.0",
     "globals": "^17.13.0",
     "html-validate": "^11.16.2",
+    "pg": "^8.23.1",
     "playwright": "^1.48.0",
     "prettier": "^3.9.10",
     "simple-git-hooks": "^2.14.0",
     "stylelint": "^17.16.0",
-    "stylelint-config-standard": "^40.0.0"
+    "stylelint-config-standard": "^40.0.0",
+    "tailwindcss": "3.4.19"
   }
 }

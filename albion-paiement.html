@@ -2,6 +2,11 @@
 <html lang="fr" class="no-js">
     <head>
         <meta charset="UTF-8" />
+        <meta
+            http-equiv="Content-Security-Policy"
+            content="default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://cdn.discordapp.com; connect-src 'self' https://wibfiqtuqfddijjlfscs.supabase.co wss://wibfiqtuqfddijjlfscs.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests"
+        />
+        <meta name="referrer" content="strict-origin-when-cross-origin" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Paiement — Builder Tryhard — UnDocPourTous</title>
         <meta
@@ -25,12 +30,13 @@
             rel="stylesheet"
         />
 
-        <!-- Tailwind (CDN) + couleurs du site -->
-        <script src="https://cdn.tailwindcss.com"></script>
-        <script src="tailwind-config.js"></script>
-
         <link rel="stylesheet" href="style.css" />
+        <!-- Tailwind compilé (npm run build:css), APRÈS style.css : même ordre effectif que l'ancien CDN,
+             qui injectait sa feuille en fin d'en-tête. Les utilitaires gardent donc la priorité. -->
+        <link rel="stylesheet" href="assets/css/tailwind.css" />
         <script src="script.js" defer></script>
+        <script type="module" src="entete.js"></script>
+        <script type="module" src="paiement.js"></script>
     </head>
 
     <body class="bg-darkBg text-textLight font-sans antialiased">
@@ -196,7 +202,13 @@
                             Le formulaire et le montant de votre paiement s’afficheront ici.
                         </p>
                     </div>
-                    <button type="button" class="btn-premium w-full">Payer et accéder</button>
+                    <button type="button" id="payer" class="btn-premium w-full">Payer et accéder</button>
+                    <p
+                        id="paiement-msg"
+                        class="paiement-msg text-[13px] leading-[1.6] text-center min-h-[1.5em]"
+                        role="status"
+                        aria-live="polite"
+                    ></p>
                     <p class="flex items-center justify-center gap-2 text-xs text-textMuted">
                         <img src="assets/icons/lock-keyhole-14.svg" alt="" width="14" height="14" />Paiement sécurisé
                     </p>
