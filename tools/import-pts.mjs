@@ -101,6 +101,7 @@ for (const outil of OUTILS) {
 <style>html.pts-attente body{visibility:hidden}</style>
 <noscript><style>html.pts-attente body{visibility:visible}</style></noscript>
 <script type="module">import { garde } from './pts-auth.js'; garde();</script>
+<script type="module" src="entete.js"></script>
 ${tete}
 </head>
 <body>
