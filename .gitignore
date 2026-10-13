@@ -28,3 +28,6 @@ desktop.ini
 npm-debug.log*
 test-results/
 playwright-report/
+
+# Contenus payants : JAMAIS dans le dépôt (publiés dans Supabase par npm run publier:contenu)
+contenus-prives/

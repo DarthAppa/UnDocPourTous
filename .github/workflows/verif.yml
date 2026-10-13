@@ -8,6 +8,10 @@ on:
     branches: [main]
   workflow_dispatch:
 
+# Droits minimum : lecture seule du dépôt
+permissions:
+  contents: read
+
 concurrency:
   group: verif-${{ github.ref }}
   cancel-in-progress: true
@@ -16,9 +20,22 @@ jobs:
   verif:
     name: verif
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
+    # Vrai Postgres pour tester les règles RLS (tools/test-rls.mjs)
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_PASSWORD: postgres
+        ports: ['5432:5432']
+        options: >-
+          --health-cmd pg_isready --health-interval 5s --health-timeout 5s --health-retries 10
+    env:
+      DATABASE_URL: postgres://postgres:postgres@localhost:5432/postgres
     steps:
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
 
       - uses: actions/setup-node@v4
         with:

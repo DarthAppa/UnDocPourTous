@@ -3,7 +3,7 @@
 //         npm run verif -- --rapide (sans les captures)
 // Code de sortie 1 si une étape échoue : le push / la PR sont alors bloqués.
 import { spawnSync } from 'node:child_process';
-import { readdirSync, existsSync, readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 
 const rapide = process.argv.includes('--rapide');
 const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
@@ -21,8 +21,19 @@ const etapes = [
     ['Classes Tailwind présentes', 'node tools/classes-tailwind.mjs'],
     ['CSP à jour', 'node tools/csp.mjs --check'],
 ];
-if (pkg.scripts?.['test:pts'] && existsSync('tools/test-pts-verrou.mjs'))
-    etapes.push(['Tests verrou PTS', 'npm run test:pts']);
+for (const [script, nom] of [
+    ['test:fonctions', 'Tests logique des Edge Functions'],
+    ['test:pts', 'Tests verrou PTS'],
+    ['test:profil', 'Tests page Mon profil'],
+    ['test:premium', 'Tests contenu Premium et paiement'],
+])
+    if (pkg.scripts?.[script]) etapes.push([nom, `npm run ${script}`]);
+// Règles RLS : besoin d'un Postgres (DATABASE_URL). Toujours lancé en CI ; en local seulement si défini.
+if (process.env.DATABASE_URL) etapes.push(['Tests règles RLS (Postgres)', 'npm run test:rls']);
+else console.log('ℹ Tests RLS ignorés en local (DATABASE_URL absent) : ils tournent dans GitHub Actions.');
+// Dépendances : bloque sur une faille critique. Les outils de build (Tailwind 3 → braces) ont des
+// alertes « high » sans correctif qui ne concernent que la compilation sur le PC, pas le site publié.
+etapes.push(['Audit des dépendances (npm audit)', 'npm audit --audit-level=critical']);
 if (!rapide) for (const p of pages) etapes.push([`Rendu ${p} (390px + 1280px)`, `node tools/screenshot.mjs ${p}`]);
 
 const resultats = [];
