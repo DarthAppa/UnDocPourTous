@@ -11,21 +11,33 @@ const params = new URLSearchParams(location.search);
 const voulu = params.get('retour') || 'pts.html';
 const retour = /^[a-z0-9-]+\.html$/.test(voulu) ? voulu : 'pts.html';
 
-const dire = (t) => { msg.textContent = t; };
+const dire = (t) => {
+    msg.textContent = t;
+};
 
 btn.addEventListener('click', async () => {
-    if (!configure) { dire('La connexion Discord n’est pas encore activée sur le site. Reviens bientôt !'); return; }
+    if (!configure) {
+        dire('La connexion Discord n’est pas encore activée sur le site. Reviens bientôt !');
+        return;
+    }
     btn.disabled = true;
     dire('Ouverture de Discord…');
-    try { await connexion(retour); }
-    catch { btn.disabled = false; dire('La connexion n’a pas pu démarrer. Réessaie dans un instant.'); }
+    try {
+        await connexion(retour);
+    } catch {
+        btn.disabled = false;
+        dire('La connexion n’a pas pu démarrer. Réessaie dans un instant.');
+    }
 });
 
 (async () => {
     if (params.get('error_description')) dire('Connexion annulée ou refusée par Discord.');
     if (!configure) return;
     const retourDeDiscord = params.has('code');
-    if (retourDeDiscord) { btn.disabled = true; dire('Vérification de ton compte…'); }
+    if (retourDeDiscord) {
+        btn.disabled = true;
+        dire('Vérification de ton compte…');
+    }
     try {
         const e = await etat();
         if (e.debloque) {
@@ -34,7 +46,9 @@ btn.addEventListener('click', async () => {
         } else if (e.connecte) {
             btn.disabled = false;
             btn.lastChild.textContent = 'Revérifier avec Discord';
-            dire(`Connecté en tant que ${e.pseudo}, mais tu n’es pas encore membre du serveur Pack ta Small. Rejoins-le, puis revérifie.`);
+            dire(
+                `Connecté en tant que ${e.pseudo}, mais tu n’es pas encore membre du serveur Pack ta Small. Rejoins-le, puis revérifie.`,
+            );
         } else if (retourDeDiscord) {
             btn.disabled = false;
             dire('La connexion n’a pas abouti. Réessaie.');

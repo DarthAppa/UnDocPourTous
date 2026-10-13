@@ -18,7 +18,8 @@ const etapes = [
     ['HTML (html-validate)', `npx --no-install html-validate ${pagesSources.join(' ')}`],
     ['Règles maison (CLAUDE.md)', 'node tools/regles.mjs'],
 ];
-if (pkg.scripts?.['test:pts'] && existsSync('tools/test-pts-verrou.mjs')) etapes.push(['Tests verrou PTS', 'npm run test:pts']);
+if (pkg.scripts?.['test:pts'] && existsSync('tools/test-pts-verrou.mjs'))
+    etapes.push(['Tests verrou PTS', 'npm run test:pts']);
 if (!rapide) for (const p of pages) etapes.push([`Rendu ${p} (390px + 1280px)`, `node tools/screenshot.mjs ${p}`]);
 
 const resultats = [];

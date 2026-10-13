@@ -28,7 +28,9 @@ export function appliquer(e) {
             a.classList.add('is-locked');
             badge.innerHTML = '<img src="assets/icons/lock-keyhole.svg" alt="">VERROUILLÉ';
             badge.className = 'badge badge-pts pts-lock-badge';
-            hint.textContent = e.connecte ? 'Rejoindre le serveur Pack ta Small →' : 'Rejoindre le Discord pour débloquer →';
+            hint.textContent = e.connecte
+                ? 'Rejoindre le serveur Pack ta Small →'
+                : 'Rejoindre le Discord pour débloquer →';
         }
     });
 
@@ -62,18 +64,29 @@ export function appliquer(e) {
 const blocDonnees = document.getElementById('pts-donnees');
 async function afficherDonnees(e) {
     if (!blocDonnees) return;
-    if (!e.connecte) { blocDonnees.hidden = true; return; }
+    if (!e.connecte) {
+        blocDonnees.hidden = true;
+        return;
+    }
     blocDonnees.hidden = false;
     const txt = blocDonnees.querySelector('[data-donnees]');
     txt.textContent = 'Lecture de tes données PTS…';
     try {
-        const d = e.donnees || await mesDonnees();
+        const d = e.donnees || (await mesDonnees());
         if (!d || !d.comptes.length) {
-            txt.innerHTML = 'Aucune donnée PTS pour l’instant. Installe <b>PTS Companion</b> puis ouvre packtasmall.fr : ta collection et tes replays seront récupérés à chaque connexion au site.';
+            txt.innerHTML =
+                'Aucune donnée PTS pour l’instant. Installe <b>PTS Companion</b> puis ouvre packtasmall.fr : ta collection et tes replays seront récupérés à chaque connexion au site.';
             return;
         }
-        const maj = d.majCollection ? new Date(d.majCollection).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—';
-        const nbCartes = Number(d.nbCartes) || 0;   // nombres forcés : rien d'externe n'est injecté en HTML
+        const maj = d.majCollection
+            ? new Date(d.majCollection).toLocaleDateString('fr-FR', {
+                  day: '2-digit',
+                  month: '2-digit',
+                  hour: '2-digit',
+                  minute: '2-digit',
+              })
+            : '—';
+        const nbCartes = Number(d.nbCartes) || 0; // nombres forcés : rien d'externe n'est injecté en HTML
         const nbReplays = Number(d.nbReplays) || 0;
         txt.innerHTML = `Collection : <b>${nbCartes} cartes</b> (mise à jour le ${maj}) · Replays : <b>${nbReplays}</b>`;
     } catch {
@@ -83,8 +96,12 @@ async function afficherDonnees(e) {
 
 zone?.querySelector('[data-deconnexion]')?.addEventListener('click', async () => {
     await deconnexion();
-    history.replaceState(null, '', 'pts.html');   // pas de faux message « inactivité » après une déconnexion voulue
+    history.replaceState(null, '', 'pts.html'); // pas de faux message « inactivité » après une déconnexion voulue
     appliquer({ connecte: false, debloque: false, membre: false, pseudo: '' });
 });
 
-etat().then(appliquer).catch(() => { /* reste verrouillé */ });
+etat()
+    .then(appliquer)
+    .catch(() => {
+        /* reste verrouillé */
+    });

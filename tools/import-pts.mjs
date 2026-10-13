@@ -17,23 +17,27 @@ const OUTILS = [
         cible: 'pts-encyclopedie.html',
         nom: 'Encyclopédie',
         titre: 'Encyclopédie Pack ta Small',
-        description: 'Encyclopédie complète de Pack ta Small : guide du jeu, armes, synergies, cartes spéciales, Callers, packs, maths des combats et collection complète des cartes.'
+        description:
+            'Encyclopédie complète de Pack ta Small : guide du jeu, armes, synergies, cartes spéciales, Callers, packs, maths des combats et collection complète des cartes.',
     },
     {
         source: 'Partie2_Builder_general.html',
         cible: 'pts-builder.html',
         nom: 'Builder général',
         titre: 'Builder général Pack ta Small',
-        description: 'Builder Pack ta Small : compose ton équipe de 20, cible les synergies, calcule le Collectif et laisse l’optimiseur proposer 3 compos.'
-    }
+        description:
+            'Builder Pack ta Small : compose ton équipe de 20, cible les synergies, calcule le Collectif et laisse l’optimiseur proposer 3 compos.',
+    },
 ];
 
 const esc = (s) => s.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
 function navParties(courant) {
-    const liens = OUTILS.map((o) => o.cible === courant
-        ? `<a href="${o.cible}" aria-current="page"><span>Pack ta Small</span><b>${o.nom}</b></a>`
-        : `<a href="${o.cible}"><span>Pack ta Small</span><b>${o.nom}</b></a>`).join('');
+    const liens = OUTILS.map((o) =>
+        o.cible === courant
+            ? `<a href="${o.cible}" aria-current="page"><span>Pack ta Small</span><b>${o.nom}</b></a>`
+            : `<a href="${o.cible}"><span>Pack ta Small</span><b>${o.nom}</b></a>`,
+    ).join('');
     return `<nav class="parts" aria-label="Outils Pack ta Small">${liens}</nav>`;
 }
 
