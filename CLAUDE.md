@@ -22,6 +22,8 @@ Hébergé sur GitHub Pages, branche `main`, domaine dans `CNAME`.
 - Couleurs : uniquement les tokens définis dans `tailwind-config.js` (`darkBg`, `cardBg`, `cardBorder`, `brandOrange`, `brandOrangeHover`, `textLight`, `mintFree`, `holo`) et leurs équivalents `--var` dans `style.css`. Un nouveau token s'ajoute aux deux endroits.
 - Pas d'image qui n'existe pas dans le dépôt. Les images vont dans `assets/img/`. Sans image : visuel en CSS/SVG.
 - Pas de logos officiels des jeux (droits) : noms en texte stylisé uniquement.
+- IMPORTANT : nom officiel du site « UnDocPourTous » (un seul mot, U, D, P, T majuscules, S final), jamais « UnDocPourTout ». Seule variante tolérée : « Un Doc Pour Tous » en toutes lettres. Dans le code généré, le nom est défini une seule fois (constante, ex. `site.nom` dans les données) et réutilisé partout.
+- Chaque page : `<title>` au format « Sujet — UnDocPourTous » et `og:site_name="UnDocPourTous"`.
 - Textes du site en français.
 - Mobile d'abord : tester à 390px et 1280px, aucune barre de défilement horizontale.
 - Le contenu doit rester visible sans JS (les classes `.reveal` ne cachent qu'avec `.js` sur `<html>`).
