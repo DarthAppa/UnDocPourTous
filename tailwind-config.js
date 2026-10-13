@@ -11,7 +11,7 @@ tailwind.config = {
                 iconBg: '#1A2330',          // fond de l'emblème
                 textLight: '#F5F5F0',       // texte principal
                 textMuted: '#9BA7B6',       // texte secondaire
-                textFaint: '#697788',       // légendes, séparateurs
+                textFaint: '#7C8A9C',       // légendes, séparateurs
                 mintFree: '#72E5BB',        // gratuit (accent principal)
                 mintDeep: '#152D29',        // fond badge / bouton gratuit
                 mintLine: '#345D50',        // bordure carte gratuite

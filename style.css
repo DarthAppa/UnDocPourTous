@@ -10,7 +10,7 @@
     --bg-icon: #1A2330;
     --text-main: #F5F5F0;
     --text-muted: #9BA7B6;
-    --text-faint: #697788;
+    --text-faint: #7C8A9C;
     --mint: #72E5BB;
     --mint-deep: #152D29;
     --mint-line: #345D50;
@@ -285,6 +285,7 @@ button.pts-discord { border: 0; cursor: pointer; }
 
 @media (prefers-reduced-motion: reduce) {
     *, *::before, *::after { animation: none !important; transition: none !important; }
+    html { scroll-behavior: auto; }
 }
 
 /* Scrollbar */
