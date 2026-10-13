@@ -1,6 +1,6 @@
 // Page Pack ta Small : verrouille ou débloque les cartes outils selon la connexion Discord.
 // Sans JS (ou en attendant), les cartes restent verrouillées et mènent au Discord PTS.
-import { etat, deconnexion, INVITATION } from './pts-auth.js';
+import { etat, deconnexion, mesDonnees, surveillerInactivite, INVITATION } from './pts-auth.js';
 
 const cartes = [...document.querySelectorAll('[data-outil]')];
 const zone = document.getElementById('pts-compte');
@@ -42,10 +42,38 @@ export function appliquer(e) {
         zone.hidden = true;
     }
 
+    if (e.connecte) surveillerInactivite();
+    afficherDonnees(e);
+
+    if (note && !e.connecte && (e.inactif || new URLSearchParams(location.search).has('inactif'))) {
+        note.textContent = `Tu as été déconnecté après une période d’inactivité. Reconnecte-toi avec Discord pour retrouver les outils.`;
+        return;
+    }
     if (note) {
         note.textContent = e.debloque
             ? 'Connecté avec Discord : les outils sont débloqués.'
             : 'Outils réservés aux membres du Discord Pack ta Small : connecte-toi avec Discord pour les débloquer.';
+    }
+}
+
+// Collection et replays envoyés par l'extension PTS Companion (rien d'autre)
+const blocDonnees = document.getElementById('pts-donnees');
+async function afficherDonnees(e) {
+    if (!blocDonnees) return;
+    if (!e.connecte) { blocDonnees.hidden = true; return; }
+    blocDonnees.hidden = false;
+    const txt = blocDonnees.querySelector('[data-donnees]');
+    txt.textContent = 'Lecture de tes données PTS…';
+    try {
+        const d = e.donnees || await mesDonnees();
+        if (!d || !d.comptes.length) {
+            txt.innerHTML = 'Aucune donnée PTS pour l’instant. Installe <b>PTS Companion</b> puis ouvre packtasmall.fr : ta collection et tes replays seront récupérés à chaque connexion au site.';
+            return;
+        }
+        const maj = d.majCollection ? new Date(d.majCollection).toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' }) : '—';
+        txt.innerHTML = `Collection : <b>${d.nbCartes} cartes</b> (mise à jour le ${maj}) · Replays : <b>${d.nbReplays}</b>`;
+    } catch {
+        txt.textContent = 'Impossible de lire tes données PTS pour le moment.';
     }
 }
 

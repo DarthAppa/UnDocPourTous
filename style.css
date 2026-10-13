@@ -219,9 +219,17 @@ body { background: var(--bg-dark); overflow-x: hidden; }
     background: rgba(7,9,9,.75); border: 1px solid color-mix(in srgb, var(--pts-gold) 40%, transparent);
 }
 .pts-compte > img { width: 26px; height: auto; }
-button.pts-link { background: none; border: 0; padding: 0; cursor: pointer; }
+button.pts-link { background: none; border: 0; padding: 0; cursor: pointer; white-space: nowrap; }
 .pts-discord:disabled { opacity: .6; cursor: wait; transform: none; }
 button.pts-discord { border: 0; cursor: pointer; }
+
+.pts-donnees[hidden] { display: none; }
+.pts-donnees {
+    display: flex; align-items: center; gap: 10px; padding: 8px 14px; border-radius: 10px; font-size: 13px; line-height: 1.5;
+    background: rgba(7,9,9,.7); border: 1px dashed color-mix(in srgb, var(--pts-gold) 40%, transparent); color: var(--pts-gold-pale);
+}
+.pts-donnees img { width: 34px; height: auto; flex-shrink: 0; }
+.pts-donnees b { color: var(--text-main); }
 
 /* Page de connexion */
 .pts-login-panel { padding-block: 44px; }

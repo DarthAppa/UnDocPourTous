@@ -43,6 +43,26 @@ for (const vp of [{ nom: 'desktop', width: 1280, height: 900 }, { nom: 'mobile',
         'connecté et membre : cartes débloquées vers l’Encyclopédie et le Builder');
     await p.screenshot({ path: `shots/pts-debloque-${vp.nom}.png`, fullPage: true });
 
+    // 3b. Données PTS du joueur (collection + replays) affichées une fois connecté
+    await p.evaluate(async () => (await import('/pts-page.js')).appliquer({ connecte: true, membre: true, debloque: true, pseudo: 'Apparance',
+        donnees: { comptes: [{ player_id: '1' }], collections: [], nbCartes: 308, majCollection: '2026-10-12T10:00:00Z', nbReplays: 59 } }));
+    await p.waitForTimeout(200);
+    const donnees = await p.textContent('#pts-donnees');
+    verif(await p.isVisible('#pts-donnees') && donnees.includes('308 cartes') && donnees.includes('Replays : 59'), 'connecté : collection et replays du joueur affichés');
+    await p.screenshot({ path: `shots/pts-donnees-${vp.nom}.png`, fullPage: false });
+
+    // 3c. Déconnexion automatique : avertissement 1 min avant, puis déconnexion
+    await p.evaluate(() => localStorage.setItem('pts-derniere-activite', String(Date.now() - 29.5 * 60e3)));
+    await p.waitForFunction(() => [...document.querySelectorAll('[role="alert"]')].some((b) => b.textContent.includes('déconnexion dans')), null, { timeout: 8000 }).catch(() => {});
+    verif(await p.evaluate(() => [...document.querySelectorAll('[role="alert"]')].some((b) => b.textContent.includes('déconnexion dans'))), 'inactif 29 min 30 : avertissement affiché');
+    await p.screenshot({ path: `shots/pts-inactif-avertissement-${vp.nom}.png`, fullPage: false });
+    await p.evaluate(() => localStorage.setItem('pts-derniere-activite', String(Date.now() - 31 * 60e3)));
+    await p.waitForURL(/inactif=1/, { timeout: 10000 }).catch(() => {});
+    verif(p.url().includes('pts.html?inactif=1'), 'inactif plus de 30 min : déconnecté et renvoyé sur pts.html');
+    await p.waitForTimeout(500);
+    verif((await p.textContent('#pts-verrou-note')).includes('inactivité'), 'message « déconnecté après une période d’inactivité » affiché');
+    verif(await p.evaluate(() => localStorage.getItem('pts-derniere-activite') === null), 'compteur d’inactivité remis à zéro');
+
     // 4. Accès direct à un outil sans connexion : renvoi vers la page PTS
     await p.goto(serveur.url + 'pts-builder.html');
     await p.waitForURL(/pts\.html\?verrou=1/, { timeout: 10000 }).catch(() => {});

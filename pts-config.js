@@ -13,5 +13,9 @@ export const PTS_CONFIG = {
     INVITATION: 'https://discord.gg/packtasmall',
 
     // Au-delà, on redemande une connexion pour revérifier l'appartenance au serveur.
-    VERIF_JOURS: 30
+    VERIF_JOURS: 30,
+
+    // Déconnexion automatique après ce temps sans activité (souris, clavier, défilement, toucher).
+    // Un avertissement s'affiche 1 minute avant.
+    INACTIVITE_MINUTES: 30
 };
