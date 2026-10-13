@@ -11,6 +11,8 @@
     --text-main: #F2EEE6;
     --mint: #2EC4A6;
     --holo: #5EE7FF;
+    --parchment: #E8D3A8;
+    --wood: #2A1E14;
 }
 
 html { scroll-behavior: smooth; }

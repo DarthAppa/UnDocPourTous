@@ -12,6 +12,9 @@ Hébergé sur GitHub Pages, branche `main`, domaine dans `CNAME`.
 ## Commandes
 - Vérifier le rendu : `npm run shot` (captures dans `shots/`, affiche les erreurs console et le débordement horizontal)
 - Première installation : `npm install` puis `npx playwright install chromium`
+- Outils installés sur le PC (Windows) : Node 24 / npm 11, Git 2.56, Python 3.12 (`python`, `py -3.12`) + Pillow (`py -3.12 -m pip install ...`), Python 3.13 en plus (`py -3.13`), GitHub CLI `gh` 2.102, `clasp` 3.4 (Google Apps Script : `clasp push`, `clasp pull`), Docker 29 (Docker Desktop doit être lancé).
+- Prévu : panels Google Apps Script (clasp), bot Discord Node.js (discord.js), abonnements Stripe, VPS avec Docker.
+- IMPORTANT : jamais de token, clé API ou mot de passe dans le code ; tout va dans `.env` (ignoré par git) avec un `.env.example` sans valeurs.
 
 ## Règles
 - IMPORTANT : un seul `<head>` contenant polices, Tailwind, `style.css` et `script.js` (en `defer`). Ne jamais dupliquer le contenu de la page.
