@@ -45,9 +45,12 @@ try {
         console.log(`\n[${vp.nom}]`);
         const p = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
         p.setDefaultTimeout(10000);
-        await p.route('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@*/**', (r) =>
-            r.fulfill({ contentType: 'text/javascript', body: FAUX_SUPABASE }),
-        );
+        // Faux client Supabase : ancien import CDN ou module local assets/vendor/supabase.mjs (autorisé par la CSP)
+        for (const motif of [
+            'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@*/**',
+            '**/assets/vendor/supabase.mjs',
+        ])
+            await p.route(motif, (r) => r.fulfill({ contentType: 'text/javascript', body: FAUX_SUPABASE }));
         await p.route(`${PTS_CONFIG.SUPABASE_URL}/**`, (r) => r.abort()); // jamais de vrai départ vers Supabase/Discord
         const erreurs = [];
         p.on('pageerror', (e) => erreurs.push(e.message));
