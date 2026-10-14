@@ -180,9 +180,12 @@ for (const vp of VUES) {
     {
         // Le vrai client enregistre la session pendant l'échange du code : simulé ici par la clé déjà présente
         const { p, erreurs } = await ouvrir(vp, { url: 'albion.html?code=abc', session: SESSION });
-        const recharge = p.waitForEvent('load');
         await p.waitForURL((u) => !u.search.includes('code'));
-        await recharge;
+        // la page se recharge sur l'adresse propre : on attend l'en-tête à jour (attente qui survit au rechargement)
+        await p
+            .locator('a.btn-login[href="profil.html"]')
+            .waitFor()
+            .catch(() => {});
         t.verif(
             p.url() === serveur.url + 'albion.html',
             'retour Google/confirmation : adresse nettoyée (plus de ?code)',
