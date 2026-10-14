@@ -1,0 +1,118 @@
+---
+import Base from '../layouts/Base.astro';
+import PageLegale from '../components/PageLegale.astro';
+import { SITE, EDITEUR } from '../site.js';
+const mail = `mailto:${EDITEUR.contact}`;
+---
+
+<Base
+    titre="Conditions d’utilisation"
+    description="Conditions d’utilisation de UnDocPourTous : compte, règles d’usage, outils Pack ta Small, abonnement Premium, responsabilité."
+>
+    <PageLegale titre="Conditions d’utilisation">
+        <p>
+            Ces conditions s’appliquent à toute utilisation de {SITE.nom}. En créant un compte, tu les acceptes. Elles
+            vont avec la <a href="confidentialite.html">politique de confidentialité</a> et les
+            <a href="mentions-legales.html">mentions légales</a>.
+        </p>
+
+        <h2>1. Le service</h2>
+        <p>
+            {SITE.nom} propose des guides et des outils pour des jeux vidéo : outils gratuits accessibles à tous,
+            outils réservés aux membres d’une communauté (Pack ta Small) et, à terme, des outils Premium payants. C’est
+            un site de fan, non officiel et non affilié aux éditeurs des jeux.
+        </p>
+
+        <h2>2. Ton compte</h2>
+        <ul>
+            <li>Le compte est gratuit. Les informations que tu donnes doivent être exactes, en particulier ton e-mail.</li>
+            <li>
+                Tu es responsable de ce qui se fait avec ton compte : garde ton mot de passe pour toi et préviens-nous à
+                <a href={mail}>{EDITEUR.contact}</a> si tu penses qu’il a été utilisé par quelqu’un d’autre.
+            </li>
+            <li>Un compte est personnel : pas de partage ni de revente, en particulier d’un accès Premium.</li>
+            <li>Moins de 15 ans : accord d’un parent ou d’un représentant légal nécessaire.</li>
+            <li>Tu peux supprimer ton compte à tout moment depuis <a href="profil.html">Mon profil</a>.</li>
+        </ul>
+
+        <h2>3. Règles d’utilisation</h2>
+        <p>Il est interdit de :</p>
+        <ul>
+            <li>contourner un verrou, une limite ou une protection du site, ou accéder aux données d’un autre joueur ;</li>
+            <li>aspirer le site ou ses données en masse, ou le surcharger (robots, requêtes automatisées) ;</li>
+            <li>republier ou revendre le contenu payant ou réservé ;</li>
+            <li>utiliser le site pour tricher, faire du commerce d’objets de jeu contre de l’argent réel, ou enfreindre
+                les conditions d’un jeu ;</li>
+            <li>envoyer des données fausses ou falsifiées (collections, replays) pour fausser les statistiques.</li>
+        </ul>
+        <p>
+            En cas de manquement, l’accès peut être suspendu ou le compte supprimé, après avertissement sauf urgence
+            (atteinte à la sécurité, fraude).
+        </p>
+
+        <h2>4. Outils Pack ta Small et extension PTS Companion</h2>
+        <p>
+            Les outils Pack ta Small sont réservés aux membres vérifiés du serveur Discord de la communauté. L’extension
+            PTS Companion, facultative, lit ta collection et tes replays sur le site du jeu, dans ton navigateur et avec
+            ta propre session, pour les envoyer sur ton compte. Pack ta Small est un jeu de fan indépendant : son équipe
+            peut modifier son site à tout moment, ce qui peut empêcher l’extension de fonctionner. Les calculs du
+            Builder sont des estimations, pas une garantie de résultat en jeu.
+        </p>
+
+        <h2>5. Abonnement Premium</h2>
+        <p>
+            Cette partie s’applique dès que tu souscris une offre Premium. Les conditions de l’offre (prix, durée,
+            contenu) sont affichées avant le paiement.
+        </p>
+        <ul>
+            <li>
+                <strong>Prix :</strong> en euros, TTC. TVA non applicable, article 293 B du Code général des impôts.
+            </li>
+            <li><strong>Paiement :</strong> par carte, via Stripe. Nous ne voyons jamais tes coordonnées bancaires.</li>
+            <li>
+                <strong>Renouvellement et résiliation :</strong> un abonnement mensuel ou saisonnier se renouvelle
+                automatiquement. Tu peux le résilier à tout moment depuis <a href="profil.html">Mon profil</a> : il
+                reste actif jusqu’à la fin de la période déjà payée, sans nouveau prélèvement.
+            </li>
+            <li>
+                <strong>Droit de rétractation :</strong> tu disposes de 14 jours pour te rétracter. Comme l’accès au
+                contenu numérique est immédiat, il te sera demandé au moment du paiement d’accepter que l’accès commence
+                tout de suite et de renoncer à ce droit (article L221-28, 13° du Code de la consommation). Sans cet
+                accord, l’accès ne commence qu’après les 14 jours.
+            </li>
+            <li>
+                <strong>Réclamation et médiation :</strong> écris d’abord à <a href={mail}>{EDITEUR.contact}</a>. Si le
+                désaccord persiste, tu pourras saisir gratuitement le médiateur de la consommation dont les coordonnées
+                seront indiquées ici avant l’ouverture des ventes.
+            </li>
+        </ul>
+
+        <h2>6. Propriété intellectuelle</h2>
+        <p>
+            Le contenu du site (textes, outils, code, illustrations originales, logo) appartient à son auteur. Tu peux
+            l’utiliser pour ton usage personnel ; toute reproduction ou diffusion, en particulier du contenu Premium ou
+            réservé, demande une autorisation écrite. Les noms et contenus des jeux appartiennent à leurs éditeurs.
+        </p>
+
+        <h2>7. Disponibilité et responsabilité</h2>
+        <p>
+            Le site est fourni « en l’état ». Nous faisons de notre mieux pour qu’il soit disponible et que ses
+            informations soient justes, mais les jeux changent souvent : chiffres, équilibrages et calculs peuvent être
+            temporairement inexacts. Le site peut être interrompu pour maintenance. Notre responsabilité ne peut être
+            engagée pour une décision prise en jeu à partir des outils, ni pour une sanction appliquée par un éditeur de
+            jeu. Rien dans ces conditions ne limite les droits que la loi te garantit en tant que consommateur.
+        </p>
+
+        <h2>8. Modifications</h2>
+        <p>
+            Ces conditions peuvent évoluer. La date en haut de page indique la dernière version ; en cas de changement
+            important, tu seras prévenu par e-mail ou sur le site avant qu’il s’applique.
+        </p>
+
+        <h2>9. Droit applicable</h2>
+        <p>
+            Ces conditions sont soumises au droit français. En cas de litige, une solution amiable est recherchée en
+            priorité ; à défaut, les tribunaux compétents sont ceux prévus par la loi.
+        </p>
+    </PageLegale>
+</Base>

@@ -86,7 +86,7 @@ export const FAUX_SUPABASE = `export function createClient(url) {
         return { data: { session: copie(F.session) }, error: null };
       },
       signUp: async ({ email, options }) => {
-        A.push({ type: 'signUp', email, pseudo: options && options.data && options.data.name, redirection: options && options.emailRedirectTo });
+        A.push({ type: 'signUp', email, pseudo: options && options.data && options.data.name, langue: options && options.data && options.data.langue, redirection: options && options.emailRedirectTo });
         const mode = (F.auth || {}).inscription || 'confirmer';
         if (mode === 'existe') return { data: { user: { identities: [] }, session: null }, error: null };
         if (mode === 'session') {

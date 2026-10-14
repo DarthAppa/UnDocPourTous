@@ -1,0 +1,27 @@
+---
+// Mise en page commune des pages légales : fil d'Ariane, titre, date de mise à jour, texte.
+import { MAJ_LEGAL } from '../site.js';
+
+interface Props {
+    titre: string;
+}
+const { titre } = Astro.props;
+---
+
+<main class="wrap pt-8 pb-16 flex flex-col gap-8">
+    <nav aria-label="Fil d’Ariane" class="crumbs">
+        <span><a href="index.html">Accueil</a></span>
+        <span><span class="sep" aria-hidden="true">/</span><span aria-current="page">{titre}</span></span>
+    </nav>
+    <article class="legal">
+        <p class="font-mono font-medium text-[11px] text-mintFree">INFORMATIONS LÉGALES</p>
+        <h1>{titre}</h1>
+        <p class="legal-maj">Dernière mise à jour : {MAJ_LEGAL}</p>
+        <slot />
+        <nav class="legal-liens" aria-label="Autres pages légales">
+            <a href="mentions-legales.html">Mentions légales</a>
+            <a href="confidentialite.html">Confidentialité</a>
+            <a href="conditions.html">Conditions d’utilisation</a>
+        </nav>
+    </article>
+</main>

@@ -1,0 +1,163 @@
+---
+import Base from '../layouts/Base.astro';
+import PageLegale from '../components/PageLegale.astro';
+import { SITE, EDITEUR } from '../site.js';
+const mail = `mailto:${EDITEUR.contact}`;
+---
+
+<Base
+    titre="Politique de confidentialité"
+    description="Quelles données UnDocPourTous utilise, pourquoi, chez qui elles sont stockées, combien de temps, et comment exercer tes droits (RGPD)."
+>
+    <PageLegale titre="Politique de confidentialité">
+        <p class="legal-encadre">
+            <strong>En bref :</strong> pas de publicité, pas de traceur publicitaire, pas de revente de données. On ne
+            garde que ce qu’il faut pour ton compte et les outils que tu utilises. Tu peux télécharger ou supprimer tes
+            données à tout moment depuis <a href="profil.html">Mon profil</a>.
+        </p>
+
+        <h2>Responsable du traitement</h2>
+        <p>
+            {EDITEUR.nom}, éditeur de {SITE.nom}. Contact pour toute question sur tes données :
+            <a href={mail}>{EDITEUR.contact}</a>.
+        </p>
+
+        <h2>Sans compte</h2>
+        <p>
+            Tu peux consulter le site et les outils gratuits sans créer de compte. Aucun cookie de mesure d’audience ou
+            de publicité n’est déposé. Comme tout site, les serveurs qui affichent les pages (GitHub) et les polices
+            d’écriture (Google Fonts) reçoivent techniquement ton adresse IP pour te répondre.
+        </p>
+
+        <h2>Les données que nous utilisons</h2>
+        <h3>Ton compte</h3>
+        <ul>
+            <li>Adresse e-mail, pseudo et mot de passe (stocké chiffré : personne ne peut le lire).</li>
+            <li>
+                Si tu te connectes avec Google, Discord ou Twitch : l’identifiant, le nom, l’e-mail et l’avatar que ce
+                service nous transmet. Nous ne recevons jamais ton mot de passe de ces services.
+            </li>
+            <li>La langue de ton navigateur à l’inscription, pour t’écrire en français ou en anglais.</li>
+            <li>Dates de création et de dernière connexion du compte.</li>
+        </ul>
+        <h3>Outils Pack ta Small</h3>
+        <ul>
+            <li>
+                Vérification Discord : nous regardons une seule fois si tu es membre du serveur Discord Pack ta Small et
+                gardons uniquement ton identifiant Discord et le résultat (membre ou non), pas la liste de tes serveurs.
+            </li>
+            <li>
+                Si tu installes l’extension PTS Companion : ton identifiant et ton pseudo Pack ta Small, ta collection
+                de cartes et tes replays de combats (qui contiennent les pseudos de jeu de tes adversaires). Ils
+                servent au Builder Ma collection et à des statistiques d’ensemble sur les armes et les compos.
+            </li>
+        </ul>
+        <h3>Abonnement Premium</h3>
+        <ul>
+            <li>
+                Le paiement est géré par Stripe : nous ne voyons jamais ton numéro de carte. Nous gardons l’état de ton
+                abonnement (actif, annulé…), sa date de fin et les références client Stripe.
+            </li>
+        </ul>
+        <h3>Stockage dans ton navigateur</h3>
+        <p>
+            Quand tu es connecté, ta session est gardée dans le stockage local de ton navigateur (pas de cookie). Il
+            est indispensable au fonctionnement du compte et ne sert à rien d’autre : il ne demande donc pas ton
+            consentement. Il disparaît quand tu te déconnectes.
+        </p>
+
+        <h2>Pourquoi, et sur quelle base</h2>
+        <ul>
+            <li>
+                <strong>Fournir le service que tu demandes</strong> (compte, outils, Builder, Premium) : exécution du
+                contrat, c’est-à-dire des <a href="conditions.html">conditions d’utilisation</a>.
+            </li>
+            <li>
+                <strong>Sécuriser le site</strong> (limiter les abus, déconnecter les sessions inactives, enquêter sur
+                une faille) : intérêt légitime.
+            </li>
+            <li>
+                <strong>Garder les preuves de paiement</strong> : obligation légale (comptabilité).
+            </li>
+            <li>
+                <strong>T’envoyer des e-mails</strong> : seulement ceux liés à ton compte (confirmation d’adresse, mot de
+                passe oublié, changement d’adresse, abonnement). Aucune lettre d’information sans ton accord.
+            </li>
+        </ul>
+
+        <h2>Qui y a accès</h2>
+        <p>
+            Seul l’éditeur du site y a accès, ainsi que les prestataires techniques ci-dessous, qui agissent pour notre
+            compte et ne peuvent pas utiliser tes données pour eux-mêmes. Les règles de la base de données empêchent un
+            joueur de lire les données d’un autre.
+        </p>
+        <div class="legal-table">
+            <table>
+                <thead>
+                    <tr><th>Prestataire</th><th>Rôle</th><th>Lieu</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Supabase</td><td>Comptes, base de données</td><td>Londres (Royaume-Uni)</td></tr>
+                    <tr><td>Resend</td><td>Envoi des e-mails</td><td>Irlande (UE)</td></tr>
+                    <tr><td>GitHub (GitHub Pages)</td><td>Hébergement des pages</td><td>États-Unis</td></tr>
+                    <tr><td>Google Fonts</td><td>Polices d’écriture</td><td>États-Unis</td></tr>
+                    <tr><td>Stripe</td><td>Paiement du Premium</td><td>Irlande (UE) et États-Unis</td></tr>
+                    <tr>
+                        <td>Google, Discord, Twitch</td><td>Connexion, si tu la choisis</td><td>États-Unis</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <p>
+            Le Royaume-Uni bénéficie d’une décision d’adéquation de la Commission européenne. Les transferts vers les
+            États-Unis reposent sur le cadre de protection des données UE–États-Unis (Data Privacy Framework) ou sur
+            les clauses contractuelles types de la Commission européenne.
+        </p>
+
+        <h2>Combien de temps</h2>
+        <ul>
+            <li>Compte, données Pack ta Small et préférences : tant que ton compte existe.</li>
+            <li>
+                Suppression du compte : tout est effacé immédiatement de notre base, sauf ce que la loi nous oblige à
+                garder.
+            </li>
+            <li>Pièces comptables liées à un paiement : 10 ans (obligation légale).</li>
+            <li>Statistiques d’ensemble tirées des replays : conservées, mais elles ne permettent pas de te retrouver.</li>
+        </ul>
+
+        <h2>Tes droits</h2>
+        <p>
+            Tu peux accéder à tes données, les corriger, les supprimer, les récupérer dans un fichier, t’opposer à
+            un traitement ou en demander la limitation. Le plus simple :
+        </p>
+        <ul>
+            <li><a href="profil.html">Mon profil</a> › « Télécharger mes données » (fichier JSON) ;</li>
+            <li><a href="profil.html">Mon profil</a> › « Supprimer mon compte » ;</li>
+            <li>sinon, écris à <a href={mail}>{EDITEUR.contact}</a> : réponse sous un mois maximum.</li>
+        </ul>
+        <p>
+            Si tu estimes que tes droits ne sont pas respectés, tu peux adresser une réclamation à la CNIL (<a
+                href="https://www.cnil.fr/fr/plaintes">cnil.fr/fr/plaintes</a
+            >).
+        </p>
+
+        <h2>Mineurs</h2>
+        <p>
+            Si tu as moins de 15 ans, demande l’accord d’un parent ou de ton représentant légal avant de créer un
+            compte.
+        </p>
+
+        <h2>Sécurité</h2>
+        <p>
+            Connexions chiffrées (HTTPS), mots de passe chiffrés, accès à la base limité par des règles par joueur,
+            politique de sécurité du contenu stricte sur toutes les pages, déconnexion des sessions inactives. Une
+            faille ? Voir <a href=".well-known/security.txt">security.txt</a>.
+        </p>
+
+        <h2>Modifications</h2>
+        <p>
+            Cette politique peut évoluer avec le site (nouvel outil, nouveau prestataire). La date en haut de page
+            indique la dernière version. En cas de changement important, tu seras prévenu par e-mail ou sur le site.
+        </p>
+    </PageLegale>
+</Base>

@@ -26,7 +26,9 @@
     "test:connexion": "node tools/test-connexion.mjs",
     "test:fonctions": "node tools/test-fonctions.mjs",
     "test:rls": "node tools/test-rls.mjs",
-    "publier:contenu": "node tools/publier-contenu.mjs"
+    "publier:contenu": "node tools/publier-contenu.mjs",
+    "emails": "node tools/emails.mjs",
+    "emails:publier": "node tools/emails.mjs --publier"
   },
   "simple-git-hooks": {
     "pre-push": "npm run --if-present verif"
