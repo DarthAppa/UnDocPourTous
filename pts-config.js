@@ -8,6 +8,10 @@ export const PTS_CONFIG = {
     SUPABASE_ANON_KEY:
         'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndpYmZpcXR1cWZkZGlqamxmc2NzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3OTE4NTAwNjIsImV4cCI6MjEwNzQyNjA2Mn0.qAzmjV3jlSREIXY7Nrc0-lWMm5h1XK3DM51z6PFiFUc',
 
+    // Connexions rapides actives dans la fenêtre de connexion. N'ajouter un fournisseur ici
+    // qu'après l'avoir activé dans Supabase › Authentication › Providers (google, apple, twitch…).
+    FOURNISSEURS: ['discord', 'google', 'twitch'],
+
     // Serveur Discord « PACK TA SMALL » : il faut en être membre pour débloquer les outils.
     // Mettre '' pour débloquer avec n'importe quel compte Discord.
     GUILD_ID: '1329053478743572480',

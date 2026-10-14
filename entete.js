@@ -16,6 +16,11 @@ function sessionEnregistree() {
     }
 }
 
+if (!sessionEnregistree() && document.querySelector('a.btn-login')) {
+    // Pas connecté : « Connexion » ouvre la fenêtre de connexion / inscription (sans JS, le lien reste valable)
+    import('./auth-modal.js');
+}
+
 if (sessionEnregistree()) {
     document.querySelectorAll('a.btn-login').forEach((a) => {
         a.href = 'profil.html';
