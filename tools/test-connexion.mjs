@@ -229,7 +229,28 @@ for (const vp of VUES) {
         await p.close();
     }
 
-    // 7. Déjà connecté : « Mon profil » est un lien normal (pas de fenêtre)
+    // 7. Clic très rapide (avant le chargement de la fenêtre) : la fenêtre s'ouvre quand même
+    {
+        const p = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+        await preparer(p, { serveurUrl: serveur.url, faux: {} });
+        // fenêtre ralentie de 1,5 s
+        await p.route('**/assets/js/auth-modal.js', async (r) => {
+            await new Promise((ok) => setTimeout(ok, 1500));
+            await r.continue();
+        });
+        await p.goto(serveur.url + 'index.html', { waitUntil: 'domcontentloaded' });
+        await p.waitForFunction(() => document.readyState !== 'loading');
+        await p.waitForTimeout(100);
+        await p.click('a.btn-login', { noWaitAfter: true });
+        await p.locator('dialog.auth-modal').waitFor({ timeout: 6000 });
+        t.verif(
+            (await ouverte(p)) && p.url() === serveur.url + 'index.html',
+            'clic avant le chargement de la fenêtre : elle s’ouvre dès qu’elle est prête (pas de changement de page)',
+        );
+        await p.close();
+    }
+
+    // 8. Déjà connecté : « Mon profil » est un lien normal (pas de fenêtre)
     {
         const { p } = await ouvrir(vp, { session: SESSION });
         t.verif(

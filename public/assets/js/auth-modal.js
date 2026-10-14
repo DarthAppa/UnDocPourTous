@@ -284,7 +284,7 @@ async function afficher(vue = '') {
     }
 }
 
-async function ouvrir(declencheurClic, vue = '') {
+export async function ouvrir(declencheurClic, vue = '') {
     if (!dialogue) construire();
     declencheur = declencheurClic;
     dialogue.querySelector('[data-msg]').textContent = '';
@@ -322,10 +322,3 @@ export async function retourConnexion() {
         dialogue.msg('Connexion impossible : le lien a expiré ou a déjà servi. Réessaie.', true);
     }
 }
-
-document.querySelectorAll('.btn-login').forEach((b) =>
-    b.addEventListener('click', (e) => {
-        e.preventDefault();
-        ouvrir(b);
-    }),
-);
