@@ -86,15 +86,18 @@ export function convertir(collection, parCle, wmap) {
     let inconnues = 0;
     for (const c of roster) {
         if (!c || typeof c !== 'object') continue;
-        const { base, variante } = decouper(premier(c.id, c.cardId, c.slug));
-        const ref = parCle.get(base) || (c.name ? parCle.get(cle(c.name)) : null);
+        const parts = decouper(premier(c.id, c.cardId, c.slug));
+        const base = premier(c.playerKey, parts.base);
+        const variante = premier(c.variant, parts.variante);
+        const ref = parCle.get(base) || parCle.get(parts.base) || (c.name ? parCle.get(cle(c.name)) : null);
         const note = Number(premier(c.overall, c.ovr, c.note, c.rating));
         if (!ref || !Number.isFinite(note)) {
             inconnues++;
             continue;
         }
         const armes = armesDe(c, wmap);
-        const valeur = premier(c.value, c.val, meta[c.id]?.value, null);
+        // Valeur des cartes passives : % d'or (Économiste), Collectif (Joker), bonus (GM)
+        const valeur = premier(c.economistGoldPct, c.jokerCollectif, c.gmBonusPct, c.value, c.val, null);
         cartes.push([ref.nom, note, variante, armes.length ? armes : ref.armes, valeur, fillsDe(c, meta) || ref.fl]);
     }
     return { cartes, inconnues };
