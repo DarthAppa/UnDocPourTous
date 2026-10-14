@@ -16,6 +16,17 @@ function sessionEnregistree() {
     }
 }
 
+// Retour d'une connexion Google/Twitch ou d'un lien reçu par e-mail (?code=…) : on termine la connexion.
+// connexion-pts.html gère elle-même son retour Discord (pts-connexion.js).
+const retour = new URLSearchParams(location.search);
+const pageConnexionPts = /connexion-pts\.html$/.test(location.pathname);
+if (!pageConnexionPts && (retour.has('code') || retour.has('error_description'))) {
+    import('./auth-modal.js').then((m) => m.retourConnexion());
+} else if (!sessionEnregistree() && document.querySelector('a.btn-login')) {
+    // Pas connecté : « Connexion » ouvre la fenêtre de connexion / inscription (sans JS, le lien reste valable)
+    import('./auth-modal.js');
+}
+
 if (sessionEnregistree()) {
     document.querySelectorAll('a.btn-login').forEach((a) => {
         a.href = 'profil.html';

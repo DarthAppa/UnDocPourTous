@@ -23,6 +23,7 @@
     "prepare": "simple-git-hooks",
     "test:profil": "node tools/test-profil.mjs",
     "test:premium": "node tools/test-premium.mjs",
+    "test:connexion": "node tools/test-connexion.mjs",
     "test:fonctions": "node tools/test-fonctions.mjs",
     "test:rls": "node tools/test-rls.mjs",
     "publier:contenu": "node tools/publier-contenu.mjs"

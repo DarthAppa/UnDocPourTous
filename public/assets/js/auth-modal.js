@@ -2,6 +2,8 @@
 // - Deux onglets : Connexion et S'inscrire (e-mail + mot de passe) et des boutons de connexion rapide.
 // - Même compte Supabase que les outils Pack ta Small. Discord passe par le flux PTS (vérification du serveur).
 // - Sans JS, le bouton garde son lien vers connexion-pts.html.
+// - Retour d'une connexion Google/Twitch, d'un lien de confirmation ou de réinitialisation (?code=…) :
+//   retourConnexion(), appelé par entete.js, termine la connexion puis nettoie l'adresse.
 import { PTS_CONFIG as C } from './pts-config.js';
 import { getClient, configure, connexion as connexionDiscord, deconnexion } from './pts-auth.js';
 
@@ -14,12 +16,7 @@ const FOURNISSEURS = [
     {
         id: 'discord',
         nom: 'Discord',
-        icone: '<img src="assets/img/pts/icon-discord.webp" alt="" width="20" height="20">',
-    },
-    {
-        id: 'apple',
-        nom: 'Apple',
-        icone: '<svg viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12.152 6.896c-.948 0-2.415-1.078-3.96-1.04-2.04.027-3.91 1.183-4.961 3.014-2.117 3.675-.546 9.103 1.519 12.09 1.013 1.454 2.208 3.09 3.792 3.039 1.52-.065 2.09-.987 3.935-.987 1.831 0 2.35.987 3.96.948 1.637-.026 2.676-1.48 3.676-2.948 1.156-1.688 1.636-3.325 1.662-3.415-.039-.013-3.182-1.221-3.22-4.857-.026-3.04 2.48-4.494 2.597-4.559-1.429-2.09-3.623-2.324-4.39-2.376-2-.156-3.675 1.09-4.61 1.09zM15.53 3.83c.843-1.012 1.4-2.427 1.245-3.83-1.207.052-2.662.805-3.532 1.818-.78.896-1.454 2.338-1.273 3.714 1.338.104 2.715-.688 3.559-1.701"/></svg>',
+        icone: '<svg viewBox="0 0 24 24" aria-hidden="true" fill="#5865F2"><path d="M20.317 4.369A19.79 19.79 0 0 0 15.885 3c-.191.328-.403.77-.552 1.121a18.4 18.4 0 0 0-5.487 0A12.6 12.6 0 0 0 9.29 3a19.74 19.74 0 0 0-4.433 1.37C2.056 8.55 1.296 12.63 1.676 16.652a19.9 19.9 0 0 0 5.993 3.03 14.5 14.5 0 0 0 1.284-2.087 12.9 12.9 0 0 1-2.02-.97c.169-.124.334-.254.493-.388 3.9 1.8 8.13 1.8 11.985 0 .16.134.325.264.494.388-.646.385-1.32.71-2.022.97.37.73.8 1.43 1.284 2.087a19.84 19.84 0 0 0 5.994-3.03c.446-4.66-.762-8.704-3.347-12.283zM8.52 14.18c-1.183 0-2.157-1.085-2.157-2.42 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.095 2.157 2.418 0 1.335-.955 2.42-2.157 2.42zm7.975 0c-1.183 0-2.157-1.085-2.157-2.42 0-1.333.955-2.418 2.157-2.418 1.21 0 2.176 1.095 2.157 2.418 0 1.335-.946 2.42-2.157 2.42z"/></svg>',
     },
     {
         id: 'twitch',
@@ -28,13 +25,19 @@ const FOURNISSEURS = [
     },
 ];
 const ACTIFS = C.FOURNISSEURS || ['discord'];
+const MDP_MIN = C.MDP_MIN || 10;
+
+// Adresse de retour après une connexion externe : la page actuelle, sans paramètres (jamais une autre origine)
+const ici = (params = '') => location.origin + location.pathname + params;
 
 const MESSAGES = {
+    differents: 'Les deux mots de passe ne sont pas identiques.',
     'Invalid login credentials': 'E-mail ou mot de passe incorrect.',
     'Email not confirmed': 'Confirme d’abord ton e-mail : un lien t’a été envoyé.',
     'User already registered': 'Un compte existe déjà avec cet e-mail.',
     over_email_send_rate_limit: 'Trop de demandes d’e-mails. Réessaie dans quelques minutes.',
-    weak_password: 'Mot de passe trop faible (8 caractères minimum).',
+    weak_password: `Mot de passe trop faible (${MDP_MIN} caractères minimum).`,
+    same_password: 'Choisis un mot de passe différent de l’ancien.',
 };
 const traduire = (e) =>
     MESSAGES[e?.code] || MESSAGES[e?.message] || 'Une erreur est survenue. Réessaie dans un instant.';
@@ -69,11 +72,18 @@ const html = `
         <form id="auth-p-inscription" role="tabpanel" aria-labelledby="auth-t-inscription" data-form="inscription" hidden novalidate>
             <label class="auth-champ"><span>Pseudo</span><input type="text" name="pseudo" autocomplete="nickname" maxlength="32" required></label>
             <label class="auth-champ"><span>E-mail</span><input type="email" name="email" autocomplete="email" required></label>
-            <label class="auth-champ"><span>Mot de passe <small>(8 caractères minimum)</small></span><input type="password" name="mdp" autocomplete="new-password" minlength="8" required></label>
+            <label class="auth-champ"><span>Mot de passe <small>(${MDP_MIN} caractères minimum)</small></span><input type="password" name="mdp" autocomplete="new-password" minlength="${MDP_MIN}" required></label>
             <label class="auth-case"><input type="checkbox" name="cgu" required><span>J’accepte les conditions d’utilisation et la politique de confidentialité.</span></label>
             <button type="submit" class="btn-mint auth-valider">Créer mon compte</button>
         </form>
     </div>
+
+    <form class="auth-vue" data-vue="nouveau-mdp" data-form="nouveau-mdp" hidden novalidate>
+        <p class="auth-etat">Choisis ton nouveau mot de passe.</p>
+        <label class="auth-champ"><span>Nouveau mot de passe <small>(${MDP_MIN} caractères minimum)</small></span><input type="password" name="mdp" autocomplete="new-password" minlength="${MDP_MIN}" required></label>
+        <label class="auth-champ"><span>Confirmation</span><input type="password" name="mdp2" autocomplete="new-password" minlength="${MDP_MIN}" required></label>
+        <button type="submit" class="btn-mint auth-valider">Enregistrer</button>
+    </form>
 
     <div class="auth-vue" data-vue="connecte" hidden>
         <p class="auth-etat">Connecté en tant que <strong data-pseudo></strong>.</p>
@@ -85,6 +95,7 @@ const html = `
 
 let dialogue = null;
 let declencheur = null;
+let rechargerALaFermeture = false; // connexion faite dans la fenêtre : l'en-tête doit passer à « Mon profil »
 
 function construire() {
     dialogue = document.createElement('dialog');
@@ -108,9 +119,14 @@ function construire() {
         if (e.target === dialogue || e.target.closest('[data-fermer]')) dialogue.close();
     });
     dialogue.addEventListener('close', () => {
+        if (rechargerALaFermeture) {
+            location.reload();
+            return;
+        }
         declencheur?.focus();
         msg('');
     });
+    dialogue.msg = msg;
 
     // Onglets (flèches gauche/droite)
     const onglets = [...dialogue.querySelectorAll('[role="tab"]')];
@@ -155,7 +171,7 @@ function construire() {
                     const sb = await getClient();
                     const { error } = await sb.auth.signInWithOAuth({
                         provider: id,
-                        options: { redirectTo: location.href },
+                        options: { redirectTo: ici() },
                     });
                     if (error) throw error;
                 }
@@ -181,21 +197,30 @@ function construire() {
             occupe(form, true);
             try {
                 const sb = await getClient();
-                if (form.dataset.form === 'connexion') {
+                if (form.dataset.form === 'nouveau-mdp') {
+                    if (d.mdp !== d.mdp2) throw { code: 'differents' };
+                    const { error } = await sb.auth.updateUser({ password: d.mdp });
+                    if (error) throw error;
+                    rechargerALaFermeture = true;
+                    await afficher();
+                    msg('Mot de passe enregistré. Tu es connecté.');
+                } else if (form.dataset.form === 'connexion') {
                     const { error } = await sb.auth.signInWithPassword({ email: d.email, password: d.mdp });
                     if (error) throw error;
+                    rechargerALaFermeture = true;
                     await afficher();
                     msg('Connexion réussie.');
                 } else {
                     const { data, error } = await sb.auth.signUp({
                         email: d.email,
                         password: d.mdp,
-                        options: { data: { name: d.pseudo }, emailRedirectTo: location.href },
+                        options: { data: { name: d.pseudo }, emailRedirectTo: ici() },
                     });
                     if (error) throw error;
                     if (data.user && data.user.identities && data.user.identities.length === 0)
                         throw { code: '', message: 'User already registered' };
                     if (data.session) {
+                        rechargerALaFermeture = true;
                         await afficher();
                         msg('Compte créé. Bienvenue !');
                     } else msg('Compte créé. Vérifie ta boîte mail pour confirmer ton adresse.');
@@ -215,7 +240,7 @@ function construire() {
         }
         try {
             const sb = await getClient();
-            const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: location.href });
+            const { error } = await sb.auth.resetPasswordForEmail(email, { redirectTo: ici('?reinit=1') });
             if (error) throw error;
             msg('Si un compte existe, un e-mail de réinitialisation vient d’être envoyé.');
         } catch (err) {
@@ -225,15 +250,23 @@ function construire() {
 
     dialogue.querySelector('[data-deconnexion]').addEventListener('click', async () => {
         await deconnexion();
+        rechargerALaFermeture = true;
         await afficher();
         msg('Tu es déconnecté.');
     });
 }
 
-// Affiche soit les formulaires, soit l'état « connecté »
-async function afficher() {
+// Affiche soit les formulaires, soit l'état « connecté » (ou le choix d'un nouveau mot de passe)
+async function afficher(vue = '') {
     const form = dialogue.querySelector('[data-vue="formulaires"]');
     const connecte = dialogue.querySelector('[data-vue="connecte"]');
+    const nouveau = dialogue.querySelector('[data-vue="nouveau-mdp"]');
+    nouveau.hidden = vue !== 'nouveau-mdp';
+    if (vue === 'nouveau-mdp') {
+        form.hidden = true;
+        connecte.hidden = true;
+        return;
+    }
     let session = null;
     if (configure) {
         try {
@@ -251,12 +284,43 @@ async function afficher() {
     }
 }
 
-async function ouvrir(declencheurClic) {
+async function ouvrir(declencheurClic, vue = '') {
     if (!dialogue) construire();
     declencheur = declencheurClic;
     dialogue.querySelector('[data-msg]').textContent = '';
-    dialogue.showModal();
-    await afficher();
+    if (!dialogue.open) dialogue.showModal();
+    await afficher(vue);
+}
+
+// Retour sur le site après Google/Twitch, un lien de confirmation d'e-mail ou de réinitialisation.
+// Le client Supabase (flux PKCE) échange tout seul le ?code=… contre une session en démarrant.
+export async function retourConnexion() {
+    const p = new URLSearchParams(location.search);
+    const erreur = p.get('error_description');
+    const reinit = p.get('reinit') === '1';
+    let session = null;
+    if (configure) {
+        try {
+            session = (await (await getClient()).auth.getSession()).data.session;
+        } catch {
+            /* réseau */
+        }
+    }
+    for (const k of ['code', 'error', 'error_code', 'error_description', 'state', 'reinit']) p.delete(k);
+    const propre = location.pathname + (p.toString() ? `?${p}` : '') + location.hash;
+    history.replaceState(null, '', propre);
+    const bouton = document.querySelector('.btn-login');
+    if (session && reinit) {
+        await ouvrir(bouton, 'nouveau-mdp');
+        rechargerALaFermeture = true;
+    } else if (session) {
+        location.replace(propre); // en-tête « Mon profil »
+    } else if (configure) {
+        // Code refusé (déjà utilisé, expiré, ouvert dans un autre navigateur…) ou erreur du fournisseur
+        if (erreur) console.warn('Connexion refusée :', erreur);
+        await ouvrir(bouton);
+        dialogue.msg('Connexion impossible : le lien a expiré ou a déjà servi. Réessaie.', true);
+    }
 }
 
 document.querySelectorAll('.btn-login').forEach((b) =>
