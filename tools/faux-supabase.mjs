@@ -76,6 +76,34 @@ export const FAUX_SUPABASE = `export function createClient(url) {
         try { localStorage.removeItem('${cleSession()}'); } catch {}
         return { error: null };
       },
+      // Fenêtre de connexion (auth-modal.js) : F.auth = { connexion: 'ok' | 'refus', inscription: 'confirmer' | 'session' | 'existe' }
+      signInWithPassword: async ({ email }) => {
+        A.push({ type: 'signInWithPassword', email });
+        if ((F.auth || {}).connexion === 'refus')
+          return { data: {}, error: { code: 'invalid_credentials', message: 'Invalid login credentials' } };
+        F.session = { access_token: 'jwt-test', user: { id: 'u1', email, user_metadata: { name: 'Testeur' } } };
+        try { localStorage.setItem('${cleSession()}', '{"faux":true}'); } catch {}
+        return { data: { session: copie(F.session) }, error: null };
+      },
+      signUp: async ({ email, options }) => {
+        A.push({ type: 'signUp', email, pseudo: options && options.data && options.data.name, redirection: options && options.emailRedirectTo });
+        const mode = (F.auth || {}).inscription || 'confirmer';
+        if (mode === 'existe') return { data: { user: { identities: [] }, session: null }, error: null };
+        if (mode === 'session') {
+          F.session = { access_token: 'jwt-test', user: { id: 'u1', email, user_metadata: { name: options.data.name } } };
+          try { localStorage.setItem('${cleSession()}', '{"faux":true}'); } catch {}
+          return { data: { user: { identities: [{}] }, session: copie(F.session) }, error: null };
+        }
+        return { data: { user: { identities: [{}] }, session: null }, error: null };
+      },
+      resetPasswordForEmail: async (email, o) => {
+        A.push({ type: 'resetPasswordForEmail', email, redirection: o && o.redirectTo });
+        return { data: {}, error: null };
+      },
+      updateUser: async (attributs) => {
+        A.push({ type: 'updateUser', motDePasse: !!attributs.password });
+        return { data: {}, error: null };
+      },
       signInWithOAuth: async ({ provider, options }) => {
         location.assign(url + '/auth/v1/authorize?provider=' + provider + '&redirect_to=' + encodeURIComponent(options.redirectTo));
         return { data: {}, error: null };

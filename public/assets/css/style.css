@@ -993,3 +993,194 @@ button.pts-discord {
         padding-inline: 12px;
     }
 }
+
+/* ---------- Fenêtre de connexion / inscription ---------- */
+.auth-modal {
+    width: min(420px, calc(100vw - 32px));
+    max-height: calc(100dvh - 32px);
+    margin: auto;
+    padding: 0;
+    overflow: auto;
+    color: var(--text-main);
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: 16px;
+    box-shadow: 0 24px 60px -12px rgba(0, 0, 0, 0.7);
+}
+.auth-modal::backdrop {
+    background: rgba(8, 12, 18, 0.72);
+    backdrop-filter: blur(3px);
+}
+.auth-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 28px 24px 24px;
+}
+.auth-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+    width: 36px;
+    height: 36px;
+    font-size: 26px;
+    line-height: 1;
+    color: var(--text-muted);
+    border-radius: 8px;
+}
+.auth-close:hover {
+    color: var(--text-main);
+}
+.auth-titre {
+    font-family: 'Lora', serif;
+    font-size: 24px;
+    font-weight: 700;
+}
+.auth-sous {
+    margin-top: -10px;
+    font-size: 14px;
+    color: var(--text-muted);
+}
+.auth-tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    padding: 4px;
+    gap: 4px;
+    background: var(--bg-footer);
+    border-radius: 10px;
+}
+.auth-tabs button {
+    height: 38px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-muted);
+    border-radius: 7px;
+    transition:
+        background 0.2s,
+        color 0.2s;
+}
+.auth-tabs button[aria-selected='true'] {
+    background: var(--mint-deep);
+    color: var(--mint);
+}
+.auth-sociaux {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+.auth-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 42px;
+    font-size: 14px;
+    font-weight: 600;
+    background: var(--bg-footer);
+    border: 1px solid var(--border-card);
+    border-radius: 8px;
+    transition: border-color 0.2s;
+}
+.auth-social svg,
+.auth-social img {
+    width: 18px;
+    height: 18px;
+}
+.auth-social:hover:not(:disabled) {
+    border-color: var(--mint);
+}
+.auth-social:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+.auth-social small {
+    font-size: 10px;
+    color: var(--text-faint);
+}
+.auth-ou {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12px;
+    color: var(--text-faint);
+}
+.auth-ou::before,
+.auth-ou::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: var(--border-card);
+}
+.auth-modal form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+.auth-champ {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--text-muted);
+}
+.auth-champ small {
+    color: var(--text-faint);
+}
+.auth-champ input[type] {
+    height: 42px;
+    padding-inline: 12px;
+    font-size: 15px;
+    color: var(--text-main);
+    background: var(--bg-footer);
+    border: 1px solid var(--border-card);
+    border-radius: 8px;
+}
+.auth-champ input:focus-visible {
+    outline: 2px solid var(--mint);
+    outline-offset: 1px;
+}
+.auth-case {
+    display: flex;
+    gap: 10px;
+    align-items: flex-start;
+    font-size: 12px;
+    line-height: 1.5;
+    color: var(--text-muted);
+}
+.auth-case input {
+    margin-top: 2px;
+    accent-color: var(--mint);
+}
+.auth-lien {
+    align-self: flex-start;
+    font-size: 13px;
+    color: var(--mint);
+    text-decoration: underline;
+}
+.auth-valider {
+    width: 100%;
+}
+.auth-valider:disabled {
+    opacity: 0.6;
+    cursor: wait;
+}
+.auth-etat {
+    font-size: 15px;
+}
+.auth-msg {
+    min-height: 1.2em;
+    font-size: 13px;
+    color: var(--mint);
+}
+.auth-msg[data-erreur='1'] {
+    color: #ff8f8f;
+}
+.auth-vue {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+.auth-modal [hidden] {
+    display: none;
+}
