@@ -22,7 +22,25 @@ const COLLECTION = {
     meta: {},
     roster: [
         { id: 'fannch', role: 'dps', weapon1: 'brim', weapon2: 'hellfire', overall: 87 },
-        { id: 'carumba', role: 'heal', weapon1: 'sancti', weapon2: 'damnation', overall: 86 },
+        {
+            id: 'carumba',
+            playerKey: 'carumba',
+            variant: 'base',
+            role: 'heal',
+            weapon: 'sancti',
+            weapon2: 'damnation',
+            overall: 86,
+        },
+        {
+            id: 'heisty-joker',
+            playerKey: 'heisty',
+            variant: 'joker',
+            role: 'tank',
+            weapon: 'heavy_mace',
+            weapon2: 'realm',
+            overall: 81,
+            jokerCollectif: 1,
+        },
         { id: 'friix', role: 'tank', weapon1: 'greathammer', weapon2: 'heavy_mace', overall: 85 },
         { id: 'simonlemalicieux', role: 'support', weapon1: 'ent', weapon2: 'rift', overall: 85 },
         { id: 'arobass-fillall', role: 'tank', overall: 86 },
@@ -86,14 +104,21 @@ try {
             );
             const etat = await p.textContent('#pts-coll-etat');
             t.verif(
-                etat.includes('6 cartes') && etat.includes('1 carte(s)'),
-                `builder : collection du joueur chargée (6 cartes reconnues, 1 ignorée) — « ${etat.trim()} »`,
+                etat.includes('7 cartes') && etat.includes('1 carte(s)'),
+                `builder : collection du joueur chargée (7 cartes reconnues, 1 ignorée) — « ${etat.trim()} »`,
             );
             t.verif(await p.isVisible('#qbuilder'), 'builder : affiché une fois la collection chargée');
             const coll = await p.evaluate(() => JSON.parse(document.getElementById('pts-coll').textContent));
             t.verif(
                 coll.some((c) => c[0] === 'FANNCH' && c[1] === 87 && c[3].join() === 'BRIMSTONE,HELLFIRE') &&
-                    coll.some((c) => c[0] === 'AROBASS' && c[2] === 'fillall'),
+                    coll.some((c) => c[0] === 'AROBASS' && c[2] === 'fillall') &&
+                    coll.some(
+                        (c) =>
+                            c[0] === 'HEISTY' &&
+                            c[2] === 'joker' &&
+                            c[4] === 1 &&
+                            c[3].join() === 'HEAVY MACE,REALMBREAKER',
+                    ),
                 'builder : cartes converties (nom, note, variante, armes du site)',
             );
             await p.click('#qbopt');
