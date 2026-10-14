@@ -13,8 +13,8 @@ mkdirSync('shots', { recursive: true });
 const t = compteur();
 const MIN = PTS_CONFIG.MDP_MIN;
 
-async function ouvrir(vp, { url = 'index.html', session = null, auth = {} } = {}) {
-    const p = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+async function ouvrir(vp, { url = 'index.html', session = null, auth = {}, locale = 'fr-FR' } = {}) {
+    const p = await browser.newPage({ viewport: { width: vp.width, height: vp.height }, locale });
     p.setDefaultTimeout(8000);
     const erreurs = [];
     p.on('pageerror', (e) => erreurs.push(e.message));
@@ -56,6 +56,13 @@ for (const vp of VUES) {
             (await p.isVisible('#auth-p-inscription')) && !(await p.isVisible('#auth-p-connexion')),
             'onglet « S’inscrire » affiché',
         );
+        const liens = await p
+            .locator('#auth-p-inscription .auth-case a')
+            .evaluateAll((l) => l.map((a) => a.getAttribute('href')).join(','));
+        t.verif(
+            liens === 'conditions.html,confidentialite.html',
+            'case d’inscription : liens vers les conditions et la confidentialité',
+        );
         t.verif(
             (await p.getAttribute('#auth-p-inscription [name="mdp"]', 'minlength')) === String(MIN),
             `mot de passe : ${MIN} caractères minimum (comme Supabase)`,
@@ -93,10 +100,29 @@ for (const vp of VUES) {
         await p.waitForFunction(() => document.querySelector('[data-msg]').textContent.includes('boîte mail'));
         const signUp = (await appels()).find((a) => a.type === 'signUp');
         t.verif(
-            signUp?.pseudo === 'Apparance' && signUp.redirection === serveur.url + 'index.html',
-            'inscription : pseudo envoyé, lien de confirmation vers la page (sans paramètres)',
+            signUp?.pseudo === 'Apparance' &&
+                signUp.redirection === serveur.url + 'index.html' &&
+                signUp.langue === 'fr',
+            'inscription : pseudo et langue (fr) envoyés, lien de confirmation vers la page (sans paramètres)',
         );
         t.verif((await message(p)).includes('Vérifie ta boîte mail'), 'message « Vérifie ta boîte mail »');
+        await p.close();
+    }
+    {
+        // Navigateur anglais (hors francophonie) : e-mails en anglais
+        const { p, appels } = await ouvrir(vp, { locale: 'en-US' });
+        await p.click('a.btn-login');
+        await p.click('#auth-t-inscription');
+        await p.fill('#auth-p-inscription [name="pseudo"]', 'Player');
+        await p.fill('#auth-p-inscription [name="email"]', 'player@example.com');
+        await p.fill('#auth-p-inscription [name="mdp"]', 'agoodpassword');
+        await p.check('#auth-p-inscription [name="cgu"]');
+        await p.click('#auth-p-inscription button[type="submit"]');
+        await p.waitForFunction(() => document.querySelector('[data-msg]').textContent.length > 0);
+        t.verif(
+            (await appels()).find((a) => a.type === 'signUp')?.langue === 'en',
+            'navigateur en anglais : langue « en » envoyée (e-mails en anglais)',
+        );
         await p.close();
     }
     {

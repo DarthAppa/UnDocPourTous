@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+import PageLegale from '../components/PageLegale.astro';
+import { SITE, EDITEUR, HEBERGEUR } from '../site.js';
+---
+
+<Base
+    titre="Mentions légales"
+    description="Mentions légales du site UnDocPourTous : éditeur, contact, hébergeur et propriété intellectuelle."
+>
+    <PageLegale titre="Mentions légales">
+        <h2>Éditeur du site</h2>
+        <p>
+            Le site <strong>{SITE.nom}</strong> ({SITE.url.replace('https://', '')}) est édité par
+            <strong>{EDITEUR.nom}</strong>, {EDITEUR.statut.charAt(0).toLowerCase() + EDITEUR.statut.slice(1)}.
+        </p>
+        <ul>
+            {EDITEUR.siret && <li>SIRET : {EDITEUR.siret}</li>}
+            {EDITEUR.adresse && <li>Adresse : {EDITEUR.adresse}</li>}
+            <li>Contact : <a href={`mailto:${EDITEUR.contact}`}>{EDITEUR.contact}</a></li>
+            <li>Directeur de la publication : {EDITEUR.nom}</li>
+        </ul>
+
+        <h2>Hébergement</h2>
+        <p>
+            Les pages du site sont hébergées par <strong>{HEBERGEUR.nom}</strong>, {HEBERGEUR.adresse} (<a
+                href={HEBERGEUR.site}>{HEBERGEUR.site.replace('https://', '')}</a
+            >).
+        </p>
+        <p>
+            Les comptes et les données des joueurs sont hébergés par <strong>Supabase, Inc.</strong> sur des serveurs
+            situés à Londres (Royaume-Uni). Les e-mails du site sont envoyés par <strong>Resend</strong> depuis
+            l’Union européenne (Irlande). Le détail est dans la <a href="confidentialite.html"
+                >politique de confidentialité</a
+            >.
+        </p>
+
+        <h2>Site de fan, non officiel</h2>
+        <p>
+            {SITE.nom} est un projet indépendant fait par et pour des joueurs. Il n’est ni affilié, ni approuvé, ni
+            sponsorisé par les éditeurs des jeux cités (notamment Sandbox Interactive pour Albion Online, Grinding Gear
+            Games pour Path of Exile, Blizzard Entertainment pour World of Warcraft), ni par l’équipe de Pack ta Small.
+            Les noms des jeux sont des marques de leurs propriétaires respectifs et ne sont utilisés que pour désigner
+            les jeux concernés.
+        </p>
+
+        <h2>Propriété intellectuelle</h2>
+        <p>
+            Les textes, outils, mises en page, illustrations originales et le logo de {SITE.nom} appartiennent à leur
+            auteur. Toute reproduction ou réutilisation, totale ou partielle, sans autorisation écrite est interdite,
+            sauf courte citation avec lien vers la page d’origine.
+        </p>
+
+        <h2>Signaler un contenu</h2>
+        <p>
+            Pour signaler un contenu illicite, une erreur ou une atteinte à tes droits, écris à <a
+                href={`mailto:${EDITEUR.contact}`}>{EDITEUR.contact}</a
+            > en précisant l’adresse de la page concernée. Les failles de sécurité se signalent via <a
+                href=".well-known/security.txt">security.txt</a
+            >.
+        </p>
+    </PageLegale>
+</Base>

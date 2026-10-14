@@ -27,6 +27,10 @@ const FOURNISSEURS = [
 const ACTIFS = C.FOURNISSEURS || ['discord'];
 const MDP_MIN = C.MDP_MIN || 10;
 
+// Langue des e-mails envoyés par Supabase : « fr » pour tout navigateur francophone, « en » pour le reste du monde
+const langueNavigateur = () =>
+    (navigator.languages?.[0] || navigator.language || 'fr').toLowerCase().startsWith('fr') ? 'fr' : 'en';
+
 // Adresse de retour après une connexion externe : la page actuelle, sans paramètres (jamais une autre origine)
 const ici = (params = '') => location.origin + location.pathname + params;
 
@@ -73,7 +77,7 @@ const html = `
             <label class="auth-champ"><span>Pseudo</span><input type="text" name="pseudo" autocomplete="nickname" maxlength="32" required></label>
             <label class="auth-champ"><span>E-mail</span><input type="email" name="email" autocomplete="email" required></label>
             <label class="auth-champ"><span>Mot de passe <small>(${MDP_MIN} caractères minimum)</small></span><input type="password" name="mdp" autocomplete="new-password" minlength="${MDP_MIN}" required></label>
-            <label class="auth-case"><input type="checkbox" name="cgu" required><span>J’accepte les conditions d’utilisation et la politique de confidentialité.</span></label>
+            <label class="auth-case"><input type="checkbox" name="cgu" required><span>J’accepte les <a href="conditions.html" target="_blank" rel="noopener">conditions d’utilisation</a> et la <a href="confidentialite.html" target="_blank" rel="noopener">politique de confidentialité</a>.</span></label>
             <button type="submit" class="btn-mint auth-valider">Créer mon compte</button>
         </form>
     </div>
@@ -214,7 +218,8 @@ function construire() {
                     const { data, error } = await sb.auth.signUp({
                         email: d.email,
                         password: d.mdp,
-                        options: { data: { name: d.pseudo }, emailRedirectTo: ici() },
+                        // langue : choisit les e-mails en français ou en anglais (modèles dans tools/emails.mjs)
+                        options: { data: { name: d.pseudo, langue: langueNavigateur() }, emailRedirectTo: ici() },
                     });
                     if (error) throw error;
                     if (data.user && data.user.identities && data.user.identities.length === 0)
