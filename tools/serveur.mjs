@@ -1,4 +1,5 @@
 // Petit serveur statique local (les modules JS ne marchent pas en file://).
+// Sert le site construit (dist/, après npm run build) par défaut.
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { resolve, extname, sep } from 'node:path';
@@ -17,7 +18,7 @@ const TYPES = {
     '.woff2': 'font/woff2',
 };
 
-export function demarrer(racine = process.cwd(), port = 0) {
+export function demarrer(racine = 'dist', port = 0) {
     const base = resolve(racine);
     const srv = createServer(async (req, res) => {
         let chemin;

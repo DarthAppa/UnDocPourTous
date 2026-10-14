@@ -1,0 +1,108 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+    titre="Albion Online"
+    description="Albion Online : outils gratuits et Premium pour explorer le jeu, préparer votre équipement et trouver votre voie."
+    cinzel
+>
+    <main class="wrap pt-8 pb-16 flex flex-col gap-8">
+        <nav aria-label="Fil d’Ariane" class="crumbs">
+            <span><a href="index.html">Accueil</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><a href="index.html#jeux">Jeux</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><span aria-current="page">Albion Online</span></span>
+        </nav>
+
+        <section class="pt-3 pb-2 flex flex-col md:flex-row md:items-end md:justify-between gap-5 reveal">
+            <div class="flex flex-col gap-3">
+                <p class="font-mono text-[11px] text-textMuted">VOTRE AVENTURE COMMENCE ICI</p>
+                <h1 class="font-serif font-bold text-5xl sm:text-6xl lg:text-[62px] leading-[1.2]">
+                    ALBION ONLINE
+                </h1>
+            </div>
+            <p class="text-[15px] leading-[1.65] text-textMuted md:w-[365px]">
+                Tout pour explorer Albion, préparer votre équipement et trouver votre propre voie.
+            </p>
+        </section>
+
+        <section class="flex flex-col gap-6" aria-label="Choix des outils">
+            <a href="albion-gratuit.html" class="category category-free card-link min-h-[348px] reveal">
+                <img src="assets/img/maquette/albion-gratuit.webp" alt="" width="1584" height="672" />
+                <span class="badge badge-free"><img src="assets/icons/check.svg" alt="" />GRATUIT</span>
+                <div class="flex flex-col gap-2.5 max-w-[730px]">
+                    <h2 class="text-4xl md:text-[44px] font-semibold">Outils gratuits</h2>
+                    <p class="text-[19px] leading-normal text-mintText">
+                        Plus clairs et mieux rangés que le wiki de base
+                    </p>
+                </div>
+                <ul class="flex flex-wrap gap-2.5">
+                    <li class="chip">6 outils</li>
+                    <li class="chip">Sans compte</li>
+                </ul>
+                <span class="card-hint text-sm font-semibold">Accéder gratuitement →</span>
+            </a>
+
+            <a href="albion-premium.html" class="category category-premium card-link min-h-[252px] reveal">
+                <img src="assets/img/maquette/albion-premium.webp" alt="" width="1584" height="672" />
+                <span class="badge badge-premium"><img src="assets/icons/lock-keyhole.svg" alt="" />PREMIUM</span>
+                <div class="flex flex-col gap-2.5 max-w-[730px]">
+                    <h2 class="text-[28px] font-semibold">Aller plus loin : Premium</h2>
+                    <p class="text-base leading-normal text-textMuted">Optimisé pour VOTRE compte</p>
+                </div>
+                <ul class="flex flex-wrap gap-2.5">
+                    <li class="chip">9 outils</li>
+                    <li class="chip">Mises à jour à chaque patch</li>
+                </ul>
+                <span class="card-hint text-sm font-semibold">Découvrir le Premium →</span>
+            </a>
+        </section>
+
+        <!-- Fan game : Pack ta Small, aux couleurs du jeu -->
+        <section class="flex flex-col gap-4 pt-4" aria-label="Pack ta Small">
+            <p class="font-mono text-[11px] text-textMuted">FAN GAME DE LA COMMUNAUTÉ ALBION</p>
+            <a href="pts.html" class="category category-pts card-link min-h-[320px] reveal">
+                <img
+                    class="pts-bg"
+                    src="assets/img/pts/albion-background.webp"
+                    alt=""
+                    width="1536"
+                    height="1024"
+                    loading="lazy"
+                />
+                <img
+                    class="pts-crest"
+                    src="assets/img/pts/logo-crest.webp"
+                    alt=""
+                    width="795"
+                    height="449"
+                    loading="lazy"
+                />
+                <span class="badge badge-pts">SAISON 1 · EN COURS</span>
+                <div class="flex flex-col gap-3 max-w-[560px]">
+                    <h2 id="pts-titre" class="m-0">
+                        <img
+                            class="pts-logo"
+                            src="assets/img/pts/logo.webp"
+                            alt="Pack ta Small"
+                            width="1384"
+                            height="366"
+                        />
+                    </h2>
+                    <p class="pts-title text-lg sm:text-xl">La communauté devient le jeu</p>
+                    <p class="text-[15px] leading-[1.65]">
+                        Collectionne les cartes des joueurs d’Albion, draft ton équipe de 20 et affronte les autres
+                        packs au ladder et en tournoi.
+                    </p>
+                </div>
+                <ul class="flex flex-wrap gap-2.5">
+                    <li class="chip chip-pts">Jeu de cartes gratuit</li>
+                    <li class="chip chip-pts">Saison jusqu’au 30/10</li>
+                    <li class="chip chip-pts">Encyclopédie + Builder gratuits</li>
+                </ul>
+                <span class="card-hint pts-discord pts-discord-text">Ouvrir l’encyclopédie et le builder →</span>
+                <p class="text-[11px] text-textFaint">Fan game indépendant, non affilié à Sandbox Interactive.</p>
+            </a>
+        </section>
+    </main>
+</Base>

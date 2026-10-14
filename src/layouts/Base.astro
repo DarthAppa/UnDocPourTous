@@ -1,0 +1,60 @@
+---
+// Gabarit de toutes les pages faites à la main : un seul <head>, l'en-tête et le pied de page.
+// - La CSP et le referrer sont ajoutés APRÈS le build par tools/csp.mjs (sur dist/), juste après <meta charset>.
+// - Les scripts du site sont servis tels quels depuis public/assets/js (is:inline = Astro ne les regroupe pas) :
+//   aucun script inline, donc une CSP stricte sans 'unsafe-inline'.
+import EnTete from '../components/EnTete.astro';
+import PiedDePage from '../components/PiedDePage.astro';
+import { SITE, polices } from '../site.js';
+
+interface Props {
+    /** Sujet de la page, sans le nom du site (ajouté ici : « Sujet — UnDocPourTous ») */
+    titre: string;
+    description: string;
+    /** Scripts propres à la page (modules), chargés après entete.js */
+    scripts?: string[];
+    /** Page à ne pas référencer (connexion, profil…) */
+    noindex?: boolean;
+    /** Police Cinzel (pages Pack ta Small) */
+    cinzel?: boolean;
+}
+
+const { titre, description, scripts = [], noindex = false, cinzel = false } = Astro.props;
+const titreComplet = `${titre} — ${SITE.nom}`;
+---
+
+<!doctype html>
+<html lang={SITE.langue} class="no-js">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>{titreComplet}</title>
+        <meta name="description" content={description} />
+        <meta property="og:site_name" content={SITE.nom} />
+        <meta property="og:title" content={titreComplet} />
+        <meta property="og:description" content={description} />
+        {noindex && <meta name="robots" content="noindex" />}
+        <meta property="og:type" content="website" />
+        <meta property="og:locale" content={SITE.locale} />
+
+        <!-- Polices -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link href={polices(cinzel)} rel="stylesheet" />
+
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <!-- Tailwind compilé (npm run build:css), APRÈS style.css : les utilitaires gardent la priorité. -->
+        <link rel="stylesheet" href="assets/css/tailwind.css" />
+        <script is:inline src="assets/js/script.js" defer></script>
+        <script is:inline type="module" src="assets/js/entete.js"></script>
+        {scripts.map((src) => (
+            <script is:inline type="module" src={src} />
+        ))}
+    </head>
+
+    <body class="bg-darkBg text-textLight font-sans antialiased">
+        <EnTete />
+        <slot />
+        <PiedDePage />
+    </body>
+</html>

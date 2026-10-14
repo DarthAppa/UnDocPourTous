@@ -1,0 +1,76 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+    titre="Builder général Albion Online"
+    description="Composez un équipement Albion Online et explorez les synergies entre vos pièces. Gratuit, sans compte."
+>
+    <main class="wrap pt-8 pb-16 flex flex-col gap-8">
+        <nav aria-label="Fil d’Ariane" class="crumbs">
+            <span><a href="index.html">Accueil</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><a href="albion.html">Albion Online</a></span>
+            <span
+                ><span class="sep" aria-hidden="true">/</span
+                ><a href="albion-gratuit.html">Outils gratuits</a></span
+            >
+            <span
+                ><span class="sep" aria-hidden="true">/</span><span aria-current="page">Builder général</span></span
+            >
+        </nav>
+
+        <section class="pt-3 pb-2 flex flex-col md:flex-row md:items-end md:justify-between gap-5 reveal">
+            <div class="flex flex-col gap-3.5 lg:w-[850px]">
+                <p class="font-mono font-medium text-[11px] text-mintFree">ALBION ONLINE / OUTIL GRATUIT</p>
+                <div class="flex flex-wrap items-center gap-4">
+                    <h1 class="text-4xl sm:text-5xl font-semibold">Builder général</h1>
+                    <span class="badge badge-free"><img src="assets/icons/check.svg" alt="" />GRATUIT</span>
+                </div>
+                <p class="text-base leading-[1.6] text-textMuted">
+                    Composez un équipement et explorez les synergies entre vos pièces.
+                </p>
+            </div>
+            <a href="albion-gratuit.html" class="text-[13px] text-textMuted hover:text-textLight pb-[5px]"
+                >← Tous les outils gratuits</a
+            >
+        </section>
+
+        <section
+            aria-label="Builder général"
+            class="rounded-2xl border border-cardBorder bg-cardBg overflow-hidden reveal"
+        >
+            <div class="flex items-center justify-between px-5 py-4 border-b border-cardBorder">
+                <p class="text-sm font-semibold">Builder général</p>
+                <p class="font-mono text-[10px] text-textFaint">ESPACE DE CONSULTATION</p>
+            </div>
+            <div class="min-h-[360px] grid place-items-center text-center px-6 py-16">
+                <div class="flex flex-col items-center gap-3">
+                    <p class="text-xl font-semibold">Votre équipement, pièce par pièce.</p>
+                    <p class="text-[13px] text-textMuted">Le contenu de l’outil s’affichera ici.</p>
+                </div>
+            </div>
+            <p class="px-5 py-4 border-t border-cardBorder text-[12px] text-mintFree">
+                Accès gratuit · Sans compte
+            </p>
+        </section>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <a href="albion-encyclopedie.html" class="invite card-link reveal" style="--card-accent: var(--mint)">
+                <span class="flex flex-col gap-2"
+                    ><span class="text-lg">Besoin du détail d’un objet ?</span
+                    ><span class="text-[13px] text-textMuted">Tout est dans l’Encyclopédie.</span></span
+                >
+                <span class="card-hint text-sm font-semibold">Encyclopédie →</span>
+            </a>
+            <a href="albion-paiement.html" class="invite card-link reveal" style="--card-accent: var(--orange)">
+                <span class="flex flex-col gap-2"
+                    ><span class="text-lg">Un build optimisé pour VOTRE compte ?</span
+                    ><span class="text-[13px] text-textMuted"
+                        >Le Builder Tryhard part de votre personnage.</span
+                    ></span
+                >
+                <span class="card-hint text-sm font-semibold">Passer au Builder Tryhard →</span>
+            </a>
+        </div>
+    </main>
+</Base>

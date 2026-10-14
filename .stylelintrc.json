@@ -1,6 +1,15 @@
 {
   "extends": ["stylelint-config-standard"],
-  "ignoreFiles": ["node_modules/**", "shots/**", "docs-prives/**", "Claude outputs/**", "assets/**"],
+  "ignoreFiles": [
+    "node_modules/**",
+    "shots/**",
+    "docs-prives/**",
+    "Claude outputs/**",
+    "dist/**",
+    "src/styles/**",
+    "public/assets/css/tailwind.css",
+    "public/assets/vendor/**"
+  ],
   "rules": {
     "at-rule-no-unknown": [
       true,

@@ -10,15 +10,16 @@ export default [
             'shots/**',
             'docs-prives/**',
             'Claude outputs/**',
-            'assets/**',
-            'pts-encyclopedie.html',
-            'pts-builder.html',
+            'dist/**',
+            '.astro/**',
+            'public/assets/vendor/**',
+            'public/*.html',
         ],
     },
     js.configs.recommended,
     {
-        // Scripts chargés par les pages (navigateur)
-        files: ['*.js'],
+        // Scripts chargés par les pages (navigateur) et données partagées des pages Astro
+        files: ['public/assets/js/*.js', 'src/**/*.js'],
         languageOptions: {
             ecmaVersion: 'latest',
             sourceType: 'module',
@@ -39,7 +40,7 @@ export default [
     },
     {
         // Outils Node (captures, import PTS, tests, hooks)
-        files: ['tools/**/*.{js,mjs}', '.claude/hooks/**/*.mjs', 'eslint.config.js'],
+        files: ['tools/**/*.{js,mjs}', '.claude/hooks/**/*.mjs', 'eslint.config.js', 'astro.config.mjs'],
         languageOptions: {
             ecmaVersion: 'latest',
             sourceType: 'module',

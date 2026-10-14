@@ -40,12 +40,12 @@ const zoneChargee = (p) => p.waitForFunction(() => !document.getElementById('pre
 
 try {
     // 0. La page publique ne contient aucun contenu payant
-    const source = readFileSync('albion-builder-tryhard.html', 'utf8');
+    const source = readFileSync('dist/albion-builder-tryhard.html', 'utf8');
     t.verif(
         !/Guide du tryhard/.test(source) && /data-slug="albion-builder-tryhard"/.test(source),
         'albion-builder-tryhard.html : gabarit seul, aucun contenu payant dans le fichier',
     );
-    const premium = readFileSync('albion-premium.html', 'utf8');
+    const premium = readFileSync('dist/albion-premium.html', 'utf8');
     t.verif(
         /href="albion-builder-tryhard\.html"\s+class="tool-card card-link/.test(premium),
         'albion-premium.html : la carte Builder Tryhard mène à albion-builder-tryhard.html',

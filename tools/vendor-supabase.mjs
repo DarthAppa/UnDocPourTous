@@ -1,14 +1,14 @@
-// Construit le client Supabase local : assets/vendor/supabase.mjs (un seul fichier ESM minifié,
+// Construit le client Supabase local : public/assets/vendor/supabase.mjs (un seul fichier ESM minifié,
 // exporte createClient). Remplace l'import depuis cdn.jsdelivr.net (pas de script tiers, CSP stricte).
 // Usage : npm run vendor:supabase   (après une mise à jour de @supabase/supabase-js dans package.json,
-//         version épinglée exactement), puis committer assets/vendor/supabase.mjs.
+//         version épinglée exactement), puis committer public/assets/vendor/supabase.mjs.
 import { build } from 'esbuild';
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const RACINE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const SORTIE = join(RACINE, 'assets', 'vendor', 'supabase.mjs');
+const SORTIE = join(RACINE, 'public', 'assets', 'vendor', 'supabase.mjs');
 const lirePkg = (nom) => JSON.parse(readFileSync(join(RACINE, 'node_modules', nom, 'package.json'), 'utf8'));
 const { version } = lirePkg('@supabase/supabase-js');
 
@@ -52,5 +52,5 @@ ${liste}
 mkdirSync(dirname(SORTIE), { recursive: true });
 writeFileSync(SORTIE, entete + resultat.outputFiles[0].text);
 console.log(
-    `assets/vendor/supabase.mjs : supabase-js ${version}, ${Math.round(readFileSync(SORTIE).length / 1024)} Ko`,
+    `public/assets/vendor/supabase.mjs : supabase-js ${version}, ${Math.round(readFileSync(SORTIE).length / 1024)} Ko`,
 );

@@ -1,0 +1,60 @@
+---
+// En-tête commun à toutes les pages (logo, navigation, bouton Connexion, menu mobile).
+// entete.js remplace « Connexion » par « Mon profil » quand le visiteur est connecté.
+import { SITE } from '../site.js';
+---
+
+<header class="site-header sticky top-0 z-50">
+    <div class="wrap">
+        <a href="index.html" class="flex items-center gap-3" aria-label={`${SITE.nom}, accueil`}>
+            <img class="brand-logo" src="assets/img/marque/logo-header.webp" alt="" width="56" height="56" />
+            <span class="text-lg font-bold text-textLight">{SITE.nom}</span>
+        </a>
+
+        <nav class="hidden md:flex items-center gap-9 text-sm font-medium" aria-label="Navigation principale">
+            <a href="index.html" class="nav-link">Accueil</a>
+            <a href="index.html#jeux" class="nav-link">Jeux</a>
+            <a href="albion-gratuit.html" class="nav-link">Outils</a>
+            <a href="#" class="nav-link">Discord</a>
+        </nav>
+
+        <div class="flex items-center gap-2">
+            <a href="connexion-pts.html" class="btn-login" aria-label="Connexion"
+                ><img src="assets/icons/log-in.svg" alt="" /><span class="hidden sm:inline">Connexion</span></a
+            >
+            <button
+                type="button"
+                id="burger"
+                class="md:hidden grid place-items-center w-10 h-10 text-textLight"
+                aria-label="Menu"
+                aria-expanded="false"
+                aria-controls="mobile-menu"
+            >
+                <svg
+                    class="w-6 h-6"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    aria-hidden="true"
+                >
+                    <path d="M4 7h16M4 12h16M4 17h16" />
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Menu mobile -->
+    <nav
+        id="mobile-menu"
+        class="md:hidden hidden border-t border-cardBorder bg-darkBg"
+        aria-label="Navigation mobile"
+    >
+        <div class="wrap py-4 flex flex-col gap-4 text-sm font-medium">
+            <a href="index.html" class="nav-link">Accueil</a>
+            <a href="index.html#jeux" class="nav-link">Jeux</a>
+            <a href="albion-gratuit.html" class="nav-link">Outils</a>
+            <a href="#" class="nav-link">Discord</a>
+        </div>
+    </nav>
+</header>

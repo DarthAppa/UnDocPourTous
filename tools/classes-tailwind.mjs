@@ -1,16 +1,20 @@
 // Contrôle : chaque classe utilisée par les pages et les scripts a bien une règle CSS.
-// Sert à vérifier que le Tailwind compilé (assets/css/tailwind.css) ne perd rien par rapport
+// Sert à vérifier que le Tailwind compilé (public/assets/css/tailwind.css) ne perd rien par rapport
 // à l'ancien CDN, qui générait les classes à la volée en lisant le DOM.
 // Usage : node tools/classes-tailwind.mjs              (analyse statique des fichiers)
 //         node tools/classes-tailwind.mjs --navigateur (+ classes présentes dans le DOM après chargement, Chromium)
-// Code 1 si une classe que Tailwind sait générer manque dans assets/css/tailwind.css.
+// Analyse le site construit (dist/, npm run build) et les scripts de public/assets/js.
+// Code 1 si une classe que Tailwind sait générer manque dans le CSS compilé.
 import { readFileSync, readdirSync } from 'node:fs';
+import { join } from 'node:path';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
 const GENEREES = new Set(['pts-encyclopedie.html', 'pts-builder.html']);
-const pages = readdirSync('.').filter((f) => f.endsWith('.html') && !GENEREES.has(f));
-const scripts = readdirSync('.').filter((f) => f.endsWith('.js') && !f.endsWith('.config.js'));
+const pages = readdirSync('dist').filter((f) => f.endsWith('.html') && !GENEREES.has(f));
+const JS = 'public/assets/js';
+const scripts = readdirSync(JS).filter((f) => f.endsWith('.js'));
+const lire = (f) => readFileSync(pages.includes(f) ? join('dist', f) : join(JS, f), 'utf8');
 
 // Classes définies par une feuille : tous les « .xxx » des sélecteurs (échappements Tailwind défaits)
 function classesDefinies(css) {
@@ -20,14 +24,14 @@ function classesDefinies(css) {
     for (const m of selecteurs.matchAll(/\.((?:\\.|[\w-])+)/g)) ens.add(m[1].replace(/\\(.)/g, '$1'));
     return ens;
 }
-const tailwind = classesDefinies(readFileSync('assets/css/tailwind.css', 'utf8'));
-const maison = classesDefinies(readFileSync('style.css', 'utf8'));
+const tailwind = classesDefinies(readFileSync('public/assets/css/tailwind.css', 'utf8'));
+const maison = classesDefinies(readFileSync('public/assets/css/style.css', 'utf8'));
 
 // 1. Classes trouvées dans les fichiers : attributs class="…" et appels classList / className des scripts
 const utilisees = new Map(); // classe → fichier où elle apparaît
 const noter = (c, f) => c && !utilisees.has(c) && utilisees.set(c, f);
 for (const f of [...pages, ...scripts]) {
-    const t = readFileSync(f, 'utf8');
+    const t = lire(f);
     for (const m of t.matchAll(/\bclass(?:Name)?\s*=\s*(["'`])([^"'`]*)\1/g))
         for (const c of m[2].split(/\s+/)) if (!c.includes('${')) noter(c, f);
     for (const m of t.matchAll(/classList\.(?:add|remove|toggle|contains|replace)\(([^)]*)\)/g))
@@ -86,7 +90,7 @@ if (sansCss.length)
     );
 if (manquantes.length) {
     console.error(
-        `✗ Classes Tailwind absentes de assets/css/tailwind.css (lancer npm run build:css, ou écrire la classe en entier dans le code) :\n  ${manquantes.map((c) => `${c} [${utilisees.get(c)}]`).join('\n  ')}`,
+        `✗ Classes Tailwind absentes du CSS compilé (lancer npm run build:css, ou écrire la classe en entier dans le code) :\n  ${manquantes.map((c) => `${c} [${utilisees.get(c)}]`).join('\n  ')}`,
     );
     process.exit(1);
 }

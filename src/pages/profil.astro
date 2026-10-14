@@ -1,0 +1,151 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+    titre="Mon profil"
+    description="Ton compte UnDocPourTous : pseudo, abonnement Premium, statut Pack ta Small, export et suppression de tes données."
+    scripts={['assets/js/profil.js']}
+    noindex
+>
+    <main class="wrap pt-8 pb-16 flex flex-col gap-8">
+        <nav aria-label="Fil d’Ariane" class="crumbs">
+            <span><a href="index.html">Accueil</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><span aria-current="page">Mon profil</span></span>
+        </nav>
+
+        <section class="pt-3 pb-2 flex flex-col gap-3.5">
+            <p class="font-mono font-medium text-[11px] text-mintFree">COMPTE UNDOCPOURTOUS</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-semibold">Mon profil</h1>
+            <noscript>
+                <p class="text-base leading-[1.6] text-textMuted">
+                    La connexion au site a besoin de JavaScript. Active-le dans ton navigateur, puis recharge la
+                    page pour te connecter et voir ton profil.
+                </p>
+            </noscript>
+            <p
+                id="profil-statut"
+                class="text-base leading-[1.6] text-textMuted"
+                role="status"
+                aria-live="polite"
+            ></p>
+        </section>
+
+        <div id="profil-contenu" class="profil-grille grid grid-cols-1 lg:grid-cols-2 gap-6" hidden>
+            <section class="panneau lg:col-span-2" aria-labelledby="titre-compte">
+                <div class="flex items-center gap-4 min-w-0">
+                    <div id="profil-avatar" class="profil-avatar" aria-hidden="true"></div>
+                    <div class="flex flex-col gap-1 min-w-0">
+                        <h2 id="titre-compte" class="text-xl font-semibold">Mon compte</h2>
+                        <p class="text-[15px] font-semibold break-words" data-champ="pseudo"></p>
+                    </div>
+                </div>
+                <dl class="infos-compte">
+                    <dt>E-mail</dt>
+                    <dd data-champ="email"></dd>
+                    <dt>Connexion avec</dt>
+                    <dd data-champ="fournisseur"></dd>
+                    <dt>Compte créé le</dt>
+                    <dd data-champ="cree"></dd>
+                </dl>
+                <form id="form-pseudo" class="flex flex-col gap-2" novalidate>
+                    <label for="champ-pseudo" class="text-sm font-semibold">Pseudo affiché sur le site</label>
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input
+                            id="champ-pseudo"
+                            name="pseudo"
+                            class="champ sm:max-w-[360px]"
+                            type="text"
+                            autocomplete="nickname"
+                            minlength="2"
+                            maxlength="32"
+                            required
+                            aria-describedby="aide-pseudo"
+                        />
+                        <button type="submit" class="btn-mint">Enregistrer</button>
+                    </div>
+                    <p id="aide-pseudo" class="text-xs text-textMuted">Entre 2 et 32 caractères.</p>
+                    <p id="pseudo-msg" class="text-[13px] min-h-[1.5em]" role="status" aria-live="polite"></p>
+                </form>
+            </section>
+
+            <section class="panneau" aria-labelledby="titre-premium">
+                <span class="badge badge-premium self-start"
+                    ><img src="assets/icons/lock-keyhole.svg" alt="" />PREMIUM</span
+                >
+                <h2 id="titre-premium" class="text-xl font-semibold">Premium</h2>
+                <dl class="infos-compte">
+                    <dt>Statut</dt>
+                    <dd data-champ="premium-statut"></dd>
+                    <dt>Date de fin</dt>
+                    <dd data-champ="premium-fin"></dd>
+                </dl>
+                <div class="flex flex-wrap gap-3">
+                    <button type="button" id="btn-portail" class="btn-premium" hidden>Gérer mon abonnement</button>
+                    <a id="lien-premium" href="albion-premium.html" class="btn-premium" hidden>Découvrir Premium</a>
+                </div>
+                <p id="premium-msg" class="text-[13px] min-h-[1.5em]" role="status" aria-live="polite"></p>
+            </section>
+
+            <section class="panneau" aria-labelledby="titre-pts">
+                <span class="badge badge-pts self-start">PACK TA SMALL</span>
+                <h2 id="titre-pts" class="text-xl font-semibold">Pack ta Small</h2>
+                <p class="text-sm leading-[1.6]" data-champ="pts-statut"></p>
+                <a href="connexion-pts.html?retour=profil.html" class="btn-ligne self-start"
+                    >Revérifier avec Discord</a
+                >
+            </section>
+
+            <section class="panneau lg:col-span-2" aria-labelledby="titre-donnees-pts">
+                <h2 id="titre-donnees-pts" class="text-xl font-semibold">Mes données PTS</h2>
+                <p class="text-sm leading-[1.6] text-textMuted" data-champ="pts-donnees"></p>
+            </section>
+
+            <section class="panneau lg:col-span-2" aria-labelledby="titre-securite">
+                <h2 id="titre-securite" class="text-xl font-semibold">Sécurité et vie privée</h2>
+                <div class="flex flex-col sm:flex-row sm:flex-wrap gap-3">
+                    <button type="button" id="btn-deconnexion" class="btn-ligne">Se déconnecter</button>
+                    <button type="button" id="btn-deconnexion-partout" class="btn-ligne">
+                        Se déconnecter de tous les appareils
+                    </button>
+                    <button type="button" id="btn-export" class="btn-ligne">Télécharger mes données</button>
+                    <button type="button" id="btn-suppression" class="btn-ligne btn-danger">
+                        Supprimer mon compte
+                    </button>
+                </div>
+                <p id="securite-msg" class="text-[13px] min-h-[1.5em]" role="status" aria-live="polite"></p>
+            </section>
+        </div>
+
+        <dialog
+            id="dialogue-suppression"
+            class="dialogue"
+            aria-labelledby="titre-suppression"
+            aria-describedby="texte-suppression"
+        >
+            <form id="form-suppression" class="flex flex-col gap-4 p-6" novalidate>
+                <h2 id="titre-suppression" class="text-xl font-semibold">Supprimer mon compte</h2>
+                <p id="texte-suppression" class="text-sm leading-[1.6] text-textMuted">
+                    Ton compte, ton profil, ton statut Pack ta Small et tes données PTS seront supprimés
+                    définitivement. Un abonnement Premium en cours sera résilié. Cette action est irréversible.
+                </p>
+                <label for="champ-confirmation" class="text-sm font-semibold">Tape SUPPRIMER pour confirmer</label>
+                <input
+                    id="champ-confirmation"
+                    class="champ"
+                    type="text"
+                    autocomplete="off"
+                    autocapitalize="characters"
+                    spellcheck="false"
+                />
+                <p id="suppression-msg" class="text-[13px] min-h-[1.5em]" role="status" aria-live="polite"></p>
+                <div class="flex flex-col-reverse sm:flex-row sm:justify-end gap-3">
+                    <button type="button" class="btn-ligne" data-fermer>Annuler</button>
+                    <button type="submit" id="btn-confirmer-suppression" class="btn-premium" disabled>
+                        Supprimer définitivement
+                    </button>
+                </div>
+            </form>
+        </dialog>
+    </main>
+</Base>

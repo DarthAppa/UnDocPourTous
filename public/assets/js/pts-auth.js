@@ -6,7 +6,7 @@
 // La base ne laisse lire à chacun que ses propres lignes (RLS).
 import { PTS_CONFIG as C } from './pts-config.js';
 
-const CLIENT = './assets/vendor/supabase.mjs'; // client Supabase servi par le site (pas de CDN)
+const CLIENT = '../vendor/supabase.mjs'; // client Supabase servi par le site (pas de CDN)
 const REF = (() => {
     try {
         return new URL(C.SUPABASE_URL).hostname.split('.')[0];

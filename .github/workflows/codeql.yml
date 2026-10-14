@@ -27,8 +27,9 @@ jobs:
           queries: security-extended
           config: |
             paths-ignore:
-              - assets/vendor
-              - assets/css
-              - pts-encyclopedie.html
-              - pts-builder.html
+              - public/assets/vendor
+              - public/assets/css
+              - public/pts-encyclopedie.html
+              - public/pts-builder.html
+              - dist
       - uses: github/codeql-action/analyze@v4

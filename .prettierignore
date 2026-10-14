@@ -2,9 +2,18 @@ node_modules/
 shots/
 docs-prives/
 Claude outputs/
-assets/
+dist/
+.astro/
+# Pages et composants Astro : le plugin Prettier pour Astro ajoute des espaces visibles dans le texte
+# (fil d'Ariane, liens) ; on garde la mise en forme à la main (4 espaces, comme le HTML d'origine)
+src/**/*.astro
 package-lock.json
 tools/__pycache__/
+# Fichiers générés ou fournis tels quels (images, client Supabase, CSS Tailwind compilé)
+public/assets/img/
+public/assets/icons/
+public/assets/vendor/
+public/assets/css/tailwind.css
 # Pages générées par npm run import:pts : on corrige la source, pas le résultat
-pts-encyclopedie.html
-pts-builder.html
+public/pts-encyclopedie.html
+public/pts-builder.html
