@@ -589,7 +589,7 @@ a:focus-visible > .brand-logo {
     transform: translate(-50%, -50%);
     border-radius: 50%;
     border: 1px solid var(--pts-gold);
-    background: rgba(7, 9, 9, 0.82) url('assets/icons/lock-keyhole.svg') center / 24px no-repeat;
+    background: rgba(7, 9, 9, 0.82) url('../icons/lock-keyhole.svg') center / 24px no-repeat;
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.6);
 }
 .tool-card-pts.is-locked:hover .tool-card-visual::before {

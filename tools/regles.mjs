@@ -1,7 +1,8 @@
 // Règles maison du site (CLAUDE.md) vérifiées automatiquement.
-// Usage : node tools/regles.mjs   → code 1 s'il reste une erreur.
+// Les règles « par page » portent sur le site construit (dist/) : c'est ce que reçoit le visiteur.
+// Usage : npm run build puis node tools/regles.mjs   → code 1 s'il reste une erreur.
 import { readFileSync, existsSync, readdirSync, statSync } from 'node:fs';
-import { dirname, posix } from 'node:path';
+import { dirname, posix, join } from 'node:path';
 import { execSync } from 'node:child_process';
 
 const NOM = 'UnDocPourTous';
@@ -24,8 +25,16 @@ function fichiersSuivis() {
     }
 }
 const fichiers = fichiersSuivis();
-const texte = fichiers.filter((f) => /\.(html|js|mjs|css|md|json|yml|yaml|txt)$/i.test(f) && f !== 'package-lock.json');
-const pages = fichiers.filter((f) => !f.includes('/') && f.endsWith('.html'));
+const texte = fichiers.filter(
+    (f) => /\.(html|astro|js|mjs|css|md|json|yml|yaml|txt)$/i.test(f) && f !== 'package-lock.json',
+);
+const DIST = 'dist';
+if (!existsSync(DIST)) {
+    console.error('✗ dist/ introuvable : lancer d’abord npm run build');
+    process.exit(1);
+}
+const pages = readdirSync(DIST).filter((f) => f.endsWith('.html'));
+const lirePage = (p) => readFileSync(join(DIST, p), 'utf8');
 
 // 1. Pas de secrets dans le code
 const SECRETS = [
@@ -69,7 +78,7 @@ const TOKENS = existsSync(CONFIG_TW)
     ? [...readFileSync(CONFIG_TW, 'utf8').matchAll(/(\w+)\s*:\s*'#/g)].map((m) => m[1])
     : [];
 for (const p of pages) {
-    const html = readFileSync(p, 'utf8');
+    const html = lirePage(p);
     const head = (html.match(/<head[\s\S]*?<\/head>/i) || [''])[0];
 
     if ((html.match(/<head[\s>]/gi) || []).length !== 1) err(p, 'il faut exactement un <head>');
@@ -92,8 +101,8 @@ for (const p of pages) {
 
     if (GENEREES.has(p)) continue; // pages générées : seules les règles de base ci-dessus
 
-    if (!/<script[^>]+src="script\.js"[^>]*\bdefer\b/i.test(head))
-        err(p, 'script.js doit être chargé dans le <head> avec defer');
+    if (!/<script[^>]+src="assets\/js\/script\.js"[^>]*\bdefer\b/i.test(head))
+        err(p, 'assets/js/script.js doit être chargé dans le <head> avec defer');
     if (!/<link[^>]+href="assets\/css\/tailwind\.css"/i.test(head)) err(p, 'assets/css/tailwind.css non chargé');
     if (
         [...html.matchAll(/\b(?:src|href)="(https:[^"]+)"/g)].some((m) => {
@@ -105,7 +114,8 @@ for (const p of pages) {
         })
     )
         err(p, 'CDN Tailwind → utiliser assets/css/tailwind.css (npm run build:css)');
-    if (!/<link[^>]+href="style\.css"/i.test(head)) err(p, 'style.css non chargé dans le <head>');
+    if (!/<link[^>]+href="assets\/css\/style\.css"/i.test(head))
+        err(p, 'assets/css/style.css non chargé dans le <head>');
     if (!/class="[^"]*\bno-js\b/.test(html.match(/<html[^>]*>/i)?.[0] || ''))
         warn(p, '<html> sans classe no-js (contenu .reveal sans JS ?)');
     if ((html.match(/<h1[\s>]/gi) || []).length !== 1) err(p, 'il faut exactement un <h1>');
@@ -126,7 +136,7 @@ for (const p of pages) {
     for (const m of html.matchAll(/\b(?:src|href)="([^"#?]+)(?:[#?][^"]*)?"/g)) {
         const url = m[1];
         if (/^(https?:|mailto:|tel:|data:|javascript:|\/\/)/i.test(url) || url === '') continue;
-        const chemin = url.startsWith('/') ? url.slice(1) : posix.join(dirname(p), url);
+        const chemin = join(DIST, url.startsWith('/') ? url.slice(1) : posix.join(dirname(p), url));
         if (!existsSync(decodeURI(chemin))) err(p, `fichier introuvable : ${url}`);
     }
     // Ancres internes
@@ -147,16 +157,15 @@ for (const p of pages) {
 }
 
 // 4. Tokens de couleur : tailwind.config.cjs et style.css doivent rester alignés
-if (existsSync(CONFIG_TW) && existsSync('style.css')) {
+const STYLE = 'public/assets/css/style.css';
+if (existsSync(CONFIG_TW) && existsSync(STYLE)) {
     const tw = readFileSync(CONFIG_TW, 'utf8');
     const vars = new Set(
-        [...readFileSync('style.css', 'utf8').matchAll(/--[\w-]+\s*:\s*(#[0-9a-f]{3,8})/gi)].map((m) =>
-            m[1].toLowerCase(),
-        ),
+        [...readFileSync(STYLE, 'utf8').matchAll(/--[\w-]+\s*:\s*(#[0-9a-f]{3,8})/gi)].map((m) => m[1].toLowerCase()),
     );
     for (const [, nom, hex] of tw.matchAll(/(\w+)\s*:\s*'(#[0-9a-fA-F]{3,8})'/g))
         if (!vars.has(hex.toLowerCase()))
-            err('style.css', `token ${nom} (${hex}) sans variable --xxx équivalente dans style.css`);
+            err(STYLE, `token ${nom} (${hex}) sans variable --xxx équivalente dans style.css`);
 }
 
 // Rapport

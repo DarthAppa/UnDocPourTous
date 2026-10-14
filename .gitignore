@@ -1,5 +1,10 @@
 node_modules/
 shots/
+
+# Site construit (npm run build) et fichiers générés : refaits par GitHub Actions à chaque mise en ligne
+dist/
+.astro/
+public/assets/css/tailwind.css
 .claude/settings.local.json
 .env
 .env.*
@@ -15,11 +20,11 @@ Claude outputs/
 __pycache__/
 
 # Brouillons du logo (gros PNG de travail) : seuls assets/img/marque/ sont publiés
-assets/img/logo-travail/
-assets/img/logo-undocpourtous.png
+public/assets/img/logo-travail/
+public/assets/img/logo-undocpourtous.png
 
 # Images officielles Albion (logo du jeu dedans, droits Sandbox) : usage local uniquement, jamais publiées
-assets/img/assets_albion_public/
+public/assets/img/assets_albion_public/
 
 # Fichiers système et rapports de test
 Thumbs.db

@@ -1,23 +1,30 @@
 // Vérification complète avant push / pull request.
-// Usage : npm run verif            (tout, y compris captures desktop + mobile de chaque page)
+// Usage : npm run verif            (tout : construit le site dans dist/, puis contrôles, tests et captures
+//                                   desktop + mobile de chaque page)
 //         npm run verif -- --rapide (sans les captures)
 // Code de sortie 1 si une étape échoue : le push / la PR sont alors bloqués.
 import { spawnSync } from 'node:child_process';
-import { readdirSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 
 const rapide = process.argv.includes('--rapide');
 const pkg = JSON.parse(readFileSync('package.json', 'utf8'));
 const GENEREES = ['pts-encyclopedie.html', 'pts-builder.html'];
-const pages = readdirSync('.').filter((f) => f.endsWith('.html'));
-const pagesSources = pages.filter((f) => !GENEREES.includes(f));
+// Pages du site construit : connues seulement après l'étape « Construction du site »
+const pages = () => (existsSync('dist') ? readdirSync('dist').filter((f) => f.endsWith('.html')) : []);
+const pagesSources = () =>
+    pages()
+        .filter((f) => !GENEREES.includes(f))
+        .map((f) => `dist/${f}`)
+        .join(' ');
 
+// Une étape = [nom, commande] ; la commande peut être une fonction (calculée au moment de l'étape)
 const etapes = [
     ['Formatage (Prettier)', 'npx --no-install prettier --check . --log-level warn'],
     ['JavaScript (ESLint)', 'npx --no-install eslint . --max-warnings 0'],
     ['CSS (Stylelint)', 'npx --no-install stylelint "**/*.css"'],
-    ['HTML (html-validate)', `npx --no-install html-validate ${pagesSources.join(' ')}`],
+    ['Construction du site (Tailwind + Astro + CSP)', 'npm run build'],
+    ['HTML (html-validate)', () => `npx --no-install html-validate ${pagesSources()}`],
     ['Règles maison (CLAUDE.md)', 'node tools/regles.mjs'],
-    ['CSS Tailwind à jour', 'node tools/build-css.mjs --check'],
     ['Classes Tailwind présentes', 'node tools/classes-tailwind.mjs'],
     ['CSP à jour', 'node tools/csp.mjs --check'],
 ];
@@ -35,14 +42,19 @@ else console.log('ℹ Tests RLS ignorés en local (DATABASE_URL absent) : ils to
 // Dépendances : bloque sur une faille critique. Les outils de build (Tailwind 3 → braces) ont des
 // alertes « high » sans correctif qui ne concernent que la compilation sur le PC, pas le site publié.
 etapes.push(['Audit des dépendances (npm audit)', 'npm audit --audit-level=critical']);
-if (!rapide) for (const p of pages) etapes.push([`Rendu ${p} (390px + 1280px)`, `node tools/screenshot.mjs ${p}`]);
+if (!rapide)
+    etapes.push(['Rendu de chaque page (390px + 1280px)', () => pages().map((p) => `node tools/screenshot.mjs ${p}`)]);
 
 const resultats = [];
-for (const [nom, cmd] of etapes) {
-    console.log(`\n━━ ${nom}\n$ ${cmd}`);
+for (const [nom, commande] of etapes) {
+    const cmds = [typeof commande === 'function' ? commande() : commande].flat();
     const debut = Date.now();
-    const r = spawnSync(cmd, { shell: true, stdio: 'inherit' });
-    resultats.push({ nom, ok: r.status === 0, s: ((Date.now() - debut) / 1000).toFixed(1) });
+    let ok = true;
+    for (const cmd of cmds) {
+        console.log(`\n━━ ${nom}\n$ ${cmd}`);
+        ok = spawnSync(cmd, { shell: true, stdio: 'inherit' }).status === 0 && ok;
+    }
+    resultats.push({ nom, ok, s: ((Date.now() - debut) / 1000).toFixed(1) });
 }
 
 console.log('\n━━━━━━━━━━━━ Bilan ━━━━━━━━━━━━');

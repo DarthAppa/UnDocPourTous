@@ -50,7 +50,7 @@ const COLLECTION = {
 };
 
 try {
-    const html = readFileSync('pts-encyclopedie.html', 'utf8');
+    const html = readFileSync('dist/pts-encyclopedie.html', 'utf8');
     console.log('\n[encyclopédie : contenu]');
     t.verif(
         !/id="pouvoirs"/.test(html) && !/href="#pouvoirs"/.test(html),
@@ -59,7 +59,7 @@ try {
     t.verif(/id="pts-gl"/.test(html), 'données GOAT et Légendes gardées dans la page');
     t.verif(!/class="parts"/.test(html) && !/href="pts-builder\.html"/.test(html), 'aucun lien vers le builder');
 
-    const b = readFileSync('pts-builder.html', 'utf8');
+    const b = readFileSync('dist/pts-builder.html', 'utf8');
     console.log('\n[builder : contenu]');
     t.verif(!/Builder Tournoi|pts-tcomps|id="rbuilder"/.test(b), 'Builder Tournoi retiré');
     t.verif(

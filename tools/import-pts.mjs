@@ -1,7 +1,8 @@
 // Importe les outils Pack ta Small (Encyclopédie, Builder Ma collection) dans le site.
 // Les sources sont des pages autonomes (anciennes artifacts) dans ../1_PTS/Encyclopedie.
 // Usage : npm run import:pts   (ou node tools/import-pts.mjs [dossier_source])
-// Relancer après chaque mise à jour des sources : les pages du site sont régénérées.
+// Relancer après chaque mise à jour des sources : les pages du site sont régénérées dans public/
+// (copiées telles quelles par Astro ; la CSP finale est recalculée sur dist/ par npm run build).
 //
 // - Encyclopédie (Partie 1) : sans le chapitre « GOAT & Légendes » (les données restent dans la page,
 //   elles servent aux calculs) et sans lien vers le builder.
@@ -20,7 +21,7 @@ const SITE = { nom: 'UnDocPourTous' };
 const OUTILS = [
     {
         source: 'Partie1_Encyclopedie.html',
-        cible: 'pts-encyclopedie.html',
+        cible: 'public/pts-encyclopedie.html',
         nom: 'Encyclopédie',
         titre: 'Encyclopédie Pack ta Small',
         description:
@@ -29,13 +30,13 @@ const OUTILS = [
     },
     {
         source: 'Partie3_Builders_tryhard.html',
-        cible: 'pts-builder.html',
+        cible: 'public/pts-builder.html',
         nom: 'Builder Ma collection',
         titre: 'Builder Ma collection Pack ta Small',
         description:
             'Builder Pack ta Small avec ta propre collection : compose ton équipe de 20, cible les synergies, calcule le Collectif et laisse l’optimiseur proposer 3 compos.',
         transformer: builderMaCollection,
-        scripts: ['pts-ma-collection.js'],
+        scripts: ['assets/js/pts-ma-collection.js'],
     },
 ];
 
@@ -222,8 +223,8 @@ for (const outil of OUTILS) {
 <script>document.documentElement.classList.add('pts-attente');</script>
 <style>html.pts-attente body{visibility:hidden}</style>
 <noscript><style>html.pts-attente body{visibility:visible}</style></noscript>
-<script type="module">import { garde } from './pts-auth.js'; garde();</script>
-<script type="module" src="entete.js"></script>
+<script type="module">import { garde } from './assets/js/pts-auth.js'; garde();</script>
+<script type="module" src="assets/js/entete.js"></script>
 ${scripts}${tete}
 </head>
 <body>

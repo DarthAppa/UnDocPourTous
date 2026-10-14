@@ -3,7 +3,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, existsSync } from 'node:fs';
 import { demarrer } from './serveur.mjs';
-import { PTS_CONFIG } from '../pts-config.js';
+import { PTS_CONFIG } from '../public/assets/js/pts-config.js';
 import { preparer, SESSION, texteDebordement } from './faux-supabase.mjs';
 
 // Requête vers Discord ? (comparaison du nom d'hôte, pas d'une simple sous-chaîne)
@@ -75,7 +75,7 @@ try {
 
         // 2. Connecté mais pas membre du serveur
         await p.evaluate(async () =>
-            (await import('/pts-page.js')).appliquer({
+            (await import('/assets/js/pts-page.js')).appliquer({
                 connecte: true,
                 membre: false,
                 debloque: false,
@@ -94,7 +94,7 @@ try {
 
         // 3. Connecté et membre : débloqué
         await p.evaluate(async () =>
-            (await import('/pts-page.js')).appliquer({
+            (await import('/assets/js/pts-page.js')).appliquer({
                 connecte: true,
                 membre: true,
                 debloque: true,
@@ -112,7 +112,7 @@ try {
 
         // 3b. Données PTS du joueur (collection + replays) affichées une fois connecté
         await p.evaluate(async () =>
-            (await import('/pts-page.js')).appliquer({
+            (await import('/assets/js/pts-page.js')).appliquer({
                 connecte: true,
                 membre: true,
                 debloque: true,
@@ -147,7 +147,7 @@ try {
             'déconnexion : badges revenus à « VERROUILLÉ »',
         );
         await p.evaluate(async () =>
-            (await import('/pts-page.js')).appliquer({
+            (await import('/assets/js/pts-page.js')).appliquer({
                 connecte: true,
                 membre: true,
                 debloque: true,
@@ -319,9 +319,9 @@ try {
             await q.goto(serveur.url + 'index.html', { waitUntil: 'networkidle' });
             const r = await q.evaluate(async () => {
                 const avant = globalThis.__APPELS__.length;
-                const e = await (await import('/pts-auth.js')).etat();
+                const e = await (await import('/assets/js/pts-auth.js')).etat();
                 const apres = globalThis.__APPELS__.slice(avant);
-                const second = await (await import('/pts-auth.js')).etat(); // jeton disparu : plus d'appel
+                const second = await (await import('/assets/js/pts-auth.js')).etat(); // jeton disparu : plus d'appel
                 return {
                     e,
                     types: apres.map((a) => a.type),

@@ -1,0 +1,123 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+    titre="Outils gratuits pour joueurs"
+    description="Outils gratuits pour Albion Online, Path of Exile et World of Warcraft : moins de recherche, plus de jeu."
+>
+    <main>
+        <!-- ================= INTRODUCTION ================= -->
+        <div class="wrap pt-10 md:pt-16 flex flex-col gap-[42px]">
+            <section class="flex flex-col gap-[22px] reveal" aria-labelledby="titre">
+                <p class="font-mono font-medium text-[11px] text-mintFree">MOINS DE RECHERCHE. PLUS DE JEU.</p>
+                <div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+                    <h1 id="titre" class="text-4xl sm:text-5xl lg:text-[58px] font-bold leading-[1.1] lg:w-[850px]">
+                        Votre jeu. Vos outils.<br /><span class="text-mintFree">Gratuits, pour commencer.</span>
+                    </h1>
+                    <p class="text-base leading-[1.7] text-textMuted lg:w-[355px]">
+                        Les bonnes infos, au bon endroit.<br />Choisissez votre univers et accédez aux outils qui
+                        simplifient vos sessions.
+                    </p>
+                </div>
+            </section>
+
+            <!-- ================= SÉLECTION DES JEUX ================= -->
+            <section id="jeux" class="flex flex-col gap-[22px] scroll-mt-24" aria-labelledby="titre-jeux">
+                <div class="flex items-center justify-between gap-4">
+                    <h2 id="titre-jeux" class="text-xl font-semibold">Choisissez votre univers</h2>
+                    <p class="font-mono text-[11px] text-textFaint">03 UNIVERS À EXPLORER</p>
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <a href="albion.html" class="game-card card-link reveal" style="--d: 0s">
+                        <div class="game-card-visual">
+                            <img
+                                src="assets/img/maquette/jeu-albion.webp"
+                                alt=""
+                                width="1024"
+                                height="1024"
+                                loading="lazy"
+                            />
+                            <div class="game-card-title">
+                                <p class="font-mono text-[10px] mb-3">UN MONDE À CONSTRUIRE</p>
+                                <h3 class="font-serif font-bold text-[43px] leading-none">ALBION<br />ONLINE</h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-[18px] px-7 pt-1 pb-6">
+                            <p class="flex items-center gap-2 text-[13px] text-mintFree">
+                                <span class="w-1.5 h-1.5 rounded-[3px] bg-mintFree" aria-hidden="true"></span>Outils
+                                gratuits inclus
+                            </p>
+                            <p class="card-hint">
+                                <span class="text-sm font-semibold">Entrer →</span
+                                ><span class="font-mono text-[10px] text-textFaint">LES OUTILS DU JEU</span>
+                            </p>
+                        </div>
+                    </a>
+
+                    <div class="game-card card-soon reveal" style="--d: 0.1s" aria-disabled="true">
+                        <div class="game-card-visual">
+                            <img
+                                src="assets/img/maquette/jeu-poe.webp"
+                                alt=""
+                                width="1024"
+                                height="1024"
+                                loading="lazy"
+                            />
+                            <div class="game-card-title">
+                                <p class="font-mono text-[10px] mb-3">LA PUISSANCE SE MÉRITE</p>
+                                <h3 class="font-serif font-bold text-[43px] leading-none">PATH OF<br />EXILE</h3>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-[18px] px-7 pt-1 pb-6">
+                            <p class="flex items-center gap-2 text-[13px] text-mintFree">
+                                <span class="w-1.5 h-1.5 rounded-[3px] bg-mintFree" aria-hidden="true"></span>Outils
+                                à venir
+                            </p>
+                            <p class="card-hint">
+                                <span class="text-sm font-semibold">Bientôt</span
+                                ><span class="font-mono text-[10px] text-textFaint">PAGE EN PRÉPARATION</span>
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="game-card card-soon reveal" style="--d: 0.2s" aria-disabled="true">
+                        <div class="game-card-visual">
+                            <img
+                                src="assets/img/maquette/jeu-wow.webp"
+                                alt=""
+                                width="1024"
+                                height="1024"
+                                loading="lazy"
+                            />
+                            <div class="game-card-title">
+                                <p class="font-mono text-[10px] mb-3">L’AVENTURE EN GROUPE</p>
+                                <h3 class="font-serif font-bold text-[66px] leading-none mb-3">WoW</h3>
+                                <p class="text-[13px] text-textMuted">World of Warcraft</p>
+                            </div>
+                        </div>
+                        <div class="flex flex-col gap-[18px] px-7 pt-1 pb-6">
+                            <p class="flex items-center gap-2 text-[13px] text-mintFree">
+                                <span class="w-1.5 h-1.5 rounded-[3px] bg-mintFree" aria-hidden="true"></span>Outils
+                                à venir
+                            </p>
+                            <p class="card-hint">
+                                <span class="text-sm font-semibold">Bientôt</span
+                                ><span class="font-mono text-[10px] text-textFaint">PAGE EN PRÉPARATION</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <div
+                class="border-t border-cardBorder pt-6 pb-16 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2"
+            >
+                <p class="text-sm text-textMuted">
+                    Comprendre, préparer, explorer. Les outils gratuits passent en premier.
+                </p>
+                <p class="font-mono text-xs text-mintFree">SANS COMPTE · ACCÈS LIBRE</p>
+            </div>
+        </div>
+    </main>
+</Base>

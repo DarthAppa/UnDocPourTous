@@ -5,7 +5,7 @@
 //   faux      : état du faux client (session, tables, rpc), injecté dans globalThis.__FAUX__ à chaque chargement
 //   fonctions : { nom: { status, body } | (corps) => ({ status, body }) } réponses des Edge Functions
 // Renvoie { appelsFonctions, requetesExternes } ; les appels au client sont dans window.__APPELS__.
-import { PTS_CONFIG } from '../pts-config.js';
+import { PTS_CONFIG } from '../public/assets/js/pts-config.js';
 
 // HORS_LIGNE=1 : CDN Tailwind et polices coupés (conteneur sans Internet)
 export const HORS_LIGNE = process.env.HORS_LIGNE === '1';

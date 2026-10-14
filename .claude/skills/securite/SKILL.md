@@ -9,11 +9,11 @@ Architecture : site statique PUBLIC (GitHub Pages, tout le dépôt est lisible p
 
 ## Interdits absolus
 
-1. Aucun secret dans le dépôt : clé `service_role`, clés Stripe (`sk_`, `rk_`, `whsec_`), token de bot Discord, mot de passe. Côté navigateur, seules l'URL Supabase et la clé `anon` sont permises (`pts-config.js`). Secrets des fonctions : `npx supabase secrets set`. Local : `.env` (ignoré). `npm run regles` détecte les fuites. Un secret commité est compromis : le RÉVOQUER (pas seulement l'effacer).
+1. Aucun secret dans le dépôt : clé `service_role`, clés Stripe (`sk_`, `rk_`, `whsec_`), token de bot Discord, mot de passe. Côté navigateur, seules l'URL Supabase et la clé `anon` sont permises (`public/assets/js/pts-config.js`). Secrets des fonctions : `npx supabase secrets set`. Local : `.env` (ignoré). `npm run regles` détecte les fuites. Un secret commité est compromis : le RÉVOQUER (pas seulement l'effacer).
 2. Aucun contenu payant dans le dépôt, une page HTML, un test, une capture ou un commit : il vit dans la table `contenus` (skill `contenu-premium`).
 3. Aucun droit accordé côté navigateur : pas de « premium = true » en localStorage, pas de vérification Discord depuis le navigateur. Source de vérité : `abonnements` (webhook Stripe), `membres_pts` (fonction `verifier-guilde`), lues via RLS ou `mon_acces()`.
 4. Pas de `innerHTML` / `insertAdjacentHTML` avec une donnée venant de Supabase, de l'URL ou de Discord → `textContent`. Exception : contenu Premium, TOUJOURS passé par `nettoyer()` de `premium-page.js`.
-5. Pas de script inline, `onclick=`, `javascript:`, `eval`, `new Function`, ni de script/CDN tiers : la CSP (`npm run csp`) les bloque. Supabase est vendu dans `assets/vendor/supabase.mjs` (`npm run vendor:supabase`), Tailwind est compilé (`npm run build:css`).
+5. Pas de script inline, `onclick=`, `javascript:`, `eval`, `new Function`, ni de script/CDN tiers : la CSP (calculée par `npm run build`) les bloque. Supabase est vendu dans `public/assets/vendor/supabase.mjs` (`npm run vendor:supabase`), Tailwind est compilé (`npm run build:css`).
 6. Redirections : uniquement vers une page du site (`/^[a-z0-9-]+\.html$/`) ou un préfixe Stripe vérifié (`https://checkout.stripe.com/`, `https://billing.stripe.com/`).
 7. Jamais `--no-verify`, jamais désactiver une règle de sécurité pour « faire passer » la vérif.
 

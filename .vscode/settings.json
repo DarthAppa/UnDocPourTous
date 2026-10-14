@@ -10,13 +10,14 @@
   "eslint.useFlatConfig": true,
   "files.insertFinalNewline": true,
   "files.trimTrailingWhitespace": true,
-  "tailwindCSS.includeLanguages": { "html": "html" },
-  "files.exclude": { "shots": true },
+  "tailwindCSS.includeLanguages": { "html": "html", "astro": "html" },
+  "files.exclude": { "shots": true, ".astro": true },
   "search.exclude": {
     "node_modules": true,
     "shots": true,
-    "pts-encyclopedie.html": true,
-    "pts-builder.html": true,
+    "dist": true,
+    "public/pts-encyclopedie.html": true,
+    "public/pts-builder.html": true,
     "package-lock.json": true
   },
   "cSpell.language": "fr,en",

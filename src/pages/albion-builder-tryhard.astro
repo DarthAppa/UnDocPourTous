@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+    titre="Builder Tryhard"
+    description="Le Builder Tryhard pour Albion Online : le builder poussé, optimisé pour votre personnage. Réservé aux abonnés Premium."
+    scripts={['assets/js/premium-page.js']}
+>
+    <main class="wrap pt-8 pb-16 flex flex-col gap-8">
+        <nav aria-label="Fil d’Ariane" class="crumbs">
+            <span><a href="index.html">Accueil</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><a href="albion.html">Albion Online</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><a href="albion-premium.html">Premium</a></span>
+            <span
+                ><span class="sep" aria-hidden="true">/</span><span aria-current="page">Builder Tryhard</span></span
+            >
+        </nav>
+
+        <section class="pt-3 pb-2 flex flex-col gap-3.5">
+            <p class="font-mono font-medium text-[11px] text-brandOrange">ALBION ONLINE / PREMIUM</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-semibold">Builder Tryhard</h1>
+            <p class="text-base leading-[1.6] text-textMuted">
+                Le builder poussé, optimisé pour votre personnage et votre façon de jouer. Réservé aux abonnés
+                Premium.
+            </p>
+        </section>
+
+        <p id="premium-statut" class="text-sm text-textMuted min-h-[1.5em]" role="status" aria-live="polite"></p>
+        <section
+            id="premium-zone"
+            class="flex flex-col gap-6"
+            data-slug="albion-builder-tryhard"
+            aria-label="Contenu Premium"
+        >
+            <noscript>
+                <p class="text-base leading-[1.6] text-textMuted">
+                    Ce contenu est réservé aux abonnés Premium et s’affiche après connexion, ce qui demande
+                    JavaScript. Active-le dans ton navigateur, puis recharge la page.
+                </p>
+            </noscript>
+        </section>
+
+        <a href="albion-premium.html" class="text-[13px] text-textMuted hover:text-textLight"
+            >← Revenir aux outils Premium</a
+        >
+    </main>
+</Base>

@@ -20,7 +20,8 @@ Décrire la maquette en liste courte :
 ## 2. Construire
 
 - Modifier le fichier existant section par section, sans recopier la page entière ni la dupliquer.
-- Mise en page Tailwind ; décors et effets dans `style.css` ; animations légères dans `script.js`.
+- Page dans `src/pages/<nom>.astro` avec le gabarit `Base` (en-tête, pied de page et `<head>` déjà fournis).
+- Mise en page Tailwind ; décors et effets dans `public/assets/css/style.css` ; animations légères dans `public/assets/js/script.js`.
 - Mobile pris en compte dès le départ (empilement des colonnes, décors réduits ou masqués).
 
 ## 3. Vérifier et corriger

@@ -1,25 +1,25 @@
-// Politique de sécurité du contenu (CSP) de chaque page *.html de la racine.
+// Politique de sécurité du contenu (CSP) de chaque page *.html du site construit (dist/, après astro build).
 // Écrit (ou remplace) juste après <meta charset> :
 //   <meta http-equiv="Content-Security-Policy" content="…">  et  <meta name="referrer" content="strict-origin-when-cross-origin">
 // Les scripts inline (pages Pack ta Small générées) sont autorisés un par un par leur hachage sha256 :
 // aucun 'unsafe-inline' pour les scripts. Les gestionnaires inline (onclick="…", href="javascript:…")
 // seraient bloqués : ils sont signalés comme erreurs (les réécrire en addEventListener).
-// Usage : npm run csp                  (met à jour les pages ; idempotent)
-//         node tools/csp.mjs --check   (code 1 si une page n'a pas la bonne CSP)
-// À relancer après toute modification d'un script inline (import:pts le fait déjà).
+// Usage : npm run csp                  (met à jour les pages de dist/ ; idempotent ; lancé par npm run build)
+//         node tools/csp.mjs --check   (code 1 si une page de dist/ n'a pas la bonne CSP)
+//         node tools/csp.mjs --dossier X  (autre dossier que dist/)
 import { createHash } from 'node:crypto';
-import { readFileSync, writeFileSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, readdirSync, existsSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const RACINE = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const REFERRER = 'strict-origin-when-cross-origin';
 
-// Projet Supabase lu dans pts-config.js (une seule source de vérité)
+// Projet Supabase lu dans public/assets/js/pts-config.js (une seule source de vérité)
 export function urlSupabase(racine = RACINE) {
-    const conf = readFileSync(join(racine, 'pts-config.js'), 'utf8');
+    const conf = readFileSync(join(racine, 'public', 'assets', 'js', 'pts-config.js'), 'utf8');
     const m = conf.match(/SUPABASE_URL\s*:\s*'(https:\/\/[a-z0-9-]+\.supabase\.co)'/);
-    if (!m) throw new Error('SUPABASE_URL introuvable (ou invalide) dans pts-config.js');
+    if (!m) throw new Error('SUPABASE_URL introuvable (ou invalide) dans public/assets/js/pts-config.js');
     return m[1];
 }
 
@@ -101,12 +101,18 @@ export function appliquerCsp(html, supabase) {
 // Ligne de commande
 if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) {
     const verifier = process.argv.includes('--check');
+    const i = process.argv.indexOf('--dossier');
+    const DOSSIER = resolve(RACINE, i > 0 ? process.argv[i + 1] : 'dist');
+    if (!existsSync(DOSSIER)) {
+        console.error(`✗ ${DOSSIER} introuvable : lancer d'abord npm run build`);
+        process.exit(1);
+    }
     const supabase = urlSupabase();
-    const pages = readdirSync(RACINE).filter((f) => f.endsWith('.html'));
+    const pages = readdirSync(DOSSIER).filter((f) => f.endsWith('.html'));
     let erreurs = 0;
     let modifiees = 0;
     for (const p of pages) {
-        const chemin = join(RACINE, p);
+        const chemin = join(DOSSIER, p);
         const html = readFileSync(chemin, 'utf8');
         for (const g of gestionnairesInline(html)) {
             console.error(`✗ ${p} : ${g} → bloqué par la CSP, réécrire en addEventListener`);
@@ -114,7 +120,7 @@ if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.ur
         }
         if (verifier) {
             if (!etat(html, supabase).ok) {
-                console.error(`✗ ${p} : CSP absente ou pas à jour → npm run csp`);
+                console.error(`✗ ${p} : CSP absente ou pas à jour → npm run build`);
                 erreurs++;
             }
             continue;

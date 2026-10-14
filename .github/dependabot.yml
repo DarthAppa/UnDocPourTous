@@ -11,6 +11,10 @@ updates:
       outils:
         patterns: ['*']
         update-types: [minor, patch]
+    ignore:
+      # Tailwind 4 change toute la config : migration à faire à la main, pas par Dependabot
+      - dependency-name: tailwindcss
+        update-types: ['version-update:semver-major']
   - package-ecosystem: github-actions
     directory: /
     schedule:

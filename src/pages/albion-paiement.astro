@@ -1,0 +1,129 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+    titre="Paiement — Builder Tryhard"
+    description="Choisissez votre formule Premium et finalisez votre accès au Builder Tryhard pour Albion Online."
+    scripts={['assets/js/paiement.js']}
+>
+    <main class="wrap pt-8 pb-16 flex flex-col gap-8">
+        <nav aria-label="Fil d’Ariane" class="crumbs">
+            <span><a href="index.html">Accueil</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><a href="albion.html">Albion Online</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><a href="albion-premium.html">Premium</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><span aria-current="page">Paiement</span></span>
+        </nav>
+
+        <section class="pt-3 pb-2 flex flex-col gap-3.5 reveal">
+            <p class="font-mono font-medium text-[11px] text-brandOrange">ALBION ONLINE / ACCÈS PREMIUM</p>
+            <h1 class="text-3xl sm:text-4xl lg:text-[44px] font-semibold">Débloquer Builder Tryhard</h1>
+            <p class="text-base leading-[1.6] text-textMuted">
+                Choisissez votre formule, puis finalisez votre accès à l’outil.
+            </p>
+        </section>
+
+        <div class="flex flex-col lg:flex-row gap-8 lg:items-start">
+            <div class="flex flex-col gap-6 lg:w-[800px] lg:max-w-[62%] shrink-0 w-full">
+                <fieldset class="flex flex-col gap-5">
+                    <legend class="flex items-center gap-3 mb-5">
+                        <span class="font-mono text-[11px] text-brandOrange">01</span
+                        ><span class="text-lg font-semibold">Votre formule</span>
+                    </legend>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                        <label class="plan">
+                            <input type="radio" name="formule" value="Mensuel" />
+                            <span class="flex items-center justify-between"
+                                ><span class="text-lg font-semibold">Mensuel</span
+                                ><span class="dot" aria-hidden="true"></span
+                            ></span>
+                            <span class="text-xs leading-normal text-textMuted">Un accès au rythme du mois.</span>
+                            <span class="text-[13px] text-textFaint">Tarif à renseigner</span>
+                        </label>
+
+                        <label class="plan">
+                            <input type="radio" name="formule" value="Saisonnier" checked />
+                            <span class="flex items-center justify-between"
+                                ><span class="text-lg font-semibold">Saisonnier</span
+                                ><span class="dot" aria-hidden="true"></span
+                            ></span>
+                            <span class="text-xs leading-normal text-textMuted"
+                                >Pour accompagner votre saison.</span
+                            >
+                            <span class="text-[13px] text-textFaint">Tarif à renseigner</span>
+                            <span class="font-mono text-[10px] font-semibold text-brandOrange">LE PLUS CHOISI</span>
+                        </label>
+
+                        <label class="plan">
+                            <input type="radio" name="formule" value="À vie" />
+                            <span class="flex items-center justify-between"
+                                ><span class="text-lg font-semibold">À vie</span
+                                ><span class="dot" aria-hidden="true"></span
+                            ></span>
+                            <span class="text-xs leading-normal text-textMuted">Pour voir plus loin.</span>
+                            <span class="text-[13px] text-textFaint">Tarif à renseigner</span>
+                        </label>
+                    </div>
+                </fieldset>
+
+                <article
+                    class="flex flex-col sm:flex-row overflow-hidden bg-cardBg border border-cardBorder rounded-2xl sm:min-h-[214px]"
+                >
+                    <img
+                        src="assets/img/maquette/outil-build-perso.webp"
+                        alt=""
+                        width="1152"
+                        height="928"
+                        class="w-full h-48 sm:h-auto sm:w-[248px] object-cover shrink-0"
+                    />
+                    <div class="flex flex-col gap-4 items-start p-6">
+                        <span class="badge badge-premium"
+                            ><img src="assets/icons/lock-keyhole.svg" alt="" />PREMIUM</span
+                        >
+                        <h2 class="text-[23px] font-semibold">Builder Tryhard</h2>
+                        <p class="text-sm leading-[1.6] text-textMuted">
+                            Affinez votre équipement selon votre personnage et votre façon de jouer.
+                        </p>
+                    </div>
+                </article>
+
+                <a href="albion-premium.html" class="text-[13px] text-textMuted hover:text-textLight"
+                    >← Revenir aux outils Premium</a
+                >
+            </div>
+
+            <aside
+                class="flex-1 min-w-0 flex flex-col gap-6 p-5 sm:p-7 bg-cardBg border border-cardBorder rounded-2xl"
+                aria-label="Paiement"
+            >
+                <h2 class="flex items-center gap-3">
+                    <span class="font-mono text-[11px] font-normal text-brandOrange">02</span
+                    ><span class="text-lg font-semibold">Votre paiement</span>
+                </h2>
+                <p class="flex justify-between py-4 border-y border-cardBorder text-[13px]">
+                    <span class="text-textMuted">Formule sélectionnée</span
+                    ><strong id="formule-choisie" class="font-semibold" aria-live="polite">Saisonnier</strong>
+                </p>
+                <div
+                    class="flex flex-col items-center justify-center gap-4 min-h-[214px] p-6 bg-footerBg border border-dashed border-cardBorder rounded-lg text-center"
+                >
+                    <img src="assets/icons/credit-card.svg" alt="" width="32" height="32" />
+                    <p class="text-sm">Espace de paiement</p>
+                    <p class="text-xs leading-[1.6] text-textMuted">
+                        Le formulaire et le montant de votre paiement s’afficheront ici.
+                    </p>
+                </div>
+                <button type="button" id="payer" class="btn-premium w-full">Payer et accéder</button>
+                <p
+                    id="paiement-msg"
+                    class="paiement-msg text-[13px] leading-[1.6] text-center min-h-[1.5em]"
+                    role="status"
+                    aria-live="polite"
+                ></p>
+                <p class="flex items-center justify-center gap-2 text-xs text-textMuted">
+                    <img src="assets/icons/lock-keyhole-14.svg" alt="" width="14" height="14" />Paiement sécurisé
+                </p>
+            </aside>
+        </div>
+    </main>
+</Base>

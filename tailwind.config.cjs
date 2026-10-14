@@ -1,10 +1,10 @@
-// Config Tailwind du site (compilée par tools/build-css.mjs → assets/css/tailwind.css).
-// Chaque couleur a son équivalent --var dans style.css : à modifier aux deux endroits,
-// puis lancer `npm run build:css` et committer assets/css/tailwind.css (GitHub Pages ne compile rien).
+// Config Tailwind du site (compilée par tools/build-css.mjs → public/assets/css/tailwind.css, fichier
+// généré et non suivi par git : le build de GitHub Actions le refait à chaque mise en ligne).
+// Chaque couleur a son équivalent --var dans public/assets/css/style.css : à modifier aux deux endroits.
 module.exports = {
-    // Pages faites à la main + scripts du site. Les pages Pack ta Small générées
-    // (pts-encyclopedie.html, pts-builder.html) ont leur propre CSS et n'utilisent pas Tailwind.
-    content: ['./*.html', './*.js', '!./pts-encyclopedie.html', '!./pts-builder.html'],
+    // Pages et composants Astro + scripts du site. Les pages Pack ta Small générées
+    // (public/pts-encyclopedie.html, public/pts-builder.html) ont leur propre CSS et n'utilisent pas Tailwind.
+    content: ['./src/**/*.{astro,js}', './public/assets/js/*.js'],
     theme: {
         extend: {
             colors: {

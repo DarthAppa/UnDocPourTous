@@ -1,0 +1,78 @@
+---
+import Base from '../layouts/Base.astro';
+---
+
+<Base
+    titre="Connexion Pack ta Small"
+    description="Connexion Discord pour débloquer les outils Pack ta Small : encyclopédie complète et builder général, réservés aux membres du serveur."
+    scripts={['assets/js/pts-connexion.js']}
+    noindex
+    cinzel
+>
+    <main class="wrap pt-8 pb-16 flex flex-col gap-8">
+        <nav aria-label="Fil d’Ariane" class="crumbs">
+            <span><a href="index.html">Accueil</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><a href="albion.html">Albion Online</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><a href="pts.html">Pack ta Small</a></span>
+            <span><span class="sep" aria-hidden="true">/</span><span aria-current="page">Connexion</span></span>
+        </nav>
+
+        <section
+            class="category category-pts pts-login-panel mx-auto w-full max-w-[640px] items-center text-center"
+            aria-labelledby="titre-connexion"
+        >
+            <img class="pts-bg" src="assets/img/pts/albion-background.webp" alt="" width="1536" height="1024" />
+            <div class="flex justify-center w-full">
+                <img
+                    class="pts-login-logo"
+                    src="assets/img/pts/logo.webp"
+                    alt="Pack ta Small"
+                    width="1384"
+                    height="366"
+                />
+            </div>
+            <h1 id="titre-connexion" class="pts-title text-2xl sm:text-3xl">Connexion avec Discord</h1>
+            <p class="text-[15px] leading-[1.65] max-w-[460px]" data-mode="pts">
+                Connecte-toi avec ton compte Discord pour débloquer l’Encyclopédie et le Builder général. Ils sont
+                réservés aux membres du serveur Pack ta Small.
+            </p>
+            <p class="text-[15px] leading-[1.65] max-w-[460px]" data-mode="site" hidden>
+                Connecte-toi avec ton compte Discord pour accéder à ton profil UnDocPourTous, à ton abonnement
+                Premium et aux outils réservés.
+            </p>
+
+            <button type="button" id="pts-go" class="pts-discord">
+                <img src="assets/img/pts/icon-discord.webp" alt="" width="436" height="572" />Se connecter avec
+                Discord
+            </button>
+            <p
+                id="pts-msg"
+                class="text-[14px] font-semibold text-ptsGold min-h-[1.5em]"
+                role="status"
+                aria-live="polite"
+            ></p>
+            <a
+                data-mode="pts"
+                id="pts-rejoindre"
+                href="https://discord.gg/packtasmall"
+                target="_blank"
+                rel="noopener"
+                class="pts-link"
+                >Pas encore sur le serveur ? Rejoindre le Discord Pack ta Small →</a
+            >
+
+            <ul class="pts-login-infos text-left text-[13px] leading-[1.6] text-textMuted">
+                <li>
+                    Ce que Discord nous transmet : ton pseudo, ton avatar, ton e-mail et la liste de tes serveurs.
+                    La liste des serveurs sert uniquement à vérifier, côté serveur, si tu es membre de Pack ta
+                    Small.
+                </li>
+                <li>Aucun mot de passe ne passe par UnDocPourTous, et rien n’est publié en ton nom.</li>
+            </ul>
+        </section>
+
+        <p class="text-center">
+            <a href="pts.html" id="pts-retour" class="pts-link">← Retour aux outils Pack ta Small</a>
+        </p>
+    </main>
+</Base>
