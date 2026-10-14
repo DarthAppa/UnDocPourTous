@@ -23,8 +23,20 @@ const pageConnexionPts = /connexion-pts\.html$/.test(location.pathname);
 if (!pageConnexionPts && (retour.has('code') || retour.has('error_description'))) {
     import('./auth-modal.js').then((m) => m.retourConnexion());
 } else if (!sessionEnregistree() && document.querySelector('a.btn-login')) {
-    // Pas connecté : « Connexion » ouvre la fenêtre de connexion / inscription (sans JS, le lien reste valable)
-    import('./auth-modal.js');
+    // Pas connecté : « Connexion » ouvre la fenêtre de connexion / inscription (sans JS, le lien reste valable).
+    // Le clic est pris tout de suite, même si la fenêtre n'est pas encore chargée ; si le chargement
+    // échoue (réseau), on suit le lien normal vers la page de connexion.
+    const fenetre = import('./auth-modal.js');
+    document.querySelectorAll('a.btn-login').forEach((a) =>
+        a.addEventListener('click', async (e) => {
+            e.preventDefault();
+            try {
+                await (await fenetre).ouvrir(a);
+            } catch {
+                location.href = a.href;
+            }
+        }),
+    );
 }
 
 if (sessionEnregistree()) {
