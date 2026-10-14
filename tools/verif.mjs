@@ -24,6 +24,7 @@ const etapes = [
 for (const [script, nom] of [
     ['test:fonctions', 'Tests logique des Edge Functions'],
     ['test:pts', 'Tests verrou PTS'],
+    ['test:outils', 'Tests outils PTS (Encyclopédie, Builder Ma collection)'],
     ['test:profil', 'Tests page Mon profil'],
     ['test:premium', 'Tests contenu Premium et paiement'],
 ])
