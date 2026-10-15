@@ -51,7 +51,7 @@ function urlDangereuse(nom, valeur, balise) {
     return false;
 }
 
-export function nettoyer(html) {
+function nettoyer(html) {
     const doc = new DOMParser().parseFromString(String(html), 'text/html');
     for (const el of [...doc.body.querySelectorAll('*')]) {
         const balise = el.localName.toLowerCase();

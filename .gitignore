@@ -36,3 +36,6 @@ playwright-report/
 
 # Contenus payants : JAMAIS dans le dépôt (publiés dans Supabase par npm run publier:contenu)
 contenus-prives/
+
+# Cache de la CLI Supabase
+supabase/.temp/
