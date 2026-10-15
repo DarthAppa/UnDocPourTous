@@ -16,7 +16,8 @@ const VARIANTES = [
     'legende',
     'epique',
 ];
-const EXCEPTIONS = { RIMOVEE: 'rimove', HOLYBUDY: 'holybuddy' }; // mêmes clés que le builder (pkey)
+// Noms du builder dont la clé du site diffère (pkey) ; FERHAT et CRAZORAK ont été renommés sur le site le 15/10/2026
+const EXCEPTIONS = { RIMOVEE: 'rimove', HOLYBUDY: 'holybuddy', FERHAT: 'fehrat', CRAZORAK: 'crazorack' };
 const cle = (n) =>
     EXCEPTIONS[n] ||
     String(n)
@@ -89,7 +90,13 @@ export function convertir(collection, parCle, wmap) {
         const parts = decouper(premier(c.id, c.cardId, c.slug));
         const base = premier(c.playerKey, parts.base);
         const variante = premier(c.variant, parts.variante);
-        const ref = parCle.get(base) || parCle.get(parts.base) || (c.name ? parCle.get(cle(c.name)) : null);
+        // Cartes ajoutées par l'équipe du site : identifiant « adm-<pseudo> »
+        const sansAdm = String(base).replace(/^adm-/, '');
+        const ref =
+            parCle.get(base) ||
+            parCle.get(parts.base) ||
+            parCle.get(sansAdm) ||
+            (c.name ? parCle.get(cle(c.name)) : null);
         const note = Number(premier(c.overall, c.ovr, c.note, c.rating));
         if (!ref || !Number.isFinite(note)) {
             inconnues++;
