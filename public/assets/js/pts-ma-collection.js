@@ -132,7 +132,9 @@ async function demarrer() {
         const col = await maCollection();
         if (!col || !Array.isArray(col.roster) || !col.roster.length) {
             dire(
-                'Ta collection n’est pas encore synchronisée. Installe l’extension PTS Companion, connecte-la à ton compte, puis ouvre ',
+                'Ta collection n’est pas encore synchronisée. Installe l’extension PTS Companion (',
+                lien('la télécharger', 'telechargements/pts-companion-0.2.0.zip'),
+                '), connecte-la à ton compte, puis ouvre ',
                 lien('packtasmall.fr', 'https://packtasmall.fr'),
                 ' : tes cartes apparaîtront ici. Tu peux suivre la synchronisation depuis ',
                 lien('ton profil', 'profil.html'),

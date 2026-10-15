@@ -75,7 +75,7 @@ async function afficherDonnees(e) {
         const d = e.donnees || (await mesDonnees());
         if (!d || !d.comptes.length) {
             txt.innerHTML =
-                'Aucune donnée PTS pour l’instant. Installe <b>PTS Companion</b> puis ouvre packtasmall.fr : ta collection et tes replays seront récupérés à chaque connexion au site.';
+                'Aucune donnée PTS pour l’instant. Installe <b>PTS Companion</b> (<a href="telechargements/pts-companion-0.2.0.zip" download>télécharger l’extension</a>) puis ouvre packtasmall.fr : ta collection et tes replays seront récupérés à chaque connexion au site.';
             return;
         }
         const maj = d.majCollection
