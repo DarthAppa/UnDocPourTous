@@ -19,7 +19,7 @@
 
     // 2. Ancre à l'arrivée (lien partagé « …#ch10 ») : on retire le # et on garde la section visée à l'écran.
     //    Les pages PTS s'affichent après la vérification du compte et construisent leur contenu en JS :
-    //    on recale donc le défilement quand la page se dévoile (classe pts-attente retirée), pendant 5 s au plus.
+    //    on recale donc le défilement tant que la mise en page bouge (voir plus bas).
     const visee = ancre.test(location.hash) ? location.hash.slice(1) : '';
     if (visee) {
         const recaler = function () {
@@ -29,17 +29,39 @@
         window.addEventListener('load', function () {
             history.replaceState(history.state, '', location.pathname + location.search);
             recaler();
+            // La page peut encore bouger (dévoilement PTS, polices, contenu construit en JS) : on recale à
+            // chaque changement de mise en page pendant 6 s, sauf si la personne fait défiler elle-même.
             const racine = document.documentElement;
-            if (!racine.classList.contains('pts-attente')) return;
-            const obs = new MutationObserver(function () {
-                if (racine.classList.contains('pts-attente')) return;
-                obs.disconnect();
-                requestAnimationFrame(recaler);
+            const suivi = [];
+            const arreter = function () {
+                suivi.forEach(function (f) {
+                    f();
+                });
+                suivi.length = 0;
+            };
+            const obsClasse = new MutationObserver(function () {
+                if (!racine.classList.contains('pts-attente')) requestAnimationFrame(recaler);
             });
-            obs.observe(racine, { attributes: true, attributeFilter: ['class'] });
-            setTimeout(function () {
-                obs.disconnect();
-            }, 5000);
+            obsClasse.observe(racine, { attributes: true, attributeFilter: ['class'] });
+            suivi.push(function () {
+                obsClasse.disconnect();
+            });
+            if (window.ResizeObserver) {
+                const obsTaille = new ResizeObserver(function () {
+                    requestAnimationFrame(recaler);
+                });
+                obsTaille.observe(document.body);
+                suivi.push(function () {
+                    obsTaille.disconnect();
+                });
+            }
+            ['wheel', 'touchstart', 'keydown', 'pointerdown'].forEach(function (type) {
+                window.addEventListener(type, arreter, { once: true, passive: true });
+                suivi.push(function () {
+                    window.removeEventListener(type, arreter);
+                });
+            });
+            setTimeout(arreter, 6000);
         });
     }
 

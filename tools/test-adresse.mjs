@@ -75,6 +75,7 @@ console.log('\n[en ligne : undocpourtous.com simulé]');
     await p.waitForFunction(() => !document.documentElement.classList.contains('pts-attente'));
     await p.waitForFunction(() => !location.hash);
     t.verif((await adresse(p)) === '/pts-encyclopedie', `encyclopédie avec #ch10 affichée « /pts-encyclopedie »`);
+    await p.waitForTimeout(1500); // la page finit de se construire : la section doit rester visée
     const haut = await p.$eval('#ch10', (el) => Math.round(el.getBoundingClientRect().top));
     t.verif(Math.abs(haut) < 120, `arrivée sur le chapitre visé (#ch10 à ${haut}px du haut)`);
 
