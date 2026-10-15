@@ -62,6 +62,13 @@ dist/           site construit (npm run build) : jamais modifié à la main, jam
 - Le contenu doit rester visible sans JS (les classes `.reveal` ne cachent qu'avec `.js` sur `<html>`).
 - Après toute modification visuelle : lancer `npm run shot`, regarder les captures, corriger avant de dire que c'est fini.
 
+## Design (anti « look IA »)
+
+- IMPORTANT : avant d'écrire ou de retoucher une page, lire le skill `front-conventions` (section « Anti look IA »). Il prime sur les skills design externes en cas de conflit.
+- Polices : IBM Plex Sans (texte), IBM Plex Mono (libellés, chiffres), Lora 700 (titres), Cinzel (Pack ta Small). Jamais Inter, Roboto, Poppins, Montserrat, Space Grotesk, Outfit, Sora.
+- Nouvelle page ou section : skill `frontend-design` OU `design-taste-frontend` (pas les deux). Page qui fait « généré » : `redesign-existing-projects` puis `impeccable` (`/impeccable audit`, `polish`, `critique`). Contrôle final : `hallmark` (slop-test) et `web-design-guidelines`.
+- Ces skills tiers sont installés au niveau utilisateur (`~/.claude/skills/`), pas dans le dépôt (public) : ne pas les y recopier. Leurs exemples (React, CDN, Inter…) ne s'appliquent pas ici : nos règles (Astro, vanilla JS, Tailwind compilé, CSP, pas de CDN, tokens) passent avant.
+
 ## Sécurité (skill `securite`, à lire avant tout code sensible)
 
 - IMPORTANT : le dépôt est PUBLIC. Aucun secret (seule la clé `anon` Supabase est permise côté navigateur) et AUCUN contenu payant dans le dépôt : il va dans la table `contenus` via `npm run publier:contenu` depuis `contenus-prives/` (ignoré) — skill `contenu-premium`.

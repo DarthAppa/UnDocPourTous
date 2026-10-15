@@ -6,8 +6,8 @@ export const SITE = {
     locale: 'fr_FR',
 };
 
-// Polices Google (Inter, IBM Plex Mono, Lora ; Cinzel en plus sur les pages Pack ta Small)
-const FAMILLES = 'family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Lora:wght@700';
+// Polices Google (IBM Plex Sans, IBM Plex Mono, Lora ; Cinzel en plus sur les pages Pack ta Small)
+const FAMILLES = 'family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Lora:wght@700';
 export const polices = (cinzel = false) =>
     `https://fonts.googleapis.com/css2?${FAMILLES}${cinzel ? '&family=Cinzel:wght@600;700' : ''}&display=swap`;
 
