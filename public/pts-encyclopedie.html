@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JMWRqtnEYrmNahpks867froYIe6MzcuyN16JpDa92Mw=' 'sha256-lLSkJcTIqNuVDEFi+dxWGzfUulKsk+M7n2uBbJHZ9tM=' 'sha256-UZgsD/QtppEnCf6OREaiiUz4fTDw1/k1cc/n4QPLLkY=' 'sha256-l8KgOuURPD+/0dCHQAxmdACq10am2Htyg1cRULM/LUA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://cdn.discordapp.com; connect-src 'self' https://wibfiqtuqfddijjlfscs.supabase.co wss://wibfiqtuqfddijjlfscs.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'sha256-JMWRqtnEYrmNahpks867froYIe6MzcuyN16JpDa92Mw=' 'sha256-lLSkJcTIqNuVDEFi+dxWGzfUulKsk+M7n2uBbJHZ9tM=' 'sha256-07hae8XRmY0EumQ6OLGcwCjY+s3rsXQkh36kJGOkfWM=' 'sha256-l8KgOuURPD+/0dCHQAxmdACq10am2Htyg1cRULM/LUA='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://cdn.discordapp.com; connect-src 'self' https://wibfiqtuqfddijjlfscs.supabase.co wss://wibfiqtuqfddijjlfscs.supabase.co; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self'; upgrade-insecure-requests">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Encyclopédie Pack ta Small — UnDocPourTous</title>
@@ -47,6 +47,8 @@ nav.toc a{display:flex;gap:10px;padding:4px 0;color:var(--muted);text-decoration
 nav.toc a:hover,nav.toc a:focus-visible{color:var(--blood);outline:none}
 nav.toc .n{font:500 12px/1.9 var(--mono);color:var(--gold);min-width:2ch}
 nav.toc a.lc{color:var(--blood);font-weight:700}
+nav.toc .tg{display:block;margin:14px 0 2px;font:600 11px/1.4 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--ink);break-after:avoid}
+nav.toc .tg:first-of-type{margin-top:8px}
 main{min-width:0;display:flex;flex-direction:column;gap:40px}
 section{scroll-margin-top:16px}
 h2{font:700 28px/1.15 var(--display);margin:0 0 12px;display:flex;align-items:baseline;gap:12px;text-wrap:balance}
@@ -517,39 +519,47 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
 </nav>
 <div class="p1">
 <header class="top">
-  <div class="topline"><div class="eyebrow">Pack ta Small · Encyclopédie · relevé du 12/10/2026</div><div class="tl-r"><a class="discbtn" href="https://discord.gg/DX8wNgJAGV" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M19.3 5.3A16.6 16.6 0 0 0 15.2 4l-.5 1a15.4 15.4 0 0 0-5.4 0l-.5-1a16.6 16.6 0 0 0-4.1 1.3C2.1 9.2 1.4 13 1.7 16.7A16.8 16.8 0 0 0 6.8 19.3l1.1-1.7a10.9 10.9 0 0 1-1.7-.8l.4-.3a11.9 11.9 0 0 0 10.8 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.7a16.7 16.7 0 0 0 5.1-2.6c.4-4.3-.7-8-3-11.4ZM8.7 14.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"/></svg>Discord PTS</a><button type="button" id="themeBtn" class="themebtn" aria-label="Changer de thème"><span class="tb-ic" aria-hidden="true"></span><span id="themeLbl">Auto</span></button><div class="byline">By <b>Apparance</b><span>Cyril « Apparance » Bellucci</span></div></div></div>
+  <div class="topline"><div class="eyebrow">Pack ta Small · Encyclopédie · mise à jour du 15/10/2026</div><div class="tl-r"><a class="discbtn" href="https://discord.gg/DX8wNgJAGV" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true"><path fill="currentColor" d="M19.3 5.3A16.6 16.6 0 0 0 15.2 4l-.5 1a15.4 15.4 0 0 0-5.4 0l-.5-1a16.6 16.6 0 0 0-4.1 1.3C2.1 9.2 1.4 13 1.7 16.7A16.8 16.8 0 0 0 6.8 19.3l1.1-1.7a10.9 10.9 0 0 1-1.7-.8l.4-.3a11.9 11.9 0 0 0 10.8 0l.4.3c-.5.3-1.1.6-1.7.8l1.1 1.7a16.7 16.7 0 0 0 5.1-2.6c.4-4.3-.7-8-3-11.4ZM8.7 14.5c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Zm6.6 0c-1 0-1.8-.9-1.8-2s.8-2 1.8-2 1.8.9 1.8 2-.8 2-1.8 2Z"/></svg>Discord PTS</a><button type="button" id="themeBtn" class="themebtn" aria-label="Changer de thème"><span class="tb-ic" aria-hidden="true"></span><span id="themeLbl">Auto</span></button><div class="byline">By <b>Apparance</b><span>Cyril « Apparance » Bellucci</span></div></div></div>
   <h1>L’encyclopédie, <em>le jeu</em></h1>
   <p class="lede">Tout ce qu’il faut savoir sur Pack ta Small : les 22 chapitres du guide officiel condensés, les armes, les synergies, les maths des combats mesurées sur les replays et la collection complète des cartes avec leurs visuels.</p>
 </header>
 <div class="wrap">
 <nav class="toc" aria-label="Sommaire">
   <a class="lc" href="#explorer"><span class="n">⌕</span>Explorateur</a>
-  <a class="lc" href="#lifecurse"><span class="n">★</span>Le Lifecurse</a>
+  <span class="tg">Bien commencer</span>
   <a href="#ch00"><span class="n">00</span>L’univers d’Albion</a>
   <a href="#ch01"><span class="n">01</span>Bien débuter</a>
+  <span class="tg">Les cartes</span>
   <a href="#ch02"><span class="n">02</span>Les cartes joueurs</a>
   <a href="#ch03"><span class="n">03</span>Raretés</a>
   <a href="#ch04"><span class="n">04</span>Cartes spéciales</a>
   <a href="#ch05"><span class="n">05</span>Les Callers</a>
+  <span class="tg">Construire son équipe</span>
   <a href="#ch06"><span class="n">06</span>Construire une équipe</a>
   <a href="#ch07"><span class="n">07</span>Le Draft</a>
   <a href="#ch08"><span class="n">08</span>Le Collectif</a>
   <a href="#ch09"><span class="n">09</span>Les Synergies</a>
+  <span class="tg">Le combat</span>
   <a href="#ch10"><span class="n">10</span>Système de combat</a>
   <a href="#ch11"><span class="n">11</span>Armes et capacités</a>
-  <a class="lc" href="#armes"><span class="n">A</span>Armes</a>
-  <a href="#ch12"><span class="n">12</span>Packs</a>
-  <a href="#ch13"><span class="n">13</span>Économie</a>
-  <a href="#ch14"><span class="n">14</span>Ladder</a>
-  <a href="#ch15"><span class="n">15</span>Factions</a>
-  <a href="#ch16"><span class="n">16</span>Récompenses</a>
-  <a href="#ch17"><span class="n">17</span>Pass de combat</a>
-  <a href="#ch18"><span class="n">18</span>Saisons et resets</a>
-  <a href="#ch19"><span class="n">19</span>Règles et anti-abus</a>
-  <a href="#ch20"><span class="n">20</span>Cartes communautaires</a>
-  <a href="#ch21"><span class="n">21</span>Crédits</a>
-  <a href="#ch24"><span class="n">22</span>Maths des combats</a>
-  <a class="lc" href="#collection"><span class="n">23</span>Collection complète</a>
+  <a class="lc" href="#lifecurse"><span class="n">★</span>Le Lifecurse</a>
+  <a href="#armes"><span class="n">12</span>Fiches des armes</a>
+  <a href="#ch24"><span class="n">13</span>Maths des combats</a>
+  <span class="tg">Progresser</span>
+  <a href="#ch12"><span class="n">14</span>Packs</a>
+  <a href="#ch13"><span class="n">15</span>Économie</a>
+  <a href="#ch17"><span class="n">16</span>Pass de combat</a>
+  <a href="#ch16"><span class="n">17</span>Récompenses</a>
+  <span class="tg">Compétition</span>
+  <a href="#ch14"><span class="n">18</span>Ladder</a>
+  <a href="#ch15"><span class="n">19</span>Factions</a>
+  <a href="#ch18"><span class="n">20</span>Saisons et resets</a>
+  <span class="tg">Communauté</span>
+  <a href="#ch19"><span class="n">21</span>Règles et anti-abus</a>
+  <a href="#ch20"><span class="n">22</span>Cartes communautaires</a>
+  <span class="tg">Annexes</span>
+  <a href="#collection"><span class="n">23</span>Collection complète</a>
+  <a href="#ch21"><span class="n">24</span>Crédits</a>
 </nav>
 <main>
 <section id="explorer" class="explorer">
@@ -589,32 +599,7 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
   <div id="results"></div>
   <p class="note">Clique sur une arme pour aller à sa fiche dans le chapitre Armes. Options : effets tels qu’affichés sur l’écran Draft du site. Le profil offensif / défensif est une estimation tirée des descriptions de l’encyclopédie, sans valeur officielle. Armes et cartes : encyclopédie du site. Synergies : fichier VALEURS SYNERGIES du dossier « Ressource jeu ». Sur le site, les synergies restent cachées tant qu’elles ne sont pas activées : partage cette page avec prudence. Règles d’activation réécrites en clair à partir des conditions du fichier.</p>
 </section>
-<section id="lifecurse" class="lifecurse">
-  <div>
-    <div class="eyebrow">Support · anti-protections</div>
-    <h2>Que fait le Lifecurse ?</h2>
-    <p>C’est le <b>briseur de protections</b> de l’équipe. Pendant l’engage alliée, son effet actif annule les défenses adverses qui empêchent de tuer :</p>
-    <ul class="kill">
-      <li><span>ENT</span>le gros bonus de score défensif d’Ent</li>
-      <li><span>LOCUS</span>le score défensif et la Cleanse de Locus</li>
-      <li><span>CASQUE</span>les esquives du casque chevalier : il remet dans le repack ceux qui l’avaient évité</li>
-      <li><span>FALLEN</span>l’invulnérabilité du repack sur succès critique de Fallen</li>
-    </ul>
-    <p>En défense, il apporte une <b>Demon</b> (+55 de score défensif).</p>
-    <p class="note">Comme tout effet actif : test de Réactivité, puis de Mécaniques pour la qualité. Il ne joue pas s’il est pris dans le repack ou s’il se fait stopper.</p>
-  </div>
-  <div>
-    <dl class="facts">
-      <dt>Rôle</dt><dd><span class="chip s">Support</span></dd>
-      <dt>Armure</dt><dd>Plaque · 170 PV · dégâts reçus × 0,8</dd>
-      <dt>Vision</dt><dd>−13</dd>
-      <dt>Limite</dt><dd>1 par équipe</dd>
-      <dt>Options</dt><dd>Aucune</dd>
-      <dt>Contre</dt><dd>Ent, Locus, Fallen, Carving, Realmbreaker, porteurs de casque chevalier</dd>
-    </dl>
-    <div class="warn"><b>Écart avec le DOC FINAL.</b> Le doc du projet décrit le Lifecurse comme <i>+30 offensif / +25 défensif</i> avec une Vision à +0. L’encyclopédie du site, elle, en fait un support anti-protections avec −13 de Vision. À aligner.</div>
-  </div>
-</section>
+
 <section id="ch00">
   <h2><span class="n">00</span>L’univers d’Albion</h2>
   <p>PTS reprend Albion Online, un MMORPG sans classes où l’arme équipée définit ce qu’on sait faire. Le format de référence est le <b>smallscale</b>, du 20 contre 20.</p>
@@ -625,10 +610,12 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
     <li>Chaque carte est un vrai joueur de la communauté. On compose ses 20, on choisit son Caller, et le jeu simule le combat.</li>
   </ul>
 </section>
+
 <section id="ch01">
   <h2><span class="n">01</span>Bien débuter</h2>
   <p>Jeu communautaire <b>100 % free-to-play</b>. La boucle de jeu : ouvrir des packs, monter une équipe valide, jouer des combats classés, gagner des récompenses. Un pack de départ suffit pour une première équipe. En cas de doute, <b>la valeur affichée en jeu fait foi</b>.</p>
 </section>
+
 <section id="ch02">
   <h2><span class="n">02</span>Les cartes joueurs</h2>
   <p>Une carte, c’est une note générale, 2 armes principales, 4 Fills (Tank, Support, Heal, DPS), 4 stats et des tags de Synergie.</p>
@@ -645,6 +632,7 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
     <li>Une seule version d’un même joueur réel peut figurer dans une draft.</li>
   </ul>
 </section>
+
 <section id="ch03">
   <h2><span class="n">03</span>Raretés des cartes</h2>
   <div class="tbl"><table>
@@ -658,6 +646,7 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
   <p>Types spéciaux : Épique, Légende, GOAT, Multirôle (Fill All) et les cartes passives. Les cadres de Caller ont 4 niveaux : ≤ 73, 74–79, 80–85, 86+.</p>
   <p class="mut">Catalogue au 11/10/2026 : <b>590 cartes</b>, dont 409 joueurs de base (114 Tanks, 74 Supports, 143 DPS, 78 Heals), 41 Callers, 15 GOAT, 22 Légendes, 20 Économistes, 20 Reviewers, 20 GM, 19 Recruteurs, 14 Jokers et 10 Fill All.</p>
 </section>
+
 <section id="ch04">
   <h2><span class="n">04</span>Cartes spéciales</h2>
   <p>Une draft peut contenir <b>3 cartes spéciales maximum</b>, avec une seule carte de chaque type. <b>Nouveau</b> : Recruteur, Économiste et Reviewer occupent <b>trois emplacements passifs dédiés</b> et ne prennent plus de place de rôle.</p>
@@ -670,6 +659,7 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
     <div class="box"><h3>Fill All · terrain</h3>Garde 100 % de ses stats dans n’importe quel rôle et sur toutes les armes du rôle, sans pénalité de Fill.</div>
   </div>
 </section>
+
 <section id="ch05">
   <h2><span class="n">05</span>Les Callers <span class="upd">Mis à jour le 12/10</span></h2>
   <p>Le Caller a les 4 stats d’une carte classique, plus 4 stats propres : <b>Macro, Micro, Mental, Motivation</b>. Il joue HOJ ou Golem. Les Callers standards sont notés de 60 à 84, les Callers Légende 85 et plus. Les textes ci-dessous sont ceux du site.</p>
@@ -727,14 +717,17 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
   <div class="tbl"><table><tr><th>Caller</th><th class="num">Note</th><th class="num">Macro</th><th class="num">Micro</th><th class="num">Mental</th><th class="num">Motiv</th></tr><tr><td><b>ASUNA</b></td><td class="num">89</td><td class="num">92</td><td class="num">90</td><td class="num">76</td><td class="num">98</td></tr><tr><td><b>YWELLS</b></td><td class="num">88</td><td class="num">85</td><td class="num">97</td><td class="num">78</td><td class="num">92</td></tr><tr><td><b>NICO</b></td><td class="num">86</td><td class="num">82</td><td class="num">95</td><td class="num">90</td><td class="num">77</td></tr><tr><td><b>CHIBREUR</b></td><td class="num">85</td><td class="num">76</td><td class="num">93</td><td class="num">90</td><td class="num">81</td></tr><tr><td><b>MAMOUTH</b></td><td class="num">84</td><td class="num">81</td><td class="num">80</td><td class="num">80</td><td class="num">95</td></tr><tr><td><b>JUMPLEBOW</b></td><td class="num">83</td><td class="num">80</td><td class="num">94</td><td class="num">85</td><td class="num">73</td></tr><tr><td><b>FURYBILL</b></td><td class="num">83</td><td class="num">83</td><td class="num">91</td><td class="num">88</td><td class="num">72</td></tr><tr><td><b>ZERKHOO</b></td><td class="num">82</td><td class="num">85</td><td class="num">69</td><td class="num">93</td><td class="num">83</td></tr><tr><td><b>AROBASS</b></td><td class="num">82</td><td class="num">82</td><td class="num">86</td><td class="num">82</td><td class="num">76</td></tr><tr><td><b>RYKNARR</b></td><td class="num">81</td><td class="num">82</td><td class="num">87</td><td class="num">78</td><td class="num">77</td></tr><tr><td><b>KAYZEN357</b></td><td class="num">81</td><td class="num">82</td><td class="num">94</td><td class="num">66</td><td class="num">81</td></tr><tr><td><b>MALAES</b></td><td class="num">80</td><td class="num">85</td><td class="num">67</td><td class="num">82</td><td class="num">88</td></tr><tr><td><b>AZEALUX</b> <span class="mut">*</span></td><td class="num">80</td><td class="num">82</td><td class="num">66</td><td class="num">93</td><td class="num">80</td></tr><tr><td><b>ANYMIA</b></td><td class="num">80</td><td class="num">77</td><td class="num">75</td><td class="num">93</td><td class="num">75</td></tr><tr><td><b>COMEDIEN</b></td><td class="num">79</td><td class="num">75</td><td class="num">80</td><td class="num">90</td><td class="num">95</td></tr><tr><td><b>YILK</b></td><td class="num">79</td><td class="num">80</td><td class="num">75</td><td class="num">90</td><td class="num">85</td></tr><tr><td><b>KHEYNOR</b></td><td class="num">79</td><td class="num">78</td><td class="num">79</td><td class="num">79</td><td class="num">78</td></tr><tr><td><b>OCHIWIN</b></td><td class="num">78</td><td class="num">80</td><td class="num">78</td><td class="num">74</td><td class="num">78</td></tr><tr><td><b>WHYNOZ</b></td><td class="num">78</td><td class="num">84</td><td class="num">85</td><td class="num">65</td><td class="num">80</td></tr><tr><td><b>IMRAY</b></td><td class="num">77</td><td class="num">80</td><td class="num">72</td><td class="num">76</td><td class="num">80</td></tr><tr><td><b>HOLYBUDY</b></td><td class="num">77</td><td class="num">79</td><td class="num">79</td><td class="num">85</td><td class="num">70</td></tr><tr><td><b>NAONE</b> <span class="mut">*</span></td><td class="num">76</td><td class="num">74</td><td class="num">75</td><td class="num">89</td><td class="num">66</td></tr><tr><td><b>MIKEYYY</b> <span class="mut">*</span></td><td class="num">76</td><td class="num">78</td><td class="num">79</td><td class="num">69</td><td class="num">76</td></tr><tr><td><b>HEDDDA</b></td><td class="num">76</td><td class="num">78</td><td class="num">68</td><td class="num">89</td><td class="num">69</td></tr><tr><td><b>RIMOVEE</b></td><td class="num">75</td><td class="num">73</td><td class="num">77</td><td class="num">75</td><td class="num">73</td></tr><tr><td><b>CHRISTOOPHER</b> <span class="mut">*</span></td><td class="num">75</td><td class="num">74</td><td class="num">81</td><td class="num">75</td><td class="num">68</td></tr><tr><td><b>SPOP</b></td><td class="num">74</td><td class="num">67</td><td class="num">70</td><td class="num">91</td><td class="num">68</td></tr><tr><td><b>IMACE</b> <span class="mut">*</span></td><td class="num">74</td><td class="num">73</td><td class="num">74</td><td class="num">68</td><td class="num">79</td></tr><tr><td><b>DOVHAK</b> <span class="mut">*</span></td><td class="num">74</td><td class="num">75</td><td class="num">72</td><td class="num">75</td><td class="num">72</td></tr><tr><td><b>ARKETV</b></td><td class="num">74</td><td class="num">70</td><td class="num">76</td><td class="num">77</td><td class="num">71</td></tr><tr><td><b>WINOU</b> <span class="mut">*</span></td><td class="num">73</td><td class="num">76</td><td class="num">79</td><td class="num">70</td><td class="num">65</td></tr><tr><td><b>ANORAKEU</b> <span class="mut">*</span></td><td class="num">73</td><td class="num">69</td><td class="num">68</td><td class="num">83</td><td class="num">70</td></tr><tr><td><b>YEDSOW</b></td><td class="num">72</td><td class="num">55</td><td class="num">55</td><td class="num">99</td><td class="num">81</td></tr><tr><td><b>HUMAINMYSTERIEUX</b></td><td class="num">72</td><td class="num">63</td><td class="num">70</td><td class="num">89</td><td class="num">64</td></tr><tr><td><b>HONORAIM</b></td><td class="num">72</td><td class="num">79</td><td class="num">78</td><td class="num">66</td><td class="num">65</td></tr><tr><td><b>RIOTOT</b> <span class="mut">*</span></td><td class="num">71</td><td class="num">72</td><td class="num">70</td><td class="num">71</td><td class="num">69</td></tr><tr><td><b>MONJP</b></td><td class="num">71</td><td class="num">68</td><td class="num">69</td><td class="num">82</td><td class="num">63</td></tr><tr><td><b>AMANDINEDU73</b> <span class="mut">*</span></td><td class="num">70</td><td class="num">62</td><td class="num">59</td><td class="num">73</td><td class="num">84</td></tr><tr><td><b>DOMINYKUS</b></td><td class="num">69</td><td class="num">30</td><td class="num">80</td><td class="num">90</td><td class="num">99</td></tr><tr><td><b>SPACEMEUH</b> <span class="mut">*</span></td><td class="num">68</td><td class="num">66</td><td class="num">66</td><td class="num">73</td><td class="num">65</td></tr><tr><td><b>FREEHASTENED</b></td><td class="num">67</td><td class="num">65</td><td class="num">63</td><td class="num">66</td><td class="num">72</td></tr></table></div>
   <p class="mut">Relevé le 12/10 sur les collections Appa et Evo et dans les replays. * : valeur d’un relevé plus ancien, pas revue sur le site. Corrigés ce jour : COMEDIEN, DOMINYKUS, HOLYBUDY, WHYNOZ, YILK.</p>
 </section>
+
 <section id="ch06">
   <h2><span class="n">06</span>Construire une équipe</h2>
   <p>Combat en 20 contre 20. Composition de référence : <b>1 Caller · 4 <span class="t">Tanks</span> · 4 <span class="s">Supports</span> · 7 <span class="d">DPS</span> · 4 <span class="h">Heals</span></b>. Les Fills permettent de jouer hors rôle si la carte l’autorise.</p>
 </section>
+
 <section id="ch07">
   <h2><span class="n">07</span>Le Draft</h2>
   <p>C’est l’écran de construction : composition, Collectif, Synergies actives, rôles et armes, restrictions bloquantes. Une carte non débloquée ne peut pas y être utilisée.</p>
 </section>
+
 <section id="ch08">
   <h2><span class="n">08</span>Le Collectif <span class="upd">Mis à jour le 11/10</span></h2>
   <p>Score de cohésion de <b>0 à 100</b>, affiché dans le Draft. Il modifie les <b>4 statistiques de toutes les cartes</b> de l’équipe, Caller compris : <b>(Collectif − 50) ÷ 5</b> en pourcentage, appliqué avant la comparaison avec la moyenne du combat.</p>
@@ -752,11 +745,13 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
   <p class="mut">Exemple du site : 12 joueurs de A et 6 de B → 12 × 3 + 6 × 1 × 80 % = 40,8, soit environ 41 avant Synergies.</p>
   <p>Les Synergies actives ajoutent ou retirent ensuite leur valeur × activations, et le Joker ajoute la valeur de sa carte. Résultat toujours entre 0 et 100.</p>
 </section>
+
 <section id="ch09">
   <h2><span class="n">09</span>Les Synergies</h2>
   <p>Ce sont des liens entre joueurs, en <b>Buffs</b> (+Collectif) ou <b>Debuffs</b> (−Collectif). Une Synergie partagée reste cachée tant que deux porteurs ne sont pas réunis. Chacune a sa condition d’activation et son nombre maximum d’activations. Elles n’ajoutent jamais de score directement, tout passe par le Collectif, qui ne descend jamais sous 0.</p>
   <div class="warn"><b>Mise à jour du 11/10 (nerf du Collectif).</b> Le catalogue du site ne compte plus que <b>92 synergies</b> (28 guildes, 24 buffs et 40 debuffs). Elles ne sont plus dans le catalogue : AMOUR UNILATERAL, DEUX FAUVES, DEUX FRERES, FANBOY, SOUMISSION, BOT DISCORD, MEC PEACE, PIEDS PROPRES, SHARINGAN, TOP 1 HUMOUR, PETITE BIBLE (buffs) · 753 KM, BACKUP CALLER, FAUX 7.3, GIG POT, GMEL, MALAES HATER, MEUF (Imace), MOST PROBLEMATIC FRENCH PLAYER EVER, TOP 1 OATH, PERMA COMP, POINT BLEU, PRISON, RIXE, RP, SPIKE DOUBLE TRANCHANT, FLOP 1 HUMOUR, TU LA SENS??, PX RATATATA, MAL DE DOS, VENIN (debuffs). MECHANT ZGUEG n’a plus de plafond (−1 par porteur, 100 direct à 20 porteurs) et VRAI SOLDAT non plus (+3 par porteur). Les cartes GM et Fill All comptent dans les guildes ; seules les cartes passives (Économiste, Reviewer, Joker, Recruteur) sont exclues. Les deux Builders utilisent maintenant exactement ce calcul : sur ta compo « Opti Encyclo », ils trouvent le même Collectif que le site (93).</div>
 </section>
+
 <section id="ch10">
   <h2><span class="n">10</span>Le système de combat <span class="upd">Mis à jour le 11/10</span></h2>
   <div class="grid">
@@ -794,6 +789,7 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
   <tr><td>Déconnexion</td><td>un joueur compte comme mort</td><td class="num">0,01 %</td></tr>
   <tr><td>Invis Bomb</td><td>à 1 et 2 min, les 5 pires Visions tombent</td><td class="num">1 %</td></tr></table></div>
 </section>
+
 <section id="ch11">
   <h2><span class="n">11</span>Armes et capacités <span class="upd">Mis à jour le 14/10</span></h2>
   <div class="box"><h3>Changements du moteur au 14/10/2026</h3>Relevés dans les réglages officiels du site (comparés au relevé du 11/10). Les fiches ci-dessous sont à jour.
@@ -824,95 +820,86 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
   <h3>Tableau des armes</h3>
   <div class="tbl" id="armtab"></div>
 </section>
+
+<section id="lifecurse" class="lifecurse">
+  <div>
+    <div class="eyebrow">Support · anti-protections</div>
+    <h2>Que fait le Lifecurse ?</h2>
+    <p>C’est le <b>briseur de protections</b> de l’équipe. Pendant l’engage alliée, son effet actif annule les défenses adverses qui empêchent de tuer :</p>
+    <ul class="kill">
+      <li><span>ENT</span>le gros bonus de score défensif d’Ent</li>
+      <li><span>LOCUS</span>le score défensif et la Cleanse de Locus</li>
+      <li><span>CASQUE</span>les esquives du casque chevalier : il remet dans le repack ceux qui l’avaient évité</li>
+      <li><span>FALLEN</span>l’invulnérabilité du repack sur succès critique de Fallen</li>
+    </ul>
+    <p>En défense, il apporte une <b>Demon</b> (+55 de score défensif).</p>
+    <p class="note">Comme tout effet actif : test de Réactivité, puis de Mécaniques pour la qualité. Il ne joue pas s’il est pris dans le repack ou s’il se fait stopper.</p>
+  </div>
+  <div>
+    <dl class="facts">
+      <dt>Rôle</dt><dd><span class="chip s">Support</span></dd>
+      <dt>Armure</dt><dd>Plaque · 170 PV · dégâts reçus × 0,8</dd>
+      <dt>Vision</dt><dd>−13</dd>
+      <dt>Limite</dt><dd>1 par équipe</dd>
+      <dt>Options</dt><dd>Aucune</dd>
+      <dt>Contre</dt><dd>Ent, Locus, Fallen, Carving, Realmbreaker, porteurs de casque chevalier</dd>
+    </dl>
+    <div class="warn"><b>Écart avec le DOC FINAL.</b> Le doc du projet décrit le Lifecurse comme <i>+30 offensif / +25 défensif</i> avec une Vision à +0. L’encyclopédie du site, elle, en fait un support anti-protections avec −13 de Vision. À aligner.</div>
+  </div>
+</section>
+
 <section id="armes">
-  <h2><span class="n">A</span>Armes</h2>
+  <h2><span class="n">12</span>Fiches des armes</h2>
   <p>Toutes les armes du jeu, fiche par fiche. Chaque fiche s’ouvre aussi dans l’explorateur.</p>
   <nav class="rolejump" aria-label="Aller au rôle"><a href="#armes-T" class="t">Tanks</a><a href="#armes-S" class="s">Supports</a><a href="#armes-H" class="h">Heals</a><a href="#armes-D" class="d">DPS</a></nav>
   <div id="armes-list"></div>
 </section>
-<section id="ch12">
-  <h2><span class="n">12</span>Packs <span class="upd">Mis à jour le 11/10</span></h2>
-  <p>Trois formats principaux : Recrue (3 cartes), Élite (5), Légende (9). Les nouveaux joueurs commencent avec un <b>pack de bienvenue de 30 cartes</b> (un Caller et tous les rôles). Les files classées et amicales exigent 19 combattants plus un Caller.</p>
-  <ul>
-    <li><b>Pity Élite</b> : après 50 Coffres Épiques sans Cristal, le suivant en garantit une (un Caller ne compte pas).</li>
-    <li><b>Pity Légende</b> : après 25 Packs Légendaires sans Caller, le suivant garantit un Caller.</li>
-    <li><b>Pity GOAT</b> : après 100 Packs Légendaires sans GOAT, achetés ou offerts, le suivant en garantit un. Compteur conservé d’une saison à l’autre.</li>
-    <li><b>Jauge de doublons</b> : conservée d’une saison à l’autre ; ne propose jamais de Caller, de GOAT ni de carte spéciale.</li>
-    <li>Part des cartes spéciales dans le tirage spécial (code) : Économiste, Reviewer, GM, Joker et Recruteur 18 % chacun, Fill All 10 %.</li>
-  </ul>
-</section>
-<section id="ch13">
-  <h2><span class="n">13</span>Économie</h2>
-  <p>Deux monnaies : l’<b>Or</b> (pour les coffres) et les <b>Jetons</b> (pour le coffre Recruteur). Tout se remet à zéro à minuit, heure de Paris.</p>
-  <div class="grid">
-    <div class="box"><h3>Or du jour</h3>Membre 1 800 · Booster 2 000 · Ambassadeur 2 200 · Ambassadeur et booster 2 500. Les Ambassadeurs reçoivent aussi un bonus d’Or et de Jetons chaque semaine. <span class="mut">(Le site parle désormais d’« Ambassadeur » là où l’encyclopédie dit « Fondateur ».)</span></div>
-    <div class="box"><h3>Combats classés</h3>Victoires 1–10 : 350 · 11–20 : 220 · 21–25 : 160 · puis 10 et 5. Défaites 1–10 : 45, puis 10. +60 or à la 1<sup>re</sup> victoire, +40 au 3<sup>e</sup> match. <b>Plafond de 8 000 or par jour.</b></div>
-    <div class="box"><h3>Bonus et missions</h3>Fondateur +10 %, Booster +5 % / +2 %, Elo jusqu’à +15 %, Économiste de −10 à +20 %. Missions du jour : 450 or. Missions de la semaine : 1 500 or, plus un coffre Recruteur et un coffre Élite.</div>
-  </div>
-  <div class="tbl"><table>
-    <tr><th>Coffre</th><th>Prix</th><th>Cartes</th><th>≥ 1 rare</th><th>Particularité</th></tr>
-    <tr><td>Quotidien</td><td class="num">gratuit ×2</td><td class="num">1</td><td class="num">5 %</td><td>Tout est possible, même un Goat</td></tr>
-    <tr><td>Recrue</td><td class="num">300 or</td><td class="num">3</td><td class="num">7 %</td><td>Au moins un Argent, le moins cher par carte</td></tr>
-    <tr><td>Élite</td><td class="num">750 or</td><td class="num">5</td><td class="num">22,6 %</td><td>Au moins un Or, le meilleur pour le Cristal, pitié à 50</td></tr>
-    <tr><td>Légende</td><td class="num">1 800 or</td><td class="num">9</td><td class="num">37 %</td><td>Goat 1/500 (pitié à 100), Légende 1/2 000</td></tr>
-    <tr><td>Spécialiste</td><td class="num">1 800 or</td><td class="num">7</td><td class="num">—</td><td>Une spéciale passive ou GM garantie</td></tr>
-    <tr><td>Recruteur</td><td class="num">1 000 jetons</td><td class="num">3</td><td class="num">3,6 %</td><td>Rôle au choix, une nouveauté garantie dès 80 % de collection</td></tr>
-  </table></div>
-  <p><b>Doublons</b> : Bronze 10 · Argent 20 · Or 40 · Cristal 100 · Économiste, Reviewer, Recruteur, GM et Fill All 150 · Spéciale et Joker 200 · Légende 1 800 or. Ils remplissent aussi une <b>jauge</b> (1 point pour 10 or) qui offre un Cristal au choix à 400, 500, 600 points, puis +100 à chaque fois. <b>Jetons</b> : uniquement avec un Recruteur, de 61 à 89 par victoire, dans la limite de 2 000 par jour.</p>
-</section>
-<section id="ch14">
-  <h2><span class="n">14</span>Ladder</h2>
-  <p>C’est le classement principal, organisé par paliers sur la saison. Récompenses pour le Top 1, Top 2, Top 3 et Top 4–50, dont certaines permanentes (cosmétiques).</p>
-</section>
-<section id="ch15">
-  <h2><span class="n">15</span>Factions</h2>
-  <p>Fort Sterling, Bridgewatch, Lymhurst, Thetford et Martlock. Participation facultative. Il faut <b>15 combats Ladder</b> pour rejoindre une faction (100 joueurs maximum par faction), et le choix est verrouillé jusqu’à la fin de la saison.</p>
-  <div class="grid">
-    <div class="box"><h3>Points de Faction</h3>Victoire 4 · Égalité 2 · Défaite 1. Sans limite. Bonus de mobilisation jusqu’à +25 % (actif = 5 combats par jour) et bonus de population jusqu’à +20 %.</div>
-    <div class="box"><h3>Leader</h3>Élu en début de saison (10 PF et 10 combats requis). Il choisit les attaques et répartit la défense (5 % minimum par front). Il ne touche ni aux PF ni aux récompenses.</div>
-    <div class="box"><h3>Territoires</h3>Capitale imprenable. Périphérique 1 PC · intermédiaire 2 · majeur 4 · Couronne 8. Cycles de 3 jours : choix, révélation et combats, puis résolution.</div>
-    <div class="box"><h3>Objectifs et saison</h3>3 objectifs par bloc de 7 jours (30 PF personnels requis). Récompenses de fin de saison : 100 PF et 72 h de présence. Loyauté : Recrue, Soldat, Vétéran, Élite, Légende (honorifique).</div>
-  </div>
-</section>
-<section id="ch16">
-  <h2><span class="n">16</span>Récompenses et cosmétiques</h2>
-  <p>Badges, titres, fonds de Draft, dos de cartes, cadres, coffres, packs, Or, Jetons. Les cosmétiques ne donnent aucun avantage en combat. Les récompenses permanentes sont conservées d’une saison à l’autre.</p>
-</section>
-<section id="ch17">
-  <h2><span class="n">17</span>Pass de combat</h2>
-  <p>Progression parallèle par paliers, débloqués en jouant. C’est un complément au Ladder et aux Factions, pas un remplacement.</p>
-</section>
-<section id="ch18">
-  <h2><span class="n">18</span>Saisons et resets</h2>
-  <p>Une saison dure <b>21 jours</b>. Factions, PF, Leaders, classements de saison et Pass sont remis à zéro. Badges, titres et cosmétiques restent acquis. Aucun wipe des collections n’est prévu, mais l’équipe s’en réserve le droit si la majorité a « fini » le jeu. Trois scénarios sont annoncés à l’avance :</p>
-  <ul>
-    <li><b>Aucun reset</b> : tout le monde garde ses cartes.</li>
-    <li><b>Wipe avec transfert</b> : chaque joueur garde 1 à 3 cartes.</li>
-    <li><b>Wipe avec récompenses reportées</b> : seules les récompenses de fin de saison sont versées.</li>
-  </ul>
-</section>
-<section id="ch19">
-  <h2><span class="n">19</span>Règles et anti-abus</h2>
-  <p>Sont interdits : farmer le même adversaire, arranger des résultats, exploiter des bugs, contourner des limites. Une victoire classée rapporte toujours 4 PF, même sur abandon. Les sanctions vont de l’annulation des gains à une sanction de l’équipe.</p>
-</section>
-<section id="ch20">
-  <h2><span class="n">20</span>Cartes communautaires</h2>
-  <p>Les créations et modifications de cartes passent par ticket. Pour une création : pseudo, historique de guilde et VOD. Pour contester une arme : au moins 2 VOD récentes. Seuls les tickets complets sont traités.</p>
-</section>
-<section id="ch21">
-  <h2><span class="n">21</span>Crédits</h2>
-  <div class="credits">
-    <p><b>Fondateurs</b><br>Poker, Ryknarr, Géralt, Heisty</p>
-    <p><b>Aide significative</b><br>7v3n, Azealux, Dozhix, Karjen</p>
-    <p><b>Bêta-test</b><br>Mizeeex, Batazgul, Yhantoz</p>
-    <p><b>Notation</b><br>Furybill, EpicSK, Anorakeu, Whynoz, Raoulafrite, Jumplebow, Dovhak, Noska, Inhit, Anymia, Asuna, Mamouth, Zerkhoo</p>
-    <p><b>Mention honorable</b><br>Noirbaleze</p>
-  </div>
-</section>
+
 <section id="ch24">
-  <div class="eyebrow">Chapitre 22 · Tournoi Draft du 11/10/2026 · 25 replays · 9 tournoi + 16 classés</div>
-  <h2><span class="n">22</span>Maths des combats</h2>
-  <p>Ce chapitre vient des replays complets de mes 9 combats du tournoi (5 V – 4 D, 26<sup>e</sup>). Chaque replay donne, engage par engage, le score d’attaque, le score de défense, les cartes attrapées, les dégâts reçus, les jets de stats et les morts. Les chiffres ci-dessous sont mesurés sur ces données, pas tirés des textes du site.</p>
+  <div class="eyebrow">Chapitre 13 · 162 combats classés (11 au 14/10/2026) · tournoi Draft du 11/10</div>
+  <h2><span class="n">13</span>Maths des combats <span class="upd">Mis à jour le 15/10</span></h2>
+  <p>Ce chapitre vient des replays complets : d’abord les mesures du 15/10 sur 162 combats classés, puis, en historique, mes 9 combats du tournoi du 11/10 (5 V – 4 D, 26<sup>e</sup>). Chaque replay donne, engage par engage, le score d’attaque, le score de défense, les cartes attrapées, les dégâts reçus, les jets de stats et les morts. Les chiffres ci-dessous sont mesurés sur ces données, pas tirés des textes du site.</p>
+
+  <h3>Mesures du 15/10/2026 : 162 combats classés <span class="upd">Nouveau</span></h3>
+  <p>Ces mesures remplacent celles du tournoi dans les calculs des builders. Elles viennent de 162 combats classés complets : 59 joués du 11 au 12/10 et 103 joués le 14/10, après la mise à jour du moteur de ce jour-là. Le moteur n’a pas changé entre le 14 et le 15/10 (relevé du 15/10). Quand une arme a assez de combats récents, ce sont eux qui comptent le plus.</p>
+  <div class="tbl"><table>
+    <tr><th>Par combat</th><th>11 – 12/10 (59)</th><th>14/10 (103)</th></tr>
+    <tr><td>Morts par engage</td><td class="num">0,62</td><td class="num">0,84</td></tr>
+    <tr><td>Joueurs attrapés par engage</td><td class="num">2,92</td><td class="num">2,42</td></tr>
+    <tr><td>Défaites après la chute du Caller</td><td class="num">8 %</td><td class="num">22 %</td></tr>
+    <tr><td>Fins par déroute</td><td class="num">46 %</td><td class="num">44 %</td></tr>
+    <tr><td>Durée médiane</td><td class="num">164 s</td><td class="num">156 s</td></tr>
+  </table></div>
+  <p>Les défaites après la chute du Caller ont presque triplé : depuis le 14/10, le Caller de secours ne garde que la moitié de son efficacité (0,5 au lieu de 0,8). Protéger le Caller compte plus qu’avant.</p>
+
+  <h3>Attaque des DPS (valeur d’action par engage)</h3>
+  <p>Moyenne par engage où le DPS est en vie et n’est pas coupé, y compris quand il rate son jet. Le Bloodletter tue par exécution : sa valeur ne se lit pas ici.</p>
+  <div class="tbl"><table><tr><th>Arme</th><th>Valeur par engage</th><th>Engages</th></tr><tr><td>Longbow</td><td class="num">116,1</td><td class="num">79</td></tr><tr><td>Spiked</td><td class="num">110,1</td><td class="num">1223</td></tr><tr><td>Wailing</td><td class="num">101,7</td><td class="num">254</td></tr><tr><td>Witchwork</td><td class="num">100,5</td><td class="num">147</td></tr><tr><td>Heavy Crossbow</td><td class="num">100,0</td><td class="num">641</td></tr><tr><td>Realmbreaker</td><td class="num">97,2</td><td class="num">1522</td></tr><tr><td>Aria</td><td class="num">88,9</td><td class="num">245</td></tr><tr><td>Brimstone</td><td class="num">78,2</td><td class="num">651</td></tr><tr><td>Rift</td><td class="num">77,1</td><td class="num">1596</td></tr><tr><td>Damnation</td><td class="num">73,4</td><td class="num">1237</td></tr><tr><td>Rotcaller</td><td class="num">64,9</td><td class="num">35</td></tr><tr><td>Carving</td><td class="num">61,2</td><td class="num">725</td></tr><tr><td>Hellfire</td><td class="num">59,0</td><td class="num">1154</td></tr><tr><td>Spirit</td><td class="num">50,3</td><td class="num">1172</td></tr><tr><td>Perma</td><td class="num">41,5</td><td class="num">1416</td></tr></table></div>
+
+  <h3>Défense des Heals et des Supports (par engage)</h3>
+  <div class="tbl"><table><tr><th>Arme</th><th>Défense par engage</th><th>Engages</th></tr><tr><td>Ent</td><td class="num">55,6</td><td class="num">954</td></tr><tr><td>Locus</td><td class="num">53,1</td><td class="num">1411</td></tr><tr><td>Incubus</td><td class="num">48,5</td><td class="num">369</td></tr><tr><td>Bedrock</td><td class="num">45,9</td><td class="num">1677</td></tr><tr><td>Oaths</td><td class="num">44,7</td><td class="num">1080</td></tr><tr><td>Lifecurse</td><td class="num">35,2</td><td class="num">1429</td></tr><tr><td>Fallen</td><td class="num">33,2</td><td class="num">401</td></tr><tr><td>Exalted</td><td class="num">31,8</td><td class="num">1266</td></tr><tr><td>Blight</td><td class="num">21,0</td><td class="num">330</td></tr><tr><td>Sancti</td><td class="num">19,4</td><td class="num">4627</td></tr><tr><td>Rampant</td><td class="num">14,0</td><td class="num">1508</td></tr></table></div>
+  <p>L’Occult ne défend pas : son rôle est le cleanse et le beam.</p>
+
+  <h3>Contrôles des Tanks (DPS adverses coupés par engage défendu)</h3>
+  <p>Un Tank attrapé ne contrôle jamais. La dernière colonne donne ce que chaque Tank ajoute à la puissance dans le builder : 1,4 × (coupes − 0,3).</p>
+  <div class="tbl"><table><tr><th>Arme</th><th>Coupes par engage</th><th>Dans le builder</th></tr><tr><td>1h Arcane</td><td class="num">1,17</td><td class="num">+1,2</td></tr><tr><td>1h Mace</td><td class="num">0,64</td><td class="num">+0,5</td></tr><tr><td>Great Arcane (GA)</td><td class="num">0,54</td><td class="num">+0,3</td></tr><tr><td>Heavy Mace</td><td class="num">0,34</td><td class="num">+0,1</td></tr><tr><td>Polehammer</td><td class="num">0,18</td><td class="num">−0,2</td></tr><tr><td>1h Hammer</td><td class="num">0,18</td><td class="num">−0,2</td></tr><tr><td>Soulscythe</td><td class="num">0,09</td><td class="num">−0,3</td></tr><tr><td>Greathammer</td><td class="num">0,00</td><td class="num">−0,4</td></tr></table></div>
+
+  <h3>Effets de compo</h3>
+  <ul>
+    <li><b>Lifecurse :</b> la défense adverse tombe à ×0,76. C’est toujours l’effet le plus fort (+1,5 de puissance).</li>
+    <li><b>Heal Nature (Rampant, Blight) :</b> depuis le 14/10, l’1h Arcane adverse coupe ×0,74 (1,06 DPS par engage au lieu de 1,45). Avant, aucun effet net.</li>
+    <li><b>Ent :</b> +0,3 à +0,4 joueur attrapé par engage. L’effet du grab a baissé depuis le 14/10 (+0,5 de puissance au lieu de +0,8).</li>
+    <li><b>Locus :</b> défense adverse ×0,94, coupes subies ×0,95 en cleanse. Effet plus faible que mesuré au tournoi (+0,5 au lieu de +0,8).</li>
+    <li><b>Golem :</b> +0,2 joueur attrapé, défense adverse ×0,92 en polymorph (+0,5 au lieu de +0,4).</li>
+    <li><b>Sancti casque chevalier :</b> inchangé, −20 % à −33 % de dégâts reçus (+0,4 par Sancti, 5 au plus).</li>
+  </ul>
+
+  <h3>Soins entre les engages</h3>
+  <p>Part des PV perdus récupérée avant l’engage suivant, selon les heals en vie : 2 heals 7 %, 3 heals 89 %, 4 heals 96 %, 5 heals 99 %. Inchangé : 4 heals restent la marge de sécurité.</p>
+
+  <h3>Win rate estimé</h3>
+  <p>Sur les 149 combats sans nul, chaque point de compétence moyenne d’écart avec l’adversaire vaut 0,10 en échelle logistique, soit la pente déjà utilisée par le builder (0,098). La formule de puissance est donc gardée. Seuls les rendements des armes, les contrôles et les effets de compo ont été mis à jour.</p>
+  <p class="note">Limites : les 103 combats récents viennent d’un seul compte, entre 1 475 et 1 743 d’ELO. Un effet de compo mesuré sur une centaine de combats garde une marge d’environ ± 0,4 point de puissance. Les sections suivantes datent du tournoi du 11/10 et des validations du 12/10 : elles sont gardées comme historique.</p>
 
   <h3>Mes 9 combats</h3>
   <div class="tbl"><table>
@@ -1072,8 +1059,87 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
   </ul>
   <p class="note">Limites : 25 combats classés seulement, joués avec 2 compos proches, donc les cartes adverses se répètent. Les coefficients sont des moyennes mesurées. Ce n’est pas le code exact du moteur.</p>
 </section>
+
+<section id="ch12">
+  <h2><span class="n">14</span>Packs <span class="upd">Mis à jour le 11/10</span></h2>
+  <p>Trois formats principaux : Recrue (3 cartes), Élite (5), Légende (9). Les nouveaux joueurs commencent avec un <b>pack de bienvenue de 30 cartes</b> (un Caller et tous les rôles). Les files classées et amicales exigent 19 combattants plus un Caller.</p>
+  <ul>
+    <li><b>Pity Élite</b> : après 50 Coffres Épiques sans Cristal, le suivant en garantit une (un Caller ne compte pas).</li>
+    <li><b>Pity Légende</b> : après 25 Packs Légendaires sans Caller, le suivant garantit un Caller.</li>
+    <li><b>Pity GOAT</b> : après 100 Packs Légendaires sans GOAT, achetés ou offerts, le suivant en garantit un. Compteur conservé d’une saison à l’autre.</li>
+    <li><b>Jauge de doublons</b> : conservée d’une saison à l’autre ; ne propose jamais de Caller, de GOAT ni de carte spéciale.</li>
+    <li>Part des cartes spéciales dans le tirage spécial (code) : Économiste, Reviewer, GM, Joker et Recruteur 18 % chacun, Fill All 10 %.</li>
+  </ul>
+</section>
+
+<section id="ch13">
+  <h2><span class="n">15</span>Économie</h2>
+  <p>Deux monnaies : l’<b>Or</b> (pour les coffres) et les <b>Jetons</b> (pour le coffre Recruteur). Tout se remet à zéro à minuit, heure de Paris.</p>
+  <div class="grid">
+    <div class="box"><h3>Or du jour</h3>Membre 1 800 · Booster 2 000 · Ambassadeur 2 200 · Ambassadeur et booster 2 500. Les Ambassadeurs reçoivent aussi un bonus d’Or et de Jetons chaque semaine. <span class="mut">(Le site parle désormais d’« Ambassadeur » là où l’encyclopédie dit « Fondateur ».)</span></div>
+    <div class="box"><h3>Combats classés</h3>Victoires 1–10 : 350 · 11–20 : 220 · 21–25 : 160 · puis 10 et 5. Défaites 1–10 : 45, puis 10. +60 or à la 1<sup>re</sup> victoire, +40 au 3<sup>e</sup> match. <b>Plafond de 8 000 or par jour.</b></div>
+    <div class="box"><h3>Bonus et missions</h3>Fondateur +10 %, Booster +5 % / +2 %, Elo jusqu’à +15 %, Économiste de −10 à +20 %. Missions du jour : 450 or. Missions de la semaine : 1 500 or, plus un coffre Recruteur et un coffre Élite.</div>
+  </div>
+  <div class="tbl"><table>
+    <tr><th>Coffre</th><th>Prix</th><th>Cartes</th><th>≥ 1 rare</th><th>Particularité</th></tr>
+    <tr><td>Quotidien</td><td class="num">gratuit ×2</td><td class="num">1</td><td class="num">5 %</td><td>Tout est possible, même un Goat</td></tr>
+    <tr><td>Recrue</td><td class="num">300 or</td><td class="num">3</td><td class="num">7 %</td><td>Au moins un Argent, le moins cher par carte</td></tr>
+    <tr><td>Élite</td><td class="num">750 or</td><td class="num">5</td><td class="num">22,6 %</td><td>Au moins un Or, le meilleur pour le Cristal, pitié à 50</td></tr>
+    <tr><td>Légende</td><td class="num">1 800 or</td><td class="num">9</td><td class="num">37 %</td><td>Goat 1/500 (pitié à 100), Légende 1/2 000</td></tr>
+    <tr><td>Spécialiste</td><td class="num">1 800 or</td><td class="num">7</td><td class="num">—</td><td>Une spéciale passive ou GM garantie</td></tr>
+    <tr><td>Recruteur</td><td class="num">1 000 jetons</td><td class="num">3</td><td class="num">3,6 %</td><td>Rôle au choix, une nouveauté garantie dès 80 % de collection</td></tr>
+  </table></div>
+  <p><b>Doublons</b> : Bronze 10 · Argent 20 · Or 40 · Cristal 100 · Économiste, Reviewer, Recruteur, GM et Fill All 150 · Spéciale et Joker 200 · Légende 1 800 or. Ils remplissent aussi une <b>jauge</b> (1 point pour 10 or) qui offre un Cristal au choix à 400, 500, 600 points, puis +100 à chaque fois. <b>Jetons</b> : uniquement avec un Recruteur, de 61 à 89 par victoire, dans la limite de 2 000 par jour.</p>
+</section>
+
+<section id="ch17">
+  <h2><span class="n">16</span>Pass de combat</h2>
+  <p>Progression parallèle par paliers, débloqués en jouant. C’est un complément au Ladder et aux Factions, pas un remplacement.</p>
+</section>
+
+<section id="ch16">
+  <h2><span class="n">17</span>Récompenses et cosmétiques</h2>
+  <p>Badges, titres, fonds de Draft, dos de cartes, cadres, coffres, packs, Or, Jetons. Les cosmétiques ne donnent aucun avantage en combat. Les récompenses permanentes sont conservées d’une saison à l’autre.</p>
+</section>
+
+<section id="ch14">
+  <h2><span class="n">18</span>Ladder</h2>
+  <p>C’est le classement principal, organisé par paliers sur la saison. Récompenses pour le Top 1, Top 2, Top 3 et Top 4–50, dont certaines permanentes (cosmétiques).</p>
+</section>
+
+<section id="ch15">
+  <h2><span class="n">19</span>Factions</h2>
+  <p>Fort Sterling, Bridgewatch, Lymhurst, Thetford et Martlock. Participation facultative. Il faut <b>15 combats Ladder</b> pour rejoindre une faction (100 joueurs maximum par faction), et le choix est verrouillé jusqu’à la fin de la saison.</p>
+  <div class="grid">
+    <div class="box"><h3>Points de Faction</h3>Victoire 4 · Égalité 2 · Défaite 1. Sans limite. Bonus de mobilisation jusqu’à +25 % (actif = 5 combats par jour) et bonus de population jusqu’à +20 %.</div>
+    <div class="box"><h3>Leader</h3>Élu en début de saison (10 PF et 10 combats requis). Il choisit les attaques et répartit la défense (5 % minimum par front). Il ne touche ni aux PF ni aux récompenses.</div>
+    <div class="box"><h3>Territoires</h3>Capitale imprenable. Périphérique 1 PC · intermédiaire 2 · majeur 4 · Couronne 8. Cycles de 3 jours : choix, révélation et combats, puis résolution.</div>
+    <div class="box"><h3>Objectifs et saison</h3>3 objectifs par bloc de 7 jours (30 PF personnels requis). Récompenses de fin de saison : 100 PF et 72 h de présence. Loyauté : Recrue, Soldat, Vétéran, Élite, Légende (honorifique).</div>
+  </div>
+</section>
+
+<section id="ch18">
+  <h2><span class="n">20</span>Saisons et resets</h2>
+  <p>Une saison dure <b>21 jours</b>. Factions, PF, Leaders, classements de saison et Pass sont remis à zéro. Badges, titres et cosmétiques restent acquis. Aucun wipe des collections n’est prévu, mais l’équipe s’en réserve le droit si la majorité a « fini » le jeu. Trois scénarios sont annoncés à l’avance :</p>
+  <ul>
+    <li><b>Aucun reset</b> : tout le monde garde ses cartes.</li>
+    <li><b>Wipe avec transfert</b> : chaque joueur garde 1 à 3 cartes.</li>
+    <li><b>Wipe avec récompenses reportées</b> : seules les récompenses de fin de saison sont versées.</li>
+  </ul>
+</section>
+
+<section id="ch19">
+  <h2><span class="n">21</span>Règles et anti-abus</h2>
+  <p>Sont interdits : farmer le même adversaire, arranger des résultats, exploiter des bugs, contourner des limites. Une victoire classée rapporte toujours 4 PF, même sur abandon. Les sanctions vont de l’annulation des gains à une sanction de l’équipe.</p>
+</section>
+
+<section id="ch20">
+  <h2><span class="n">22</span>Cartes communautaires</h2>
+  <p>Les créations et modifications de cartes passent par ticket. Pour une création : pseudo, historique de guilde et VOD. Pour contester une arme : au moins 2 VOD récentes. Seuls les tickets complets sont traités.</p>
+</section>
+
 <section id="collection">
-  <div class="eyebrow">Chapitre 23 · 410 joueurs · portraits relevés le 12/10/2026</div>
+  <div class="eyebrow">Chapitre 23 · Annexe · 410 joueurs · portraits relevés le 12/10/2026</div>
   <h2><span class="n">23</span>Collection complète</h2>
   <p>Toutes les cartes joueurs du jeu, avec leur portrait, leur note, leurs deux armes et leurs compétences quand elles sont connues (Vision, Réactivité, Mécaniques, Constance). La couleur du cadre indique la rareté (Bronze ≤ 69, Argent 70 – 75, Or 76 – 83, Cristal 84 et plus). Les versions spéciales (goat, légende, caller…) sont listées sous le nom.</p>
   <div class="cc-ctrl">
@@ -1086,7 +1152,21 @@ i.ob-o{background:var(--dps)}i.ob-d{background:var(--tank)}i.ob-e{background:lin
   <div id="ccg" class="cc-grid"></div>
   <button type="button" id="ccm" class="ghost cc-more" hidden>Afficher plus</button>
 </section>
-<p class="note">Source : packtasmall.fr (accès connecté), relevé du 10 au 12 octobre 2026. Encyclopédie by Apparance.</p>
+
+<section id="ch21">
+  <div class="eyebrow">Chapitre 24 · Pack ta Small et cette encyclopédie</div>
+  <h2><span class="n">24</span>Crédits</h2>
+  <div class="credits">
+    <p><b>Fondateurs</b><br>Poker, Ryknarr, Géralt, Heisty</p>
+    <p><b>Aide significative</b><br>7v3n, Azealux, Dozhix, Karjen</p>
+    <p><b>Bêta-test</b><br>Mizeeex, Batazgul, Yhantoz</p>
+    <p><b>Notation</b><br>Furybill, EpicSK, Anorakeu, Whynoz, Raoulafrite, Jumplebow, Dovhak, Noska, Inhit, Anymia, Asuna, Mamouth, Zerkhoo</p>
+    <p><b>Mention honorable</b><br>Noirbaleze</p>
+    <p><b>Cette encyclopédie</b><br>Rédaction, mesures et builders : Apparance (UnDocPourTous). Données : replays classés synchronisés par PTS Companion.</p>
+  </div>
+  <p class="note">Source : packtasmall.fr (accès connecté), relevés du 10 au 15 octobre 2026.</p>
+</section>
+
 </main>
 </div>
 </div>
@@ -1295,19 +1375,20 @@ function siteColl(plist,jok,info){
   const coll=Math.min(100,Math.max(0,total+jok));
   return {coll,gv,buffs:buffs+jok,deb,act,gc:{v:gv,g,full:full||!!flip}};}
 // Malus de structure (règles du moteur, chapitre 10 de l'encyclopédie du site)
-// Rendement mesuré par arme (valeur d'action par engage, tournoi du 11/10/2026) : [moyenne, n]
-const WPERF={D:{mu:85,k:30,w:4,t:{SPIKE:[147.5,224],BRIMSTONE:[108.8,251],REALMBREAKER:[99.4,418],RIFT:[93.6,539],WITCHWORK:[85.3,63],WAILING:[82.9,98],SPIRIT:[70.7,234],CARVING:[68.2,256],PERMA:[61.4,284],HELLFIRE:[59.1,192],ARIA:[58.3,44],DAMNA:[57.1,197],BLOODLETTER:[60,51]}},
-  H:{mu:29,k:60,w:2,t:{FALLEN:[35,45],BLIGHT:[34.7,40],EXALTED:[29.8,250],RAMPANT:[28.1,420],SANCTI:[18.5,1100]}},
-  S:{mu:52,k:30,w:3,t:{ENT:[74.9,450],LOCUS:[71,540],INCUBE:[50,265],OATHS:[44,500],BEDROCK:[40.3,300],LIFECURSE:[34.1,590]}}};
-// Contrôles mesurés en défense (DPS adverses coupés par engage défendu, 59 replays, un Tank attrapé ne contrôle jamais)
-const WCTRL={'1H ARCANE':.95,'HEAVY MACE':.6,GA:.52,'1H HAMMER':.18,SOULSCYTHE:.18,'1H MACE':.15,GREATHAMMER:.11,POLEHAMMER:.05};
-// Effets de compo mesurés sur 59 replays (régressions engage par engage) → points de puissance (ordre de grandeur)
+// Rendement mesuré par arme (valeur d'action par engage : attaque des DPS, défense des Heals et Supports), 162 combats classés du 11 au 14/10/2026,
+// priorité aux 103 combats joués après la mise à jour du moteur du 14/10. Bloodletter (exécutions) et Occult (cleanse) non mesurables ainsi : neutres. [moyenne, n]
+const WPERF={D:{mu:76,k:30,w:4,t:{LONGBOW:[116.1,79],SPIKE:[110.1,1223],WAILING:[101.7,254],WITCHWORK:[100.5,147],'HEAVY CROSSBOW':[100.0,641],REALMBREAKER:[97.2,1522],ARIA:[88.9,245],BRIMSTONE:[78.2,651],RIFT:[77.1,1596],DAMNA:[73.4,1237],ROTCALLER:[64.9,35],CARVING:[61.2,725],HELLFIRE:[59.0,1154],SPIRIT:[50.3,1172],PERMA:[41.5,1416]}},
+  H:{mu:21,k:60,w:2,t:{FALLEN:[33.2,401],EXALTED:[31.8,1266],BLIGHT:[21.0,330],SANCTI:[19.4,4627],RAMPANT:[14.0,1508]}},
+  S:{mu:46,k:30,w:3,t:{ENT:[55.6,954],LOCUS:[53.1,1411],INCUBE:[48.5,369],BEDROCK:[45.9,1677],OATHS:[44.7,1080],LIFECURSE:[35.2,1429]}}};
+// Contrôles mesurés en défense (DPS adverses coupés par engage défendu, 162 replays, un Tank attrapé ne contrôle jamais)
+const WCTRL={'1H ARCANE':1.17,'1H MACE':0.64,GA:0.54,'HEAVY MACE':0.34,POLEHAMMER:0.18,'1H HAMMER':0.18,SOULSCYTHE:0.09,GREATHAMMER:0.0};
+// Effets de compo mesurés sur 162 replays (régressions engage par engage, contrôlées sur les résultats) → points de puissance (ordre de grandeur)
 const SYNERGY=[
-  {w:'LIFECURSE',v:1.5,txt:'Lifecurse (défense adverse ×0,75)'},
-  {w:'ENT',v:.8,txt:'Ent (pack +0,6 en grab, défense adverse ×0,88 en polymorph)'},
-  {w:'LOCUS',v:.8,txt:'Locus (coupes subies ×0,83 en cleanse)'},
-  {w:['RAMPANT','BLIGHT'],v:.5,txt:'heal Nature (coupes d’Arcane ×0,72)'},
-  {w:'GOLEM',v:.4,txt:'Golem (pack +0,13, polymorph)'}];
+  {w:'LIFECURSE',v:1.5,txt:'Lifecurse (défense adverse ×0,76)'},
+  {w:'ENT',v:.5,txt:'Ent (pack +0,3 à +0,4 joueur attrapé)'},
+  {w:'LOCUS',v:.5,txt:'Locus (défense adverse ×0,94, coupes subies ×0,95 en cleanse)'},
+  {w:['RAMPANT','BLIGHT'],v:.5,txt:'heal Nature (coupes d’Arcane ×0,74 depuis le 14/10)'},
+  {w:'GOLEM',v:.5,txt:'Golem (pack +0,2, défense adverse ×0,92 en polymorph)'}];
 function wperf(rows){let v=0;for(const x of (rows.T||[]).filter(Boolean)){const c=WCTRL[x.w];if(c!=null)v+=1.4*(c-.3);}for(const r of ['D','H','S']){const P=WPERF[r];const xs=(rows[r]||[]).filter(Boolean);if(!xs.length)continue;let s=0;for(const x of xs){const m=P.t[x.w];const f=m?((m[1]*m[0]+P.k*P.mu)/(m[1]+P.k))/P.mu:1;s+=f-1;}v+=P.w*s/xs.length;}return Math.max(-3,Math.min(3,v));}
 function structPen(rows){const n=r=>(rows[r]||[]).filter(Boolean).length;const H=n('H'),T=n('T'),D=n('D');
   // Calibré sur 9 replays du tournoi (172 engages) : offense ≈ 77 par DPS efficace, plafonnée à 5,75 DPS (résilience) ; les heals Tissu meurent en premier.
