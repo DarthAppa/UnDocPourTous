@@ -13,6 +13,7 @@
     "csp": "node tools/csp.mjs",
     "test:pts": "node tools/test-pts-verrou.mjs",
     "test:outils": "node tools/test-pts-outils.mjs",
+    "test:adresse": "node tools/test-adresse.mjs",
     "verif": "node tools/verif.mjs",
     "verif:rapide": "node tools/verif.mjs --rapide",
     "format": "prettier --write .",

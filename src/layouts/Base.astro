@@ -45,6 +45,8 @@ const titreComplet = `${titre} — ${SITE.nom}`;
         <link rel="stylesheet" href="assets/css/style.css" />
         <!-- Tailwind compilé (npm run build:css), APRÈS style.css : les utilitaires gardent la priorité. -->
         <link rel="stylesheet" href="assets/css/tailwind.css" />
+        <!-- Adresse propre (/page sans .html, sans #ancre) : avant les autres scripts -->
+        <script is:inline src="assets/js/adresse.js"></script>
         <script is:inline src="assets/js/script.js" defer></script>
         <script is:inline type="module" src="assets/js/entete.js"></script>
         {scripts.map((src) => (

@@ -6,7 +6,8 @@ import { etat, chargerContenu, surveillerInactivite } from './pts-auth.js';
 const zone = document.getElementById('premium-zone');
 const statut = document.getElementById('premium-statut');
 const slug = zone?.dataset.slug || '';
-const page = location.pathname.split('/').pop();
+const dernier = location.pathname.split('/').pop() || '';
+const page = !dernier || dernier.endsWith('.html') ? dernier : `${dernier}.html`; // en ligne : « /albion-builder-tryhard »
 const ici = /^[a-z0-9-]+\.html$/.test(page) ? page : 'albion-premium.html';
 
 const dire = (t, ton = '') => {
