@@ -219,6 +219,7 @@ for (const outil of OUTILS) {
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
 <!-- Généré par tools/import-pts.mjs depuis ${outil.source} : ne pas modifier à la main -->
+<script src="assets/js/adresse.js"></script>
 <!-- Verrou : page affichée seulement si connecté et membre vérifié du serveur Pack ta Small (pts-auth.js) -->
 <script>document.documentElement.classList.add('pts-attente');</script>
 <style>html.pts-attente body{visibility:hidden}</style>

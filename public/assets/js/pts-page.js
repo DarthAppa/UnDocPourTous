@@ -96,7 +96,7 @@ async function afficherDonnees(e) {
 
 zone?.querySelector('[data-deconnexion]')?.addEventListener('click', async () => {
     await deconnexion();
-    history.replaceState(null, '', 'pts.html'); // pas de faux message « inactivité » après une déconnexion voulue
+    history.replaceState(null, '', location.pathname); // pas de faux message « inactivité » après une déconnexion voulue
     appliquer({ connecte: false, debloque: false, membre: false, pseudo: '' });
 });
 

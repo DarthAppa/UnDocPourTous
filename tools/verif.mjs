@@ -35,6 +35,7 @@ for (const [script, nom] of [
     ['test:profil', 'Tests page Mon profil'],
     ['test:premium', 'Tests contenu Premium et paiement'],
     ['test:connexion', 'Tests fenêtre de connexion / inscription'],
+    ['test:adresse', 'Tests adresse propre (sans .html ni #ancre)'],
 ])
     if (pkg.scripts?.[script]) etapes.push([nom, `npm run ${script}`]);
 // Règles RLS : besoin d'un Postgres (DATABASE_URL). Toujours lancé en CI ; en local seulement si défini.

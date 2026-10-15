@@ -125,7 +125,7 @@ async function afficherDonneesPts() {
 // Retour de Stripe : l'abonnement est enregistré par le webhook, quelques secondes plus tard.
 async function suivrePaiement() {
     dire(statut, 'Paiement reçu, merci ! L’accès Premium peut prendre quelques secondes à s’activer.', 'ok');
-    history.replaceState(null, '', 'profil.html');
+    history.replaceState(null, '', location.pathname); // paramètre retiré, adresse propre gardée
     for (let i = 0; i < 6; i++) {
         await attendre(3000);
         try {

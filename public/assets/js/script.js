@@ -5,7 +5,9 @@ document.documentElement.classList.replace('no-js', 'js');
 
 document.addEventListener('DOMContentLoaded', () => {
     /* ---------- Lien de la page en cours (aria-current) ---------- */
-    const pageCourante = location.pathname.split('/').pop() || 'index.html';
+    // En ligne, l'adresse est « /albion » (adresse.js) : on remet le .html pour comparer aux liens
+    const dernier = location.pathname.split('/').pop() || 'index';
+    const pageCourante = dernier.endsWith('.html') ? dernier : `${dernier}.html`;
     document.querySelectorAll('.nav-link').forEach((a) => {
         if (a.getAttribute('href') === pageCourante) a.setAttribute('aria-current', 'page');
     });

@@ -169,7 +169,9 @@ function construire() {
             msg('Redirection…');
             try {
                 if (id === 'discord') {
-                    const page = location.pathname.split('/').pop() || 'index.html';
+                    // En ligne l'adresse est « /profil » (adresse.js) : on remet le .html
+                    const dernier = location.pathname.split('/').pop() || 'index';
+                    const page = dernier.endsWith('.html') ? dernier : `${dernier}.html`;
                     await connexionDiscord(/^[a-z0-9-]+\.html$/.test(page) ? page : 'index.html');
                 } else {
                     const sb = await getClient();
