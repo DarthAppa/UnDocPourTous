@@ -2,7 +2,9 @@
 // La collection est envoyée dans Supabase par l'extension PTS Companion (table collections, lisible
 // seulement par son propriétaire grâce à la RLS). Rien n'est écrit dans la page publique.
 // Format attendu par le builder (script #pts-coll) : [NOM, note, variante, [armes], valeur, [fills T,S,H,D]].
+// Le builder lui-même (balisage, données, code) est chargé par pts-outil.js : on attend qu'il soit affiché.
 import { etat, maCollection } from './pts-auth.js';
+import { pret } from './pts-outil.js';
 
 const VARIANTES = [
     'economist',
@@ -129,6 +131,7 @@ function lien(texte, href) {
 }
 
 async function demarrer() {
+    if (!(await pret)) return; // pas membre (renvoi vers pts.html) ou outil indisponible (message affiché)
     const statut = document.getElementById('pts-coll-etat');
     const zone = document.getElementById('qbuilder');
     if (!statut || !zone) return;

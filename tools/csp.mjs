@@ -41,9 +41,22 @@ function scriptsInline(html) {
 const hachage = (code) =>
     `'sha256-${createHash('sha256').update(code.replace(/\r\n?/g, '\n'), 'utf8').digest('base64')}'`;
 
+// Code chargé après coup (pages Pack ta Small : contenu réservé lu dans Supabase par pts-outil.js) :
+// la page déclare le hachage de chaque script autorisé dans data-csp-scripts="sha256-… sha256-…".
+function hachagesDeclares(html) {
+    const liste = [];
+    for (const m of html.matchAll(/\bdata-csp-scripts\s*=\s*"([^"]*)"/gi))
+        for (const h of m[1].split(/\s+/).filter(Boolean)) {
+            if (!/^sha256-[A-Za-z0-9+/]{43}=$/.test(h))
+                throw new Error(`hachage invalide dans data-csp-scripts : ${h}`);
+            liste.push(`'${h}'`);
+        }
+    return liste;
+}
+
 export function politique(html, supabase) {
     const hote = new URL(supabase).host;
-    const hachages = [...new Set(scriptsInline(html).map(hachage))];
+    const hachages = [...new Set([...scriptsInline(html).map(hachage), ...hachagesDeclares(html)])];
     return [
         "default-src 'self'",
         ["script-src 'self'", ...hachages].join(' '),

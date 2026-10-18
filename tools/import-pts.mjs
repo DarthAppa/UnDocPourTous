@@ -4,12 +4,20 @@
 // Relancer après chaque mise à jour des sources : les pages du site sont régénérées dans public/
 // (copiées telles quelles par Astro ; la CSP finale est recalculée sur dist/ par npm run build).
 //
-// - Encyclopédie (Partie 1) : sans le chapitre « GOAT & Légendes » (les données restent dans la page,
-//   elles servent aux calculs) et sans lien vers le builder.
+// - SÉCURITÉ : les pages publiques (public/pts-*.html, dépôt PUBLIC) ne contiennent AUCUN contenu réservé.
+//   Le texte, les données et le code de chaque outil vont dans contenus-prives/pts/ (ignoré par git), puis dans
+//   la table Supabase « contenus » (niveau pts : lisible seulement par un membre vérifié du serveur, RLS) avec
+//   npm run publier:pts. La page publique n'est qu'une coquille : public/assets/js/pts-outil.js lit le contenu
+//   après la connexion et n'exécute le code que si son hachage figure dans la CSP de la page (data-csp-scripts).
+//   Le slug contient une empreinte du contenu : publier une nouvelle version ne casse pas la page en ligne.
+//   Après chaque import : npm run publier:pts AVANT de fusionner la pull request.
+// - Encyclopédie (Partie 1) : sans le chapitre « GOAT & Légendes » (les données restent, elles servent aux
+//   calculs), sans lien vers le builder, sans les compos et données de tournoi de l'auteur (inutilisées).
 // - Builder Ma collection (Partie 3, builder 1 seulement) : la collection n'est PLUS écrite dans la page.
 //   Chaque membre voit SES cartes, lues dans Supabase (envoyées par l'extension PTS Companion) par
 //   pts-ma-collection.js, qui lance ensuite le builder. Le Builder Tournoi et le Builder général ne sont pas publiés.
-import { readFileSync, writeFileSync } from 'node:fs';
+import { createHash } from 'node:crypto';
+import { mkdirSync, readFileSync, readdirSync, rmSync, writeFileSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { appliquerCsp, gestionnairesInline, urlSupabase } from './csp.mjs';
@@ -17,11 +25,14 @@ import { appliquerCsp, gestionnairesInline, urlSupabase } from './csp.mjs';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const SRC = resolve(ROOT, process.argv[2] || '../1_PTS/Encyclopedie');
 const SITE = { nom: 'UnDocPourTous' };
+const PRIVE = resolve(ROOT, 'contenus-prives', 'pts'); // ignoré par git (contenus-prives/)
+const TAILLE_PART = 1_000_000; // caractères par ligne de la table contenus (publier-contenu.mjs : 2 Mo max)
 
 const OUTILS = [
     {
         source: 'Partie1_Encyclopedie.html',
         cible: 'public/pts-encyclopedie.html',
+        slug: 'pts-encyclopedie',
         nom: 'Encyclopédie',
         titre: 'Encyclopédie Pack ta Small',
         description:
@@ -31,6 +42,7 @@ const OUTILS = [
     {
         source: 'Partie3_Builders_tryhard.html',
         cible: 'public/pts-builder.html',
+        slug: 'pts-builder',
         nom: 'Builder Ma collection',
         titre: 'Builder Ma collection Pack ta Small',
         description:
@@ -72,6 +84,11 @@ function encyclopedie(t) {
     t = retirerNavParties(t);
     t = retirerLigne(t, /<a class="lc" href="#pouvoirs">/, 'sommaire GOAT & Légendes');
     t = retirerBloc(t, '<section id="pouvoirs">', '</section>', 'chapitre GOAT & Légendes');
+    // Compos de l'auteur et données de tournoi : jamais lues par l'encyclopédie, retirées
+    for (const id of ['pts-comps', 'pts-tcomps', 'pts-tour'])
+        t = retirerBloc(t, `<script type="application/json" id="${id}">`, '</script>', `données ${id}`);
+    if (/pts-comps|pts-tcomps|pts-tour/.test(t))
+        throw new Error('compos ou tournoi encore utilisés par l’encyclopédie');
     return t;
 }
 
@@ -165,6 +182,25 @@ function builderMaCollection(t) {
     return t;
 }
 
+// Sépare le corps de la page : balisage, blocs de données (JSON) et code (scripts inline)
+function separer(corps) {
+    const donnees = {};
+    const scripts = [];
+    const balisage = corps.replace(/<script\b([^>]*)>([\s\S]*?)<\/script>\n?/g, (_, attrs, code) => {
+        const json = attrs.match(/^\s*type="application\/json"\s+id="(pts-[a-z]+)"\s*$/);
+        if (json) {
+            if (json[1] in donnees) throw new Error(`bloc de données ${json[1]} en double`);
+            donnees[json[1]] = code;
+        } else if (attrs.trim() === '') scripts.push(code);
+        else throw new Error(`script inattendu dans la page : <script${attrs}>`);
+        return '';
+    });
+    if (/<script/i.test(balisage)) throw new Error('script restant dans le balisage');
+    return { balisage: balisage.trim(), donnees, scripts };
+}
+
+const sha256 = (texte, format) => createHash('sha256').update(texte, 'utf8').digest(format);
+
 function barreSite(outil) {
     return `<nav class="udpt-bar" aria-label="Fil d’Ariane">
   <a href="index.html" class="udpt-home">${SITE.nom}</a><span aria-hidden="true">/</span>
@@ -184,7 +220,16 @@ const CSS_BARRE = `
 /* Correctif : case « Inclure les GOAT et Légendes » écrasée par la règle générale des champs */
 .glt input[type="checkbox"]{width:auto;flex:0 0 auto;padding:0;margin:0;accent-color:var(--blood)}
 #pts-coll-etat a{color:var(--ink);text-decoration:underline}
+/* Coquille publique (contenu chargé après la connexion par pts-outil.js) */
+#pts-outil{display:contents}
+.udpt-etat{max-width:1180px;margin:24px auto;padding:0 16px;font:500 15px/1.5 var(--body);color:var(--muted)}
+.udpt-etat:empty{display:none}
+.udpt-etat a{color:var(--ink);text-decoration:underline}
 `;
+
+rmSync(PRIVE, { recursive: true, force: true });
+mkdirSync(PRIVE, { recursive: true });
+const manifeste = [];
 
 for (const outil of OUTILS) {
     let t = readFileSync(resolve(SRC, outil.source), 'utf8').replace(/\r\n/g, '\n');
@@ -199,12 +244,26 @@ for (const outil of OUTILS) {
     // Sur-titre : plus de numéro de partie (« Pack ta Small · Partie 1 · … »)
     t = t.replace(/(Pack ta Small) · Partie \d · /, '$1 · ');
 
-    // 3. Séparation <head> / <body> : tout jusqu'à la fin du <style> va dans le <head>
+    // 3. Séparation <head> / <body> : tout jusqu'à la fin du <style> va dans le <head> (mise en page seulement)
     const fin = t.indexOf('</style>') + '</style>'.length;
     const tete = t.slice(0, fin).replace('</style>', CSS_BARRE + '</style>');
-    const corps = t.slice(fin);
-    const scripts = (outil.scripts || []).map((s) => `<script type="module" src="${s}"></script>\n`).join('');
+    if (/<script/i.test(tete)) throw new Error(`script dans le <head> de ${outil.source}`);
 
+    // 4. Corps réservé : balisage + données + code, écrits dans contenus-prives/pts/ (jamais dans la page publique)
+    const { balisage, donnees, scripts } = separer(t.slice(fin));
+    const charge = JSON.stringify({ v: 1, balisage, donnees, scripts });
+    const version = sha256(charge, 'hex').slice(0, 12);
+    const slug = `${outil.slug}-${version}`;
+    const parts = Math.ceil(charge.length / TAILLE_PART);
+    for (let i = 0; i < parts; i++) {
+        const fichier = `${slug}-${i + 1}.json`;
+        writeFileSync(resolve(PRIVE, fichier), charge.slice(i * TAILLE_PART, (i + 1) * TAILLE_PART));
+        manifeste.push({ slug: `${slug}-${i + 1}`, fichier, titre: `${outil.titre} (${i + 1}/${parts})` });
+    }
+    // Hachages du code, ajoutés à la CSP de la page par tools/csp.mjs (seul ce code-là pourra s'exécuter)
+    const hachages = scripts.map((c) => `sha256-${sha256(c, 'base64')}`).join(' ');
+
+    const extra = (outil.scripts || []).map((s) => `<script type="module" src="${s}"></script>\n`).join('');
     const titre = `${outil.titre} — ${SITE.nom}`;
     const page = `<!DOCTYPE html>
 <html lang="fr">
@@ -218,25 +277,31 @@ for (const outil of OUTILS) {
 <meta property="og:description" content="${esc(outil.description)}">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="fr_FR">
+<meta name="robots" content="noindex">
 <!-- Généré par tools/import-pts.mjs depuis ${outil.source} : ne pas modifier à la main -->
+<!-- Page vide : le contenu est réservé aux membres vérifiés du serveur Pack ta Small (table contenus, RLS) -->
 <script src="assets/js/adresse.js"></script>
-<!-- Verrou : page affichée seulement si connecté et membre vérifié du serveur Pack ta Small (pts-auth.js) -->
-<script>document.documentElement.classList.add('pts-attente');</script>
-<style>html.pts-attente body{visibility:hidden}</style>
-<noscript><style>html.pts-attente body{visibility:visible}</style></noscript>
-<script type="module">import { garde } from './assets/js/pts-auth.js'; garde();</script>
 <script type="module" src="assets/js/entete.js"></script>
-${scripts}${tete}
+<script type="module" src="assets/js/pts-outil.js"></script>
+${extra}${tete}
 </head>
 <body>
 ${barreSite(outil)}
-${corps.trim()}
+<p id="pts-outil-etat" class="udpt-etat" role="status" aria-live="polite">Chargement de l’outil…</p>
+<noscript><p class="udpt-etat">Cet outil est réservé aux membres du serveur Pack ta Small : active JavaScript, puis <a href="pts.html">connecte-toi avec Discord</a>.</p></noscript>
+<div id="pts-outil" data-slug="${slug}" data-parts="${parts}" data-csp-scripts="${hachages}"></div>
 </body>
 </html>
 `;
     // CSP : scripts inline autorisés par hachage, rien d'autre (voir tools/csp.mjs)
-    for (const g of gestionnairesInline(page))
+    for (const g of gestionnairesInline(page + balisage))
         console.warn(`  ! ${outil.source} : ${g} → bloqué par la CSP, à réécrire en addEventListener`);
     writeFileSync(resolve(ROOT, outil.cible), appliquerCsp(page, urlSupabase(ROOT)));
-    console.log(`${outil.source} -> ${outil.cible} (${Math.round(page.length / 1024)} Ko)`);
+    console.log(
+        `${outil.source} -> ${outil.cible} (${Math.round(page.length / 1024)} Ko publics) + ${slug} ` +
+            `(${Math.round(charge.length / 1024)} Ko réservés, ${parts} partie(s))`,
+    );
 }
+writeFileSync(resolve(PRIVE, 'manifeste.json'), JSON.stringify(manifeste, null, 2));
+const restants = readdirSync(PRIVE).length - 1;
+console.log(`\n${restants} fichier(s) réservé(s) dans contenus-prives/pts/ → npm run publier:pts avant de fusionner.`);

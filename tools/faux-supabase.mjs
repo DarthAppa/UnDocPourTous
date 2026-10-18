@@ -5,6 +5,7 @@
 //   faux      : état du faux client (session, tables, rpc), injecté dans globalThis.__FAUX__ à chaque chargement
 //   fonctions : { nom: { status, body } | (corps) => ({ status, body }) } réponses des Edge Functions
 // Renvoie { appelsFonctions, requetesExternes } ; les appels au client sont dans window.__APPELS__.
+import { existsSync, readFileSync } from 'node:fs';
 import { PTS_CONFIG } from '../public/assets/js/pts-config.js';
 
 // HORS_LIGNE=1 : CDN Tailwind et polices coupés (conteneur sans Internet)
@@ -111,6 +112,19 @@ export const FAUX_SUPABASE = `export function createClient(url) {
     },
   };
 }`;
+
+// Contenu réservé des outils Pack ta Small, préparé par npm run import:pts dans contenus-prives/pts/
+// (ignoré par git) : lignes de la table contenus. Tableau vide en CI (contenu privé absent).
+export function contenusPts(dossier = 'contenus-prives/pts') {
+    const manifeste = `${dossier}/manifeste.json`;
+    if (!existsSync(manifeste)) return [];
+    return JSON.parse(readFileSync(manifeste, 'utf8')).map(({ slug, fichier, titre }) => ({
+        slug,
+        titre,
+        niveau: 'pts',
+        html: readFileSync(`${dossier}/${fichier}`, 'utf8'),
+    }));
+}
 
 export function cleSession() {
     return `sb-${new URL(PTS_CONFIG.SUPABASE_URL).hostname.split('.')[0]}-auth-token`;

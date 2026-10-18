@@ -34,5 +34,8 @@ npm-debug.log*
 test-results/
 playwright-report/
 
+# Fichiers locaux de la CLI Supabase (projet lié, version)
+supabase/.temp/
+
 # Contenus payants : JAMAIS dans le dépôt (publiés dans Supabase par npm run publier:contenu)
 contenus-prives/

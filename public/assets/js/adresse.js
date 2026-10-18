@@ -18,7 +18,7 @@
     }
 
     // 2. Ancre à l'arrivée (lien partagé « …#ch10 ») : on retire le # et on garde la section visée à l'écran.
-    //    Les pages PTS s'affichent après la vérification du compte et construisent leur contenu en JS :
+    //    Les pages PTS reçoivent leur contenu après la vérification du compte (pts-outil.js) :
     //    on recale donc le défilement tant que la mise en page bouge (voir plus bas).
     const visee = ancre.test(location.hash) ? location.hash.slice(1) : '';
     if (visee) {

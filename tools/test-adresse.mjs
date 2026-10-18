@@ -7,7 +7,7 @@ import { chromium } from 'playwright';
 import { readFile } from 'node:fs/promises';
 import { resolve, extname } from 'node:path';
 import { demarrer } from './serveur.mjs';
-import { preparer, SESSION, compteur } from './faux-supabase.mjs';
+import { preparer, SESSION, compteur, contenusPts } from './faux-supabase.mjs';
 
 const EN_LIGNE = 'https://undocpourtous.com';
 const DIST = resolve('dist');
@@ -21,6 +21,7 @@ const serveur = await demarrer();
 const browser = await chromium.launch();
 const t = compteur();
 const MEMBRE = { user_id: 'u1', membre: true, verifie_le: new Date().toISOString() };
+const CONTENUS = contenusPts(); // contenu réservé des pages PTS (absent en CI : test de l'encyclopédie ignoré)
 
 // Faux GitHub Pages : /albion → dist/albion.html, / → dist/index.html
 async function pagesGithub(route) {
@@ -69,10 +70,11 @@ console.log('\n[en ligne : undocpourtous.com simulé]');
     t.verif(!erreurs.length, `aucune erreur JS ${erreurs.join(' | ')}`);
     await p.close();
 }
-{
-    const { p, erreurs } = await ouvrir(EN_LIGNE, { membres_pts: MEMBRE });
+if (!CONTENUS.length) console.log('  - encyclopédie ignorée : contenu réservé absent (CI)');
+else {
+    const { p, erreurs } = await ouvrir(EN_LIGNE, { membres_pts: MEMBRE, contenus: CONTENUS });
     await p.goto(`${EN_LIGNE}/pts-encyclopedie.html#ch10`, { waitUntil: 'networkidle' });
-    await p.waitForFunction(() => !document.documentElement.classList.contains('pts-attente'));
+    await p.waitForFunction(() => document.getElementById('ch10'));
     await p.waitForFunction(() => !location.hash);
     t.verif((await adresse(p)) === '/pts-encyclopedie', `encyclopédie avec #ch10 affichée « /pts-encyclopedie »`);
     await p.waitForTimeout(1500); // la page finit de se construire : la section doit rester visée

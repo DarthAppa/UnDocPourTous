@@ -141,6 +141,16 @@ L'outil refuse un fichier hors de `contenus-prives/`, un fichier suivi par git, 
 
 Supprimer un contenu : SQL Editor → `delete from public.contenus where slug = 'guide-albion-tryhard';`
 
+### Outils Pack ta Small (encyclopédie, builder)
+
+Les pages `pts-encyclopedie.html` et `pts-builder.html` du site sont des coquilles vides : tout leur contenu (texte, données, code) est dans la table `contenus`, niveau `pts` (membres vérifiés du serveur seulement).
+
+1. `npm run import:pts` : régénère les coquilles et prépare le contenu dans `contenus-prives/pts/` (slugs du type `pts-encyclopedie-<empreinte>-1`, en plusieurs parties de 1 Mo).
+2. `npm run publier:pts` : envoie ces parties (clé `SUPABASE_SERVICE_ROLE_KEY` du `.env`, ou à défaut lue avec `SUPABASE_ACCESS_TOKEN`, gardée en mémoire seulement).
+3. Seulement ensuite : fusionner la pull request. L'empreinte dans le slug fait que la page en ligne garde sa version tant que la nouvelle n'est pas publiée.
+
+Ménage des anciennes versions (quand la nouvelle page est en ligne) : SQL Editor → `select slug, maj_le from public.contenus where niveau = 'pts' order by maj_le desc;` puis `delete` des slugs qui ne sont plus dans `contenus-prives/pts/manifeste.json`.
+
 ## 8. Tester les règles de sécurité en local
 
 Les règles RLS se testent sur un vrai Postgres 16 jetable (Docker Desktop lancé) :

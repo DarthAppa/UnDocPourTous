@@ -1,5 +1,5 @@
 // Publie (ou met à jour) un contenu protégé dans la table Supabase « contenus ».
-// Usage : node tools/publier-contenu.mjs <slug> <fichier.html> "<titre>" <premium|pts>
+// Usage : node tools/publier-contenu.mjs <slug> <fichier.html|.json> "<titre>" <premium|pts>
 //   ex. : node tools/publier-contenu.mjs guide-albion-tryhard contenus-prives/guide-albion-tryhard.html "Guide tryhard" premium
 //
 // Le fichier doit être dans contenus-prives/ (ignoré par git) : un contenu payant ne va JAMAIS
@@ -51,7 +51,8 @@ if (!niveauValide(niveau)) stop(`niveau invalide « ${niveau} » : premium ou pt
 
 // Le fichier doit exister, être un .html, et se trouver dans contenus-prives/.
 if (!existsSync(fichier) || !statSync(fichier).isFile()) stop(`fichier introuvable : ${fichier}`);
-if (!fichier.toLowerCase().endsWith('.html')) stop('le fichier doit être un .html');
+// .html (guide Premium) ou .json (outil Pack ta Small préparé par npm run import:pts)
+if (!/\.(html|json)$/i.test(fichier)) stop('le fichier doit être un .html ou un .json');
 const chemin = realpathSync(fichier);
 if (!existsSync(DOSSIER_PRIVE) || !chemin.startsWith(realpathSync(DOSSIER_PRIVE) + sep))
     stop('le fichier doit être dans le dossier contenus-prives/ (privé, ignoré par git)');

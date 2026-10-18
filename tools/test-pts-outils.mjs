@@ -1,4 +1,6 @@
 // Teste les 2 outils Pack ta Small publiés (pages générées par npm run import:pts) :
+// - Sécurité : les pages publiques sont des coquilles vides (aucun texte, donnée ou code réservé) ;
+//   le contenu vient de la table contenus et seul le code dont le hachage est dans la CSP s'exécute.
 // - Encyclopédie : sans chapitre GOAT & Légendes, sans lien vers le builder, aucune erreur JS.
 // - Builder Ma collection : lancé avec la collection DU JOUEUR (lue dans Supabase), jamais celle de l'auteur ;
 //   sans collection, un message explique comment l'envoyer (extension PTS Companion).
@@ -6,7 +8,7 @@
 import { chromium } from 'playwright';
 import { mkdirSync, readFileSync } from 'node:fs';
 import { demarrer } from './serveur.mjs';
-import { preparer, SESSION, compteur, VUES, texteDebordement } from './faux-supabase.mjs';
+import { preparer, SESSION, compteur, VUES, texteDebordement, contenusPts } from './faux-supabase.mjs';
 
 const serveur = await demarrer();
 const browser = await chromium.launch();
@@ -49,24 +51,119 @@ const COLLECTION = {
     ],
 };
 
-try {
-    const html = readFileSync('dist/pts-encyclopedie.html', 'utf8');
-    console.log('\n[encyclopédie : contenu]');
-    t.verif(
-        !/id="pouvoirs"/.test(html) && !/href="#pouvoirs"/.test(html),
-        'chapitre GOAT & Légendes retiré (section et sommaire)',
-    );
-    t.verif(/id="pts-gl"/.test(html), 'données GOAT et Légendes gardées dans la page');
-    t.verif(!/class="parts"/.test(html) && !/href="pts-builder\.html"/.test(html), 'aucun lien vers le builder');
+// Contenu réservé préparé par npm run import:pts (contenus-prives/, absent en CI : tests fonctionnels ignorés)
+const CONTENUS = contenusPts();
+const coquille = (page) => {
+    const html = readFileSync(`dist/${page}`, 'utf8');
+    const m = html.match(/<div id="pts-outil" data-slug="([^"]+)" data-parts="(\d+)" data-csp-scripts="([^"]*)">/);
+    return { html, slug: m?.[1], parts: Number(m?.[2]), hachages: m?.[3].split(' ').filter(Boolean) ?? [] };
+};
+const charge = (c) => {
+    const lignes = Array.from({ length: c.parts }, (_, i) => CONTENUS.find((x) => x.slug === `${c.slug}-${i + 1}`));
+    return lignes.every(Boolean) ? JSON.parse(lignes.map((l) => l.html).join('')) : null;
+};
 
-    const b = readFileSync('dist/pts-builder.html', 'utf8');
-    console.log('\n[builder : contenu]');
-    t.verif(!/Builder Tournoi|pts-tcomps|id="rbuilder"/.test(b), 'Builder Tournoi retiré');
-    t.verif(
-        /<script type="application\/json" id="pts-coll">\[\]<\/script>/.test(b) && !/SEBASTIEN",98,"economist/.test(b),
-        'collection de l’auteur absente de la page publique',
-    );
-    t.verif(!/window\.claude/.test(b), 'plus d’appel à window.claude');
+try {
+    console.log('\n[pages publiques : aucun contenu réservé]');
+    for (const page of ['pts-encyclopedie.html', 'pts-builder.html']) {
+        const c = coquille(page);
+        t.verif(
+            Boolean(c.slug && c.parts >= 1),
+            `${page} : coquille avec slug versionné (${c.slug}, ${c.parts} partie(s))`,
+        );
+        t.verif(c.html.length < 120_000, `${page} : page légère (${Math.round(c.html.length / 1024)} Ko)`);
+        t.verif(!/type="application\/json"/.test(c.html), `${page} : aucun bloc de données dans la page`);
+        const corps = c.html.slice(c.html.indexOf('<body>'));
+        t.verif(!/<script/i.test(corps), `${page} : aucun script dans le corps de la page`);
+        t.verif(
+            !/SEBASTIEN|FANNCH|7V3N|AHOUAHOU|Maths des combats|Meta Recruteur/.test(c.html),
+            `${page} : aucun nom de carte, compo ou chapitre`,
+        );
+        const csp = c.html.match(/Content-Security-Policy" content="([^"]+)"/)?.[1] ?? '';
+        t.verif(
+            c.hachages.length > 0 && c.hachages.every((h) => csp.includes(`'${h}'`)),
+            `${page} : le code autorisé (${c.hachages.length} script(s)) est dans la CSP`,
+        );
+        t.verif(
+            !/script-src[^;]*unsafe-(inline|eval)/.test(csp),
+            `${page} : CSP sans unsafe-inline ni unsafe-eval pour les scripts`,
+        );
+    }
+
+    const avecContenu = CONTENUS.length > 0;
+    if (!avecContenu) console.log('  - contenu réservé absent (CI) : tests fonctionnels des outils ignorés');
+    const encyclo = charge(coquille('pts-encyclopedie.html'));
+    const builder = charge(coquille('pts-builder.html'));
+    if (avecContenu) {
+        console.log('\n[contenu réservé (contenus-prives/pts)]');
+        t.verif(
+            Boolean(encyclo && builder),
+            'contenu réservé à jour pour les deux pages (même version que les coquilles)',
+        );
+        const e = JSON.stringify(encyclo ?? {});
+        t.verif(
+            !/id=\\"pouvoirs\\"|href=\\"#pouvoirs\\"/.test(e),
+            'chapitre GOAT & Légendes retiré (section et sommaire)',
+        );
+        t.verif(Boolean(encyclo?.donnees?.['pts-gl']), 'données GOAT et Légendes gardées (calculs)');
+        t.verif(
+            !['pts-comps', 'pts-tcomps', 'pts-tour'].some((id) => id in (encyclo?.donnees ?? {})),
+            'encyclopédie : compos de l’auteur et données de tournoi retirées',
+        );
+        t.verif(!/class=\\"parts\\"|href=\\"pts-builder\.html\\"/.test(e), 'aucun lien vers le builder');
+        const b = JSON.stringify(builder ?? {});
+        t.verif(!/Builder Tournoi|pts-tcomps|rbuilder/.test(b), 'Builder Tournoi retiré');
+        t.verif(
+            builder?.donnees?.['pts-coll'] === '[]' && !/SEBASTIEN\\",98,\\"economist/.test(b),
+            'collection de l’auteur absente',
+        );
+        t.verif(!/window\.claude/.test(b), 'plus d’appel à window.claude');
+    }
+
+    console.log('\n[accès]');
+    {
+        // Membre vérifié mais contenu modifié dans la base avec du code non prévu : rien ne s'exécute
+        const c = coquille('pts-encyclopedie.html');
+        const piege = JSON.stringify({
+            v: 1,
+            balisage: '<p id="piege">x</p>',
+            donnees: {},
+            scripts: ['window.__pirate=1'],
+        });
+        const p = await browser.newPage();
+        p.setDefaultTimeout(15000);
+        await preparer(p, {
+            serveurUrl: serveur.url,
+            faux: {
+                session: SESSION,
+                tables: {
+                    membres_pts: MEMBRE,
+                    contenus: Array.from({ length: c.parts }, (_, i) => ({
+                        slug: `${c.slug}-${i + 1}`,
+                        html: i ? '' : piege,
+                    })),
+                },
+            },
+        });
+        await p.goto(serveur.url + 'pts-encyclopedie.html', { waitUntil: 'networkidle' });
+        await p.waitForFunction(() => document.getElementById('pts-outil-etat').textContent.includes('Impossible'));
+        t.verif(
+            !(await p.evaluate(() => window.__pirate)) && !(await p.$('#piege')),
+            'code absent de la CSP refusé : rien n’est exécuté ni affiché',
+        );
+        await p.close();
+    }
+    {
+        // Connecté, membre « périmé » côté navigateur mais la base ne renvoie rien : renvoi vers pts.html
+        const p = await browser.newPage();
+        await preparer(p, { serveurUrl: serveur.url, faux: { session: SESSION, tables: { membres_pts: MEMBRE } } });
+        await p.goto(serveur.url + 'pts-builder.html');
+        await p.waitForURL(/pts\.html\?verrou=1/, { timeout: 10000 }).catch(() => {});
+        t.verif(p.url().endsWith('pts.html?verrou=1'), 'base sans contenu pour ce compte : renvoi vers pts.html');
+        await p.close();
+    }
+
+    if (!avecContenu) throw new Error('FIN');
 
     for (const vp of VUES) {
         console.log(`\n[${vp.nom}]`);
@@ -75,7 +172,10 @@ try {
             p.setDefaultTimeout(15000);
             const erreurs = [];
             p.on('pageerror', (e) => erreurs.push(e.message));
-            const outils = await preparer(p, { serveurUrl: serveur.url, faux: { session: SESSION, tables } });
+            const outils = await preparer(p, {
+                serveurUrl: serveur.url,
+                faux: { session: SESSION, tables: { contenus: CONTENUS, ...tables } },
+            });
             await p.goto(serveur.url + page, { waitUntil: 'networkidle' });
             return { p, erreurs, ...outils };
         };
@@ -83,7 +183,7 @@ try {
         // Encyclopédie, membre vérifié
         {
             const { p, erreurs, debordement } = await ouvrir('pts-encyclopedie.html', { membres_pts: MEMBRE });
-            await p.waitForFunction(() => !document.documentElement.classList.contains('pts-attente'));
+            await p.waitForFunction(() => document.querySelector('#pts-outil .p1'));
             t.verif(p.url().endsWith('pts-encyclopedie.html'), 'encyclopédie ouverte pour un membre vérifié');
             t.verif(!(await p.$('#pouvoirs')), 'encyclopédie : pas de chapitre GOAT & Légendes');
             const d = await debordement(vp.width);
@@ -148,7 +248,7 @@ try {
         }
     }
 } catch (e) {
-    t.verif(false, `test interrompu : ${e.message.split('\n')[0]}`);
+    if (e.message !== 'FIN') t.verif(false, `test interrompu : ${e.message.split('\n')[0]}`);
 } finally {
     await browser.close();
     serveur.fermer();

@@ -28,6 +28,7 @@
     "test:fonctions": "node tools/test-fonctions.mjs",
     "test:rls": "node tools/test-rls.mjs",
     "publier:contenu": "node tools/publier-contenu.mjs",
+    "publier:pts": "node tools/publier-pts.mjs",
     "emails": "node tools/emails.mjs",
     "emails:publier": "node tools/emails.mjs --publier"
   },
