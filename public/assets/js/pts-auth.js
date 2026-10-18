@@ -436,7 +436,7 @@ function afficherAvertissement(secondes) {
         bandeau.style.cssText =
             'position:fixed;left:50%;bottom:20px;transform:translateX(-50%);z-index:9999;width:min(520px, calc(100% - 32px));box-sizing:border-box;' +
             'padding:12px 18px;border-radius:10px;background:#070909;color:#D8C091;border:1px solid #D9A64F;' +
-            'box-shadow:0 10px 30px rgba(0,0,0,.6);font:600 14px/1.4 Inter,system-ui,sans-serif;text-align:center';
+            'box-shadow:0 10px 30px rgba(0,0,0,.6);font:600 14px/1.4 "IBM Plex Sans",sans-serif;text-align:center';
         document.body.appendChild(bandeau);
     }
     bandeau.textContent = `Inactif depuis un moment : déconnexion dans ${secondes} s. Bouge la souris ou touche l’écran pour rester connecté.`;

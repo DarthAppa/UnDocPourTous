@@ -29,7 +29,7 @@ module.exports = {
                 ptsGoldPale: '#D8C091', // Pack ta Small : or pâle (texte)
             },
             fontFamily: {
-                sans: ['Inter', 'sans-serif'],
+                sans: ['"IBM Plex Sans"', 'sans-serif'],
                 mono: ['"IBM Plex Mono"', 'monospace'],
                 serif: ['Lora', 'serif'],
                 pts: ['Cinzel', 'Georgia', 'serif'],
