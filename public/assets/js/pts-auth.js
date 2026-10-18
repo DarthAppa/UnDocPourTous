@@ -14,7 +14,7 @@ const REF = (() => {
         return '';
     }
 })();
-export const CLE_SESSION = `sb-${REF}-auth-token`; // clé de stockage de la session Supabase
+const CLE_SESSION = `sb-${REF}-auth-token`; // clé de stockage de la session Supabase
 
 export const configure = !C.SUPABASE_URL.includes('REMPLACER') && !C.SUPABASE_ANON_KEY.includes('REMPLACER');
 export const INVITATION = C.INVITATION;
@@ -369,7 +369,7 @@ const noterActivite = () => {
     }
 };
 
-export function inactifDepuisTrop() {
+function inactifDepuisTrop() {
     const d = derniereActivite();
     return d > 0 && Date.now() - d > limite();
 }
